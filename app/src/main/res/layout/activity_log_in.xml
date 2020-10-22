@@ -88,7 +88,8 @@
         app:backgroundTint="#F2F2F2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/errormessage"
-        app:srcCompat="@drawable/arrowicon" />
+        app:srcCompat="@drawable/arrowicon"
+        android:contentDescription="TODO" />
 
     <TextView
         android:id="@+id/forgotPassword"
