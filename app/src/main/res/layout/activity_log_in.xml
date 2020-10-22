@@ -8,10 +8,10 @@
 
     <ImageView
         android:id="@+id/imageViewLogIn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
+        android:layout_width="259dp"
+        android:layout_height="77dp"
         android:layout_marginTop="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/loginicon"
@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="84dp"
-        android:layout_marginTop="124dp"
+        android:layout_marginTop="48dp"
         android:text="@string/enter_name"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,7 +32,7 @@
         android:id="@+id/editTextAccountName"
         android:layout_width="240dp"
         android:layout_height="50dp"
-        android:layout_marginStart="85dp"
+        android:layout_marginStart="84dp"
         android:layout_marginTop="1dp"
         android:autofillHints="@string/name_hint"
         android:ems="10"
@@ -57,7 +57,7 @@
         android:id="@+id/editTextPassword"
         android:layout_width="240dp"
         android:layout_height="50dp"
-        android:layout_marginStart="85dp"
+        android:layout_marginStart="84dp"
         android:autofillHints="@string/password_hint"
         android:ems="10"
         android:hint="@string/password_hint"
@@ -67,8 +67,8 @@
 
     <TextView
         android:id="@+id/errormessage"
-        android:layout_width="240dp"
-        android:layout_height="50dp"
+        android:layout_width="245dp"
+        android:layout_height="36dp"
         android:layout_marginStart="85dp"
         android:layout_marginTop="23dp"
         android:gravity="center"
@@ -95,12 +95,15 @@
         android:id="@+id/forgotPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="149dp"
-        android:layout_marginTop="51dp"
+        android:layout_marginTop="40dp"
         android:clickable="true"
         android:focusable="true"
         android:text="@string/forgot_password"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonLogIn" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonLogIn"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

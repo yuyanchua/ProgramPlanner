@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -14,6 +15,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 public class SignUpActivity extends AppCompatActivity {
 
     TextView errView;
+    Spinner questionSpin;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -22,6 +24,15 @@ public class SignUpActivity extends AppCompatActivity {
 
         errView = findViewById(R.id.errorMessage);
         errView.setVisibility(View.INVISIBLE);
+
+        //TODO:set the value for question spinner
+        String [] questionArray = {"Question 1", "Question 2", "Question 3"};
+        questionSpin = findViewById(R.id.spinnerSecurityQuestion);
+
+        ArrayAdapter questionAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, questionArray);
+        questionAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        questionSpin.setAdapter(questionAdapter);
+
 
         FloatingActionButton btSignUp = findViewById(R.id.buttonNextSteptep);
         btSignUp.setOnClickListener(new View.OnClickListener() {
@@ -48,8 +59,8 @@ public class SignUpActivity extends AppCompatActivity {
         String repass = getEditValue(R.id.reEnterPassword);
         String answer = getEditValue(R.id.enterAnswer);
 
-        Spinner quesSpin = findViewById(R.id.spinnerSecurityQuestion);
-        int quesIndex = quesSpin.getSelectedItemPosition();
+        questionSpin = findViewById(R.id.spinnerSecurityQuestion);
+        int quesIndex = questionSpin.getSelectedItemPosition();
 
         if(!pass.equals(repass)){
             //Error
