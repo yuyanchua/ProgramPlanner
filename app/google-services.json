@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "344830482999",
+    "firebase_url": "https://program-planner-506.firebaseio.com",
+    "project_id": "program-planner-506",
+    "storage_bucket": "program-planner-506.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:344830482999:android:983eb001425631a0767db2",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "344830482999-4bal67mgjoqcmghs8d6i16r236kh2sev.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZQRpqMQSncqDb3PSx1__0c7CzvtGcblg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "344830482999-4bal67mgjoqcmghs8d6i16r236kh2sev.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
