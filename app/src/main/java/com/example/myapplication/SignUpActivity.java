@@ -92,47 +92,48 @@ public class SignUpActivity extends AppCompatActivity {
 
 
         //check whether is possible to signup
-        boolean result = signUpToDatabase(name, pass, quesIndex, answer);
+        signUpToDatabase(name, pass, quesIndex, answer);
+        /*boolean result = signUpToDatabase(name, pass, quesIndex, answer);
         if(!result){
             errView.setText("Username is already in database");
             errView.setVisibility(View.VISIBLE);
             return ;
-        }
+        }*/
     }
 
-    private boolean signUpToDatabase(String name, String pass, int quesIndex, String answer){
-        //MessageDigest md = MessageDigest.getInstance(pass);
+    private void signUpToDatabase(String name, String pass, int quesIndex, String answer){
+        byte[] password = pass.getBytes();
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        md.update(password);
+        byte[] digest = md.digest();
+        StringBuffer hex = new StringBuffer();
+        for(int i = 0; i < digest.length; i++){
+            hex.append(Integer.toString((digest[i]&0xff) + 0x100, 16).substring(1));
+        }
+        String pass_in_string = hex.toString();
+        user = new User(name, pass_in_string, quesIndex, answer);
 
-
-        user = new User(name, pass, quesIndex, answer);
+        final String Name = name;
         users.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //if(dataSnapshot.child(user.username.exists()));
-                // Check whether the username exists
-                users.push().setValue(user);
-                Toast.makeText(getApplicationContext(), "Sign up successfully!", Toast.LENGTH_SHORT).show();
+                if(dataSnapshot.child(Name).exists()){
+                    Toast.makeText(getApplicationContext(), "Username Exists!", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    users.child(Name).setValue(user);
+                    Toast.makeText(getApplicationContext(), "Sign up successfully!", Toast.LENGTH_SHORT).show();
+                }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
-        return true;
-        /*fAuth.createUserWithEmailAndPassword(name, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
-                    Toast.makeText(getApplicationContext(), "Sign up successfully!", Toast.LENGTH_SHORT).show();
-                    return True;
-                }
-                else{
-                    Toast.makeText(getApplicationContext(), "Sign up failed!", Toast.LENGTH_SHORT).show();
-                    return False;
-                }
-            }
-        });*/
-
     }
+
 }
