@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -89,8 +88,14 @@ public class LoginActivity extends AppCompatActivity {
         users.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(!dataSnapshot.child(User).exists() || !dataSnapshot.child(User).child("password").getValue().toString().equals(Pass)){
-                    errView.setText("Either Username and Password is Incorrect");
+                try {
+                    if (!dataSnapshot.child(User).exists() || !dataSnapshot.child(User).child("password").getValue().toString().equals(Pass)) {
+                        errView.setText("Either Username and Password is Incorrect");
+                        errView.setVisibility(View.VISIBLE);
+                        passEdit.getText().clear();
+                    }
+                }catch(NullPointerException ex){
+                    errView.setText("Please enter a username");
                     errView.setVisibility(View.VISIBLE);
                     passEdit.getText().clear();
                 }

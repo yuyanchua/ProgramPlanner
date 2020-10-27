@@ -21,8 +21,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -52,7 +50,7 @@ public class SignUpActivity extends AppCompatActivity {
         questionSpin.setAdapter(questionAdapter);
 
 
-        FloatingActionButton btSignUp = findViewById(R.id.buttonNextSteptep);
+        FloatingActionButton btSignUp = findViewById(R.id.buttonNextStep);
         btSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

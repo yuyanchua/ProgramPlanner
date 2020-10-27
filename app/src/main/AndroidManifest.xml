@@ -19,6 +19,7 @@
         <activity android:name=".ForgetPassActivity"/>
         <activity android:name=".SignUpActivity"/>
         <activity android:name=".ResetPassActivity"/>
+        <activity android:name=".ForgetQuesActivity"/>
 
     </application>
 </manifest>
