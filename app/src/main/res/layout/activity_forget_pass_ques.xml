@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -16,40 +15,40 @@
         tools:ignore="ContentDescription" />
 
     <TextView
-        android:id="@+id/accountNameTip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="85dp"
-        android:layout_marginTop="87dp"
-        android:text="@string/enter_name"
+        android:id="@+id/securityQuestionTip"
+        android:layout_width="240dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="100dp"
+        android:text="@string/security_question_display"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordResetIcon" />
 
     <EditText
-        android:id="@+id/accountName"
+        android:id="@+id/questionAnswer"
         android:layout_width="240dp"
         android:layout_height="50dp"
-        android:layout_marginStart="84dp"
-        android:layout_marginTop="60dp"
         android:autofillHints=""
         android:ems="10"
-        android:hint="@string/name_hint"
+        android:hint="@string/answer_hint"
         android:inputType="textPersonName"
         android:text=""
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/accountNameTip" />
+        app:layout_constraintTop_toBottomOf="@+id/securityQuestionTip" />
 
     <TextView
         android:id="@+id/errorMessage"
         android:layout_width="240dp"
         android:layout_height="50dp"
-        android:layout_marginStart="84dp"
-        android:layout_marginTop="76dp"
+        android:layout_marginTop="73dp"
         android:gravity="center"
         android:text="@string/error_message"
         android:textColor="@color/design_default_color_error"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/accountName" />
+        app:layout_constraintTop_toBottomOf="@+id/questionAnswer" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/buttonNextStep"

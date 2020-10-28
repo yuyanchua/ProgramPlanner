@@ -21,8 +21,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -52,7 +50,7 @@ public class SignUpActivity extends AppCompatActivity {
         questionSpin.setAdapter(questionAdapter);
 
 
-        FloatingActionButton btSignUp = findViewById(R.id.buttonNextSteptep);
+        FloatingActionButton btSignUp = findViewById(R.id.buttonNextStep);
         btSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,17 +115,18 @@ public class SignUpActivity extends AppCompatActivity {
         }
         String pass_in_string = hex.toString();
         user = new User(name, pass_in_string, quesIndex, answer);
-
         final String Name = name;
         users.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.child(Name).exists()){
-                    Toast.makeText(getApplicationContext(), "Username Exists!", Toast.LENGTH_SHORT).show();
+                    errView.setText("Username is already in database");
+                    errView.setVisibility(View.VISIBLE);
                 }
                 else {
                     users.child(Name).setValue(user);
                     Toast.makeText(getApplicationContext(), "Sign up successfully!", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
             }
             @Override
