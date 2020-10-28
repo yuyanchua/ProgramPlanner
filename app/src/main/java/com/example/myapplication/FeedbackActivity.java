@@ -53,7 +53,8 @@ public class FeedbackActivity extends AppCompatActivity {
         String feedback = feedEdit.getText().toString();
         newFeedback = new Feedback(User.username, feedback);
 //        if(!feedback.isEmpty())
-            addFeedbackToDatabase();
+        getFeedbackId();
+        addFeedbackToDatabase();
     }
 
     private void addFeedbackToDatabase(){
@@ -65,7 +66,7 @@ public class FeedbackActivity extends AppCompatActivity {
                 //TODO: add feedback class, with id, username, comment
 //                db_ref.child("feedback").setValue(User.username);
 //                db_ref.child("feedback").child(User.username);
-                getFeedbackId();
+
                 db_ref.child(Integer.toString(feedbackId)).setValue(newFeedback);
                 Toast.makeText(getApplicationContext(), "New Feedback is Added", Toast.LENGTH_SHORT).show();
                 finish();

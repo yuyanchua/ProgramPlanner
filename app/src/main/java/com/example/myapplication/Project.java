@@ -36,23 +36,6 @@ public class Project {
             }
             code += digit;
         }
-//
-//        int code_int = Integer.parseInt(code);
-//        if(isClient){
-//            if(code_int % 2 != 1)
-//                code = Integer.toString(code_int + 1);
-//        }else{
-//            if(code_int % 2 != 0)
-//                code = Integer.toString(code_int + 1);
-//        }
-//
-//        if(code.length() > 6){
-//            int diff = 6 - code.length();
-//            while(diff > 0 ){
-//                code =  "0" + code;
-//                diff --;
-//            }
-//        }
         return code;
     }
 

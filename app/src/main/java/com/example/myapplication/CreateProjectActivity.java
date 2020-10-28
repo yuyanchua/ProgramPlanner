@@ -66,12 +66,6 @@ public class CreateProjectActivity extends AppCompatActivity {
 //        EditText projectEdit = null;
         String projectName = projectEdit.getText().toString();
 
-//        if(projectName.isEmpty()){
-//            errView.setText("Please enter a name for the new project");
-//            errView.setVisibility(View.VISIBLE);
-//            return;
-//        }
-
         //Create new project
         String client_invite = getInviteCode(true);
         String dev_invite = getInviteCode(false);
