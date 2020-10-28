@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ListView
+        android:id="@+id/listViewTimeLine"
+        android:layout_width="380dp"
+        android:layout_height="425dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="42dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timeLineTitle" />
+
+    <TextView
+        android:id="@+id/timeLineTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="148dp"
+        android:layout_marginTop="39dp"
+        android:text="Timeline"
+        android:textSize="30sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/buttonEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="32dp"
+        android:text="Edit"
+        android:textAllCaps="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/listViewTimeLine" />
+
+    <Button
+        android:id="@+id/buttonAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:text="Add"
+        android:textAllCaps="false"
+        app:layout_constraintStart_toEndOf="@+id/buttonEdit"
+        app:layout_constraintTop_toBottomOf="@+id/listViewTimeLine" />
+
+    <Button
+        android:id="@+id/buttonDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="32dp"
+        android:text="Delete"
+        android:textAllCaps="false"
+        app:layout_constraintStart_toEndOf="@+id/buttonAdd"
+        app:layout_constraintTop_toBottomOf="@+id/listViewTimeLine" />
+
+    <Button
+        android:id="@+id/buttonConfirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="104dp"
+        android:layout_marginTop="18dp"
+        android:textAllCaps="false"
+        android:text="Confirm"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonAdd" />
+
+    <Button
+        android:id="@+id/buttonBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="29dp"
+        android:layout_marginTop="18dp"
+        android:textAllCaps="false"
+        android:text="Back"
+        app:layout_constraintStart_toEndOf="@+id/buttonConfirm"
+        app:layout_constraintTop_toBottomOf="@+id/buttonAdd" />
+</androidx.constraintlayout.widget.ConstraintLayout>

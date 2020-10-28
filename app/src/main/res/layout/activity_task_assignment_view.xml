@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/taskAssignmentTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="89dp"
+        android:layout_marginTop="53dp"
+        android:text="Task Assignment"
+        android:textSize="30sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ListView
+        android:id="@+id/listViewTasks"
+        android:layout_width="372dp"
+        android:layout_height="434dp"
+        android:layout_marginStart="19dp"
+        android:layout_marginTop="55dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/taskAssignmentTitle" />
+
+    <Button
+        android:id="@+id/buttonEdit"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="19dp"
+        android:text="Edit"
+        android:textAllCaps="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/listViewTasks" />
+
+    <Button
+        android:id="@+id/buttonAdd"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="19dp"
+        android:layout_marginTop="19dp"
+        android:text="Add Tasks"
+        android:textAllCaps="false"
+        app:layout_constraintStart_toEndOf="@+id/buttonEdit"
+        app:layout_constraintTop_toBottomOf="@+id/listViewTasks" />
+
+    <Button
+        android:id="@+id/buttonDelete"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="22dp"
+        android:layout_marginTop="19dp"
+        android:text="Delete"
+        android:textAllCaps="false"
+        app:layout_constraintStart_toEndOf="@+id/buttonAdd"
+        app:layout_constraintTop_toBottomOf="@+id/listViewTasks" />
+
+    <Button
+        android:id="@+id/buttonConfirm"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="89dp"
+        android:layout_marginTop="7dp"
+        android:text="Confirm"
+        android:textAllCaps="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonEdit" />
+
+    <Button
+        android:id="@+id/buttonBack"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="7dp"
+        android:text="Back"
+        android:textAllCaps="false"
+        app:layout_constraintStart_toEndOf="@+id/buttonConfirm"
+        app:layout_constraintTop_toBottomOf="@+id/buttonAdd" />
+</androidx.constraintlayout.widget.ConstraintLayout>
