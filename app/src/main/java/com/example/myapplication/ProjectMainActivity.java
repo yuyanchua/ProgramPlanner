@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,11 +15,15 @@ public class ProjectMainActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        setContentView(R.layout.activity_project_main);
+        setContentView(R.layout.activity_project_view);
         String welcome = "Welcome, " + User.username;
 
-//        Button btCreate = findViewById(R.id.create);
-        Button btCreate = null;
+        TextView welcomeView = findViewById(R.id.WelcomeMessage);
+        welcomeView.setText(welcome);
+
+        ListView projectList = findViewById(R.id.ListViewProject);
+
+        Button btCreate = findViewById(R.id.buttonCreate);
         btCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -25,8 +31,15 @@ public class ProjectMainActivity extends AppCompatActivity {
             }
         });
 
-//        Button btLogout = findViewById(R.id.logout);
-        Button btLogout = null;
+        Button btJoin = findViewById(R.id.buttonJoin);
+        btJoin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                joinProject();
+            }
+        });
+
+        Button btLogout = findViewById(R.id.buttonLogOut);
         btLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

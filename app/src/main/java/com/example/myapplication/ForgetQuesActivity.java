@@ -63,9 +63,14 @@ public class ForgetQuesActivity extends AppCompatActivity {
         db_ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String ques_index = dataSnapshot.child(username).child("questionIndex").getValue().toString();
-                String question = getQuestion(Integer.parseInt(ques_index));
-                quesView.setText(question);
+                try {
+                    String ques_index = dataSnapshot.child(username).child("questionIndex").getValue().toString();
+                    String question = getQuestion(Integer.parseInt(ques_index));
+                    quesView.setText(question);
+                }catch(NullPointerException ex){
+                    errView.setText("Please enter a username");
+                    errView.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override

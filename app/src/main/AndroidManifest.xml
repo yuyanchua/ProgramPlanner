@@ -23,6 +23,17 @@
         <activity android:name=".ProjectMainActivity"/>
         <activity android:name=".CreateProjectActivity"/>
         <activity android:name=".JoinProjectActivity"/>
+        <activity android:name=".CustomerActivity"/>
+        <activity android:name=".DeveloperActivity"/>
+        <activity android:name=".FeedbackActivity"/>
+        <activity android:name=".TimelineActivity"/>
+        <activity android:name=".TaskAssignActivity"/>
+        <activity android:name=".AddTaskActivity"/>
+        <activity android:name=".EventActivity"/>
+        <activity android:name=".LogViewActivity"/>
+        <activity android:name=".GraphActivity"/>
+        <activity android:name=".NotebookActivity"/>
+        <activity android:name=".InviteActivity"/>
 
 
     </application>

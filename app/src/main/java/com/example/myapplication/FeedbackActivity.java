@@ -23,12 +23,12 @@ public class FeedbackActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView();
+        setContentView(R.layout.activity_feedback_view);
 
         firebase = FirebaseDatabase.getInstance();
         db_ref = firebase.getReference("Project");
 
-        Button btConfirm = null;
+        Button btConfirm = findViewById(R.id.button);
         btConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -36,6 +36,13 @@ public class FeedbackActivity extends AppCompatActivity {
             }
         });
 
+        Button btBack = findViewById(R.id.button2);
+        btBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void submitFeedback(){
@@ -51,6 +58,7 @@ public class FeedbackActivity extends AppCompatActivity {
                 String projectId = Long.toString(Project.projectId);
                 //TODO: add feedback class, with id, username, comment
 //                dataSnapshot.child(projectId).child("feedback");
+                finish();
             }
 
             @Override

@@ -33,36 +33,44 @@ public class CreateProjectActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_test);
+        setContentView(R.layout.activity_create_project);
 //        errView = findViewById(R.id.errorMsg);
-        errView = null;
-        errView.setVisibility(View.INVISIBLE);
+//        errView = null;
+//        errView.setVisibility(View.INVISIBLE);
 
         firebase = FirebaseDatabase.getInstance();
         db_ref = firebase.getReference("Project");
         allCodes = new HashSet<>();
         getAllCodes();
 
-//        Button btConfirm = findViewById(R.id.Confirm);
-        Button btConfirm = null;
+        Button btConfirm = findViewById(R.id.buttonConfirm);
+//        Button btConfirm = null;
         btConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 createProject();
             }
         });
+
+        Button btCancel = findViewById(R.id.buttonCancel);
+        btCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void createProject(){
-//        EditText projectEdit = findViewById(R.id.projectEditView);
-        EditText projectEdit = null;
+        EditText projectEdit = findViewById(R.id.textBoxProjectName);
+//        EditText projectEdit = null;
         String projectName = projectEdit.getText().toString();
 
-        if(projectName.isEmpty()){
-            errView.setText("Please enter a name for the new project");
-            errView.setVisibility(View.VISIBLE);
-            return;
-        }
+//        if(projectName.isEmpty()){
+//            errView.setText("Please enter a name for the new project");
+//            errView.setVisibility(View.VISIBLE);
+//            return;
+//        }
 
         //Create new project
         String client_invite = getInviteCode(true);
@@ -70,14 +78,13 @@ public class CreateProjectActivity extends AppCompatActivity {
 
         newProject = new Project(projectId, projectName, client_invite, dev_invite);
 
-        //TODO: add the project name to database
         generateProjectId();
         addProjectToDatabase();
 
     }
 
+    //Checking for largest existing project id
     private void generateProjectId(){
-        //TODO: Check for largest existing project id
         db_ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -90,6 +97,7 @@ public class CreateProjectActivity extends AppCompatActivity {
 
                 projectId = maxId + 1;
                 newProject.projectId = projectId;
+//                projectId = 0;
             }
 
             @Override
@@ -128,7 +136,7 @@ public class CreateProjectActivity extends AppCompatActivity {
         String invite_code = "";
         do {
             invite_code = Project.generateCode(isClient);
-            //TODO: Validate
+            //validate existing code
             if(allCodes.contains(invite_code)){
                 continue;
             }else{
@@ -142,6 +150,7 @@ public class CreateProjectActivity extends AppCompatActivity {
 
     private void addProjectToDatabase(){
 
+//        db_ref.addValueEventListener(new ValueEventListener() {
         db_ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

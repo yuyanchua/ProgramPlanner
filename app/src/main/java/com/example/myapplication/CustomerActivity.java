@@ -12,8 +12,9 @@ public class CustomerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView();
-        Button btFeedback = null;
+        setContentView(R.layout.activity_customer_main);
+
+        Button btFeedback = findViewById(R.id.buttonLeaveFeedBack);
         btFeedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -21,6 +22,21 @@ public class CustomerActivity extends AppCompatActivity {
             }
         });
 
+        Button btTimeline = findViewById(R.id.buttonTimeline);
+        btTimeline.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toTimeline();
+            }
+        });
+
+        Button btBack = findViewById(R.id.buttonBack);
+        btBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
     }
 
@@ -29,7 +45,9 @@ public class CustomerActivity extends AppCompatActivity {
     }
 
     private void toTimeline(){
-//        startActivity(new Intent(CustomerActivity.this, TimelineActivity.class));
+        Intent intent = new Intent(CustomerActivity.this, TimelineActivity.class);
+        intent.putExtra("isDeveloper", false);
+        startActivity(intent);
     }
 
     @Override
