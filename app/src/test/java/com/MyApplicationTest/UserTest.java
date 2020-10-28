@@ -46,5 +46,5 @@ public class UserTest {
                 new User("blank", "blank", 0, "test answer");
         assertTrue("User constructor failed to properly initialize the 'answer' field.", testUser.answer.equals("test answer"));
     }
-
+    //</Constructor Tests>
 }
