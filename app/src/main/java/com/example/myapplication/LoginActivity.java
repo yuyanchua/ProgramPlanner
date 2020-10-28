@@ -39,7 +39,6 @@ public class LoginActivity extends AppCompatActivity {
         btLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 login();
             }
         });
@@ -81,18 +80,22 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void verifyWithDatabase(String user, String pass){
-        final String User = user;
-        final String Pass = pass;
+    private void verifyWithDatabase(final String user, final String pass){
         final EditText passEdit = findViewById(R.id.editTextPassword);
         users.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 try {
-                    if (!dataSnapshot.child(User).exists() || !dataSnapshot.child(User).child("password").getValue().toString().equals(Pass)) {
+                    boolean isExist = dataSnapshot.child(user).exists();
+                    boolean isEqual = dataSnapshot.child(user).child("password").getValue().toString().equals(pass);
+
+                    if (!isExist || !isEqual) {
                         errView.setText("Either Username and Password is Incorrect");
                         errView.setVisibility(View.VISIBLE);
                         passEdit.getText().clear();
+                    }else{
+                        User.username = user;
+                        startActivity(new Intent(LoginActivity.this, ProjectMainActivity.class));
                     }
                 }catch(NullPointerException ex){
                     errView.setText("Please enter a username");

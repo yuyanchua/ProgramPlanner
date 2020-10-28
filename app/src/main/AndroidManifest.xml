@@ -20,6 +20,10 @@
         <activity android:name=".SignUpActivity"/>
         <activity android:name=".ResetPassActivity"/>
         <activity android:name=".ForgetQuesActivity"/>
+        <activity android:name=".ProjectMainActivity"/>
+        <activity android:name=".CreateProjectActivity"/>
+        <activity android:name=".JoinProjectActivity"/>
+
 
     </application>
 </manifest>
