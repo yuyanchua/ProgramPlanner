@@ -1,74 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/logViewTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="172dp"
-        android:layout_marginTop="44dp"
-        android:text="Logs"
-        android:textSize="30sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/logViewTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="172dp"
+            android:layout_marginTop="44dp"
+            android:text="Logs"
+            android:textSize="30sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <ListView
-        android:id="@+id/listViewLogs"
-        android:layout_width="366dp"
-        android:layout_height="272dp"
-        android:layout_marginStart="22dp"
-        android:layout_marginTop="35dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logViewTitle" />
+        <ListView
+            android:id="@+id/listViewLogs"
+            android:layout_width="370dp"
+            android:layout_height="230dp"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="35dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/logViewTitle" />
 
-    <EditText
-        android:id="@+id/editTextTextMultiLine3"
-        android:layout_width="310dp"
-        android:layout_height="150dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="15dp"
-        android:background="#DDF1FA"
-        android:ems="10"
-        android:gravity="start|top"
-        android:inputType="textMultiLine"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addLogTip" />
+        <EditText
+            android:id="@+id/editTextTextMultiLine3"
+            android:layout_width="310dp"
+            android:layout_height="150dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="15dp"
+            android:background="#DDF1FA"
+            android:ems="10"
+            android:gravity="start|top"
+            android:inputType="textMultiLine"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/addLogTip" />
 
-    <TextView
-        android:id="@+id/addLogTip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="150dp"
-        android:layout_marginTop="18dp"
-        android:text="Add New Log:"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/listViewLogs" />
+        <TextView
+            android:id="@+id/addLogTip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="150dp"
+            android:layout_marginTop="18dp"
+            android:text="Add New Log:"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/listViewLogs" />
 
-    <Button
-        android:id="@+id/buttonSubmit"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="21dp"
-        android:text="Submit"
-        android:textAllCaps="false"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLine3" />
+        <Button
+            android:id="@+id/buttonSubmit"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="21dp"
+            android:text="Submit"
+            android:textAllCaps="false"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLine3" />
 
-    <Button
-        android:id="@+id/buttonBack"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="110dp"
-        android:layout_marginTop="21dp"
-        android:text="Back"
-        android:textAllCaps="false"
-        app:layout_constraintStart_toEndOf="@+id/buttonSubmit"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLine3" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@+id/buttonBack"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="110dp"
+            android:layout_marginTop="21dp"
+            android:text="Back"
+            android:textAllCaps="false"
+            app:layout_constraintStart_toEndOf="@+id/buttonSubmit"
+            app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLine3" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

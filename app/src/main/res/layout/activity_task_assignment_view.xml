@@ -19,8 +19,8 @@
 
     <ListView
         android:id="@+id/listViewTasks"
-        android:layout_width="372dp"
-        android:layout_height="434dp"
+        android:layout_width="377dp"
+        android:layout_height="302dp"
         android:layout_marginStart="19dp"
         android:layout_marginTop="55dp"
         app:layout_constraintStart_toStartOf="parent"

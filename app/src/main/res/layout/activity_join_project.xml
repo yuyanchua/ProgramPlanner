@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -34,13 +33,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="103dp"
         android:layout_marginTop="16dp"
+        android:autofillHints=""
         android:ems="10"
         android:gravity="center"
         android:hint="Project Name"
         android:inputType="textPersonName"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/enterProjectTip"
-        android:autofillHints="" />
+        app:layout_constraintTop_toBottomOf="@+id/enterProjectTip" />
 
     <TextView
         android:id="@+id/invitationCodeTip"
@@ -59,13 +58,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
         android:layout_marginTop="15dp"
+        android:autofillHints=""
         android:ems="10"
         android:gravity="center"
         android:hint="invitation code"
         android:inputType="textPersonName"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/invitationCodeTip"
-        android:autofillHints="" />
+        app:layout_constraintTop_toBottomOf="@+id/invitationCodeTip" />
 
     <TextView
         android:id="@+id/errorMessageTip"
@@ -83,8 +82,8 @@
         android:id="@+id/buttonJoin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="161dp"
-        android:layout_marginTop="33dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="40dp"
         android:text="Join"
         android:textAllCaps="false"
         app:layout_constraintStart_toStartOf="parent"
@@ -94,10 +93,10 @@
         android:id="@+id/buttonCancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="161dp"
-        android:layout_marginTop="29dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="40dp"
         android:text="Cancel"
         android:textAllCaps="false"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonJoin" />
+        app:layout_constraintStart_toEndOf="@+id/buttonJoin"
+        app:layout_constraintTop_toBottomOf="@+id/errorMessageTip" />
 </androidx.constraintlayout.widget.ConstraintLayout>

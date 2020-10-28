@@ -1,85 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 
-    <ListView
-        android:id="@+id/listViewNote"
-        android:layout_width="376dp"
-        android:layout_height="234dp"
-        android:layout_marginStart="19dp"
-        android:layout_marginTop="13dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/noteListTip" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/noteBookTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="140dp"
-        android:layout_marginTop="53dp"
-        android:text="Notebook"
-        android:textSize="30sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <ListView
+            android:id="@+id/listViewNote"
+            android:layout_width="376dp"
+            android:layout_height="234dp"
+            android:layout_marginStart="19dp"
+            android:layout_marginTop="13dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/noteListTip" />
 
-    <EditText
-        android:id="@+id/editTextTextMultiLine2"
-        android:layout_width="310dp"
-        android:layout_height="150dp"
-        android:layout_marginStart="52dp"
-        android:layout_marginTop="21dp"
-        android:background="#DDF1FA"
-        android:ems="10"
-        android:gravity="start|top"
-        android:inputType="textMultiLine"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addNoteTip" />
+        <TextView
+            android:id="@+id/noteBookTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="140dp"
+            android:layout_marginTop="53dp"
+            android:text="Notebook"
+            android:textSize="30sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/noteListTip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="167dp"
-        android:layout_marginTop="17dp"
-        android:text="Note List:"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/noteBookTitle" />
+        <EditText
+            android:id="@+id/editTextNote"
+            android:layout_width="310dp"
+            android:layout_height="150dp"
+            android:layout_marginStart="52dp"
+            android:layout_marginTop="21dp"
+            android:background="#DDF1FA"
+            android:ems="10"
+            android:gravity="start|top"
+            android:inputType="textMultiLine"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/addNoteTip" />
 
-    <TextView
-        android:id="@+id/addNoteTip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="145dp"
-        android:layout_marginTop="15dp"
-        android:text="Add New Note:"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/listViewNote" />
+        <TextView
+            android:id="@+id/noteListTip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="167dp"
+            android:layout_marginTop="17dp"
+            android:text="Note List:"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/noteBookTitle" />
 
-    <Button
-        android:id="@+id/buttonSubmit"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="67dp"
-        android:layout_marginTop="28dp"
-        android:text="Submit"
-        android:textAllCaps="false"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLine2" />
+        <TextView
+            android:id="@+id/addNoteTip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="145dp"
+            android:layout_marginTop="15dp"
+            android:text="Add New Note:"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/listViewNote" />
 
-    <Button
-        android:id="@+id/buttonBack"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="76dp"
-        android:layout_marginTop="28dp"
-        android:text="Back"
-        android:textAllCaps="false"
-        app:layout_constraintStart_toEndOf="@+id/buttonSubmit"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLine2" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@+id/buttonSubmit"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="67dp"
+            android:layout_marginTop="28dp"
+            android:text="Submit"
+            android:textAllCaps="false"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editTextNote" />
+
+        <Button
+            android:id="@+id/buttonBack"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="76dp"
+            android:layout_marginTop="28dp"
+            android:text="Back"
+            android:textAllCaps="false"
+            app:layout_constraintStart_toEndOf="@+id/buttonSubmit"
+            app:layout_constraintTop_toBottomOf="@+id/editTextNote" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
