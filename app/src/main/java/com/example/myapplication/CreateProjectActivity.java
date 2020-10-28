@@ -142,8 +142,8 @@ public class CreateProjectActivity extends AppCompatActivity {
             }else{
                 allCodes.add(invite_code);
                 isValid = true;
-                break;
             }
+
         }while(!isValid);
         return invite_code;
     }

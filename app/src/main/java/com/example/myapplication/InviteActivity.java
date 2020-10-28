@@ -26,7 +26,9 @@ public class InviteActivity extends AppCompatActivity {
 
     private void setupCode(){
         TextView customerView = findViewById(R.id.inviteCodeCustomer);
+        customerView.setText(Project.clientCode);
 
         TextView developerView = findViewById(R.id.inviteCodeDeveloper);
+        developerView.setText(Project.devCode);
     }
 }

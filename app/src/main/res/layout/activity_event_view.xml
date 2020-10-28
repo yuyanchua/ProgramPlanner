@@ -51,17 +51,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/eventNameTip" />
 
-    <EditText
-        android:id="@+id/textBoxDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="22dp"
-        android:ems="10"
-        android:inputType="date"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dateTip" />
-
     <TextView
         android:id="@+id/dateTip"
         android:layout_width="wrap_content"
@@ -88,13 +77,13 @@
         android:id="@+id/errorMessageTip"
         android:layout_width="240dp"
         android:layout_height="50dp"
-        android:layout_marginStart="85dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="84dp"
+        android:layout_marginTop="16dp"
         android:gravity="center"
         android:text="@string/error_message"
         android:textColor="@color/design_default_color_error"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textBoxDate" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewDate" />
 
     <Button
         android:id="@+id/buttonBack"
@@ -106,4 +95,15 @@
         android:textAllCaps="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonAddEvent" />
+
+    <TextView
+        android:id="@+id/textViewDate"
+        android:layout_width="180dp"
+        android:layout_height="37dp"
+        android:layout_marginTop="26dp"
+        android:text="Select to Choose Date"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dateTip" />
 </androidx.constraintlayout.widget.ConstraintLayout>

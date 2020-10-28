@@ -4,15 +4,21 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Calendar;
+
 public class EventActivity extends AppCompatActivity {
 
-    TextView errView;
+    TextView errView, dateView;
+    DatePicker datePicker;
+    Calendar calendar;
+    int year, month, day;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -21,6 +27,14 @@ public class EventActivity extends AppCompatActivity {
 
         errView = findViewById(R.id.errorMessageTip);
         errView.setVisibility(View.INVISIBLE);
+
+        dateView = findViewById(R.id.textViewDate);
+        dateView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         Button btAdd = findViewById(R.id.buttonAddEvent);
         btAdd.setOnClickListener(new View.OnClickListener() {
@@ -43,12 +57,11 @@ public class EventActivity extends AppCompatActivity {
         EditText titleEdit = findViewById(R.id.textBoxEventName);
         String title = titleEdit.getText().toString();
 
-        EditText dateEdit = findViewById(R.id.textBoxDate);
-        String date = dateEdit.getText().toString();
 
         CheckBox notify = findViewById(R.id.checkBox);
         boolean isNotify = notify.isSelected();
 
         //TODO: add to database
     }
+
 }

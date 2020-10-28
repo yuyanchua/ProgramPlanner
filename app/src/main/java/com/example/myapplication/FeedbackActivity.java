@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +20,8 @@ public class FeedbackActivity extends AppCompatActivity {
 
     FirebaseDatabase firebase;
     DatabaseReference db_ref;
+    Feedback newFeedback;
+    int feedbackId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -26,7 +29,7 @@ public class FeedbackActivity extends AppCompatActivity {
         setContentView(R.layout.activity_feedback_view);
 
         firebase = FirebaseDatabase.getInstance();
-        db_ref = firebase.getReference("Project");
+        db_ref = firebase.getReference("Project").child(Long.toString(Project.projectId)).child("feedback");
 
         Button btConfirm = findViewById(R.id.button);
         btConfirm.setOnClickListener(new View.OnClickListener() {
@@ -46,19 +49,46 @@ public class FeedbackActivity extends AppCompatActivity {
     }
 
     private void submitFeedback(){
-        EditText feedEdit = null;
+        EditText feedEdit = findViewById(R.id.textBoxFeedBack);
         String feedback = feedEdit.getText().toString();
-        addFeedbackToDatabase(feedback);
+        newFeedback = new Feedback(User.username, feedback);
+//        if(!feedback.isEmpty())
+            addFeedbackToDatabase();
     }
 
-    private void addFeedbackToDatabase(final String feedback){
-        db_ref.addValueEventListener(new ValueEventListener() {
+    private void addFeedbackToDatabase(){
+        db_ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String projectId = Long.toString(Project.projectId);
+                System.out.println("Project Id " + projectId);
                 //TODO: add feedback class, with id, username, comment
-//                dataSnapshot.child(projectId).child("feedback");
+//                db_ref.child("feedback").setValue(User.username);
+//                db_ref.child("feedback").child(User.username);
+                getFeedbackId();
+                db_ref.child(Integer.toString(feedbackId)).setValue(newFeedback);
+                Toast.makeText(getApplicationContext(), "New Feedback is Added", Toast.LENGTH_SHORT).show();
                 finish();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void getFeedbackId(){
+
+        db_ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int maxId = 0;
+                for(DataSnapshot snap : dataSnapshot.getChildren()){
+                    maxId = Integer.parseInt(snap.getKey());
+
+                }
+                feedbackId = maxId + 1;
             }
 
             @Override

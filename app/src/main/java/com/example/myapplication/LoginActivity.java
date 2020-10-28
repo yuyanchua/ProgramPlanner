@@ -22,6 +22,9 @@ import java.security.NoSuchAlgorithmException;
 
 public class LoginActivity extends AppCompatActivity {
     private TextView errView;
+    private EditText userEdit;
+    private EditText passEdit;
+
     FirebaseDatabase DB;
     DatabaseReference users;
 
@@ -54,10 +57,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login(){
-        EditText userEdit = findViewById(R.id.editTextAccountName);
+        userEdit = findViewById(R.id.editTextAccountName);
         String user = userEdit.getText().toString();
 
-        EditText passEdit = findViewById(R.id.editTextPassword);
+        passEdit = findViewById(R.id.editTextPassword);
         String pass = passEdit.getText().toString();
 
         byte[] password = pass.getBytes();
@@ -96,6 +99,8 @@ public class LoginActivity extends AppCompatActivity {
                     }else{
                         User.username = user;
                         startActivity(new Intent(LoginActivity.this, ProjectMainActivity.class));
+                        userEdit.getText().clear();
+                        passEdit.getText().clear();
                     }
                 }catch(NullPointerException ex){
                     errView.setText("Please enter a username");
