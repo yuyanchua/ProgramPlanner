@@ -87,8 +87,58 @@ public class ProjectTest {
      */
 
     @Test
-    public void testGenerateCodeIsClient() {
+    public void testGenerateCodeIsClientLength() {
         String generated = Project.generateCode(true);
         assertEquals("Generated code length was not 6.", 6, generated.length());
+    }
+
+    @Test
+    public void testGenerateCodeIsClientIsOdd() {
+        String generated = Project.generateCode(true);
+        assertEquals("Generated code for client was not odd.", 1, Integer.parseInt(generated) % 2);
+    }
+
+    @Test
+    public void testGenerateCodeIsntClientLength() {
+        String generated = Project.generateCode(false);
+        assertEquals("Generated code length was not 6.", 6, generated.length());
+    }
+
+    @Test
+    public void testGenerateCodeIsntClientEven() {
+        String generated = Project.generateCode(false);
+        assertEquals("Generated code for non-client was not even.", 0, Integer.parseInt(generated) % 2);
+    }
+
+    @Test
+    public void testGenerateCodeManyLength() {
+        int[] codes = new int[100];
+        for(int i = 0; i < 100; i++){
+            codes[i] = Project.generateCode((i % 2) == 0).length();
+            assertEquals("Incorrect length on code number " + i + ".", 6, codes[i]);
+        }
+    }
+
+    @Test
+    public void testGenerateCodeManyOddEven() {
+        String[] codes = new String[100];
+        for(int i = 0; i < 100; i++){
+            codes[i] = Project.generateCode((i % 2) == 1);
+            assertEquals("Incorrect length on code number " + i + ".", i % 2, Integer.parseInt(codes[i]) % 2);
+        }
+    }
+    //</generateCode tests>
+
+    //Getters tested with constructor tests.
+
+    /**
+     * Test the to string method. Not a super complex method, simply
+     * concats an int to a string. We'll give it one test anyway.
+     */
+    @Test
+    public void testToString() {
+        Project testProject = new Project(1, "blank", "blank", "blank");
+        Project testProject1 = new Project(2, "blank", "blank", "blank");
+        assertTrue("To string did not return the string followed by the object project id.", "Project Id: 1".equals(testProject.toString()));
     }
 }

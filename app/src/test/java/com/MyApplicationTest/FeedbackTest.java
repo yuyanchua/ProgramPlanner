@@ -18,23 +18,60 @@ public class FeedbackTest {
      * values of the created object reflect those passed in the constructor.
      * One test for each field.
      */
-    @Test
+
+   /* @Test
     public void testConstructorProjectId() {
-        Feedback testFeed = new Feedback(3, "blank", "blank");
+        Feedback testFeed = new Feedback("blank", "blank");
         assertEquals("Feedback constructor failed to properly initialize the 'projectId field.", 3, testFeed.projectId);
-    }
+    }*/
 
     @Test
     public void testConstructorUsername() {
-        Feedback testFeed = new Feedback(0, "test username", "blank");
+        Feedback testFeed = new Feedback("test username", "blank");
         assertTrue("Feedback constructor failed to properly initialize the 'username' field.", testFeed.username.equals("test username"));
     }
 
     @Test
     public void testConstructorComment() {
-        Feedback testFeed = new Feedback(0, "blank", "test comment");
+        Feedback testFeed = new Feedback("blank", "test comment");
         assertTrue("Feedback constructor failed to properly initialize the 'comment' field.", testFeed.comment.equals("test comment"));
     }
 
+    //Default constructor tests
+
+    @Test
+    public void testDefaultConstructorUsername() {
+        Feedback testFeed = new  Feedback();
+        assertTrue("Default Feedback constructor failed to properly initialize the 'username' field.", testFeed.username.equals(""));
+    }
+
+    @Test
+    public void testDefaultConstructorComment() {
+        Feedback testFeed = new  Feedback();
+        assertTrue("Default Feedback constructor failed to properly initialize the 'comment' field.", testFeed.comment.equals(""));
+    }
+
     //</Constructor Tests>
+
+    /**
+     * Test the Username getter.
+     * Should be trivial to pass.
+     * If it fails, something is VERY wrong.
+     */
+    @Test
+    public void testGetUsername() {
+        Feedback testFeed = new Feedback("test username", "blank");
+        assertEquals("GetUsername did not return the object's username.", testFeed.username, testFeed.getUsername());
+    }
+
+    /**
+     * Test the comment getter.
+     * Should be trivial to pass.
+     * If it fails, something is VERY wrong.
+     */
+    @Test
+    public void testGetComment() {
+        Feedback testFeed = new Feedback("blank", "test comment");
+        assertEquals("GetComment did not return the object's comment.", testFeed.comment, testFeed.getComment());
+    }
 }
