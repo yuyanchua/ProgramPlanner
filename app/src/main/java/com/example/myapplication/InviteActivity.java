@@ -5,14 +5,28 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 public class InviteActivity extends AppCompatActivity {
+    TextView customerView, developerView;
+    FirebaseDatabase firebase;
+    DatabaseReference db_ref;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invite_code_page);
+
+        firebase = FirebaseDatabase.getInstance();
+        db_ref = firebase.getReference("Project").child(Long.toString(Project.projectId));
 
         setupCode();
         Button btDone = findViewById(R.id.buttonDone);
@@ -25,8 +39,30 @@ public class InviteActivity extends AppCompatActivity {
     }
 
     private void setupCode(){
-        TextView customerView = findViewById(R.id.inviteCodeCustomer);
+        customerView = findViewById(R.id.inviteCodeCustomer);
+//        customerView.setText(Project.clientCode);
 
-        TextView developerView = findViewById(R.id.inviteCodeDeveloper);
+        developerView = findViewById(R.id.inviteCodeDeveloper);
+//        developerView.setText(Project.devCode);
+
+        getCode();
+    }
+
+    private void getCode(){
+        db_ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String clientCode = dataSnapshot.child("clientCode").getValue().toString();
+                String devCode = dataSnapshot.child("devCode").getValue().toString();
+
+                customerView.setText(clientCode);
+                developerView.setText(devCode);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }

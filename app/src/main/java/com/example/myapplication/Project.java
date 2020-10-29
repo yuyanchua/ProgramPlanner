@@ -29,33 +29,29 @@ public class Project {
     public static String generateCode(boolean isClient){
         Random random = new Random();
         String code = "";
-        for(int i = 0; i < 6; i ++)
-            code += random.nextInt(10);
+        for(int i = 0; i < 6; i ++) {
+            int digit = random.nextInt(10);
 
-        int code_int = Integer.parseInt(code);
-        if(isClient){
-            if(code_int % 2 != 1)
-                code = Integer.toString(code_int + 1);
-        }else{
-            if(code_int % 2 != 0)
-                code = Integer.toString(code_int + 1);
-        }
-
-        if(code.length() > 6){
-            int diff = 6 - code.length();
-            while(diff > 0 ){
-                code =  "0" + code;
-                diff --;
+            if(i == 5){
+                if(isClient){
+                    if(digit % 2 != 1)
+                        digit = (digit + 1) % 10;
+                }else{
+                    if(digit % 2 != 0){
+                        digit = (digit + 1) % 10;
+                    }
+                }
             }
+            code += digit;
         }
         return code;
     }
-    
+
     //Changed to instance vars
     public String getProjectName(){
         return this.i_projectName;
     }
-    
+
     public String getClientCode(){
         return this.i_clientCode;
     }

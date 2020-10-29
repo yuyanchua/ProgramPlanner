@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class DeveloperActivity extends AppCompatActivity {
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,8 +19,7 @@ public class DeveloperActivity extends AppCompatActivity {
         setup();
 
         TextView projectNameView = findViewById(R.id.ProjectNameTitle);
-        //TODO: set name for project title
-        projectNameView.setText("Test Project");
+        projectNameView.setText(Project.projectName);
 
 
     }
