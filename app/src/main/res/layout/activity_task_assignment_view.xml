@@ -17,47 +17,38 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ListView
-        android:id="@+id/listViewTasks"
-        android:layout_width="377dp"
-        android:layout_height="302dp"
-        android:layout_marginStart="19dp"
-        android:layout_marginTop="55dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/taskAssignmentTitle" />
-
     <Button
         android:id="@+id/buttonEdit"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="36dp"
-        android:layout_marginTop="19dp"
+        android:layout_marginTop="48dp"
         android:text="Edit"
         android:textAllCaps="false"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/listViewTasks" />
+        app:layout_constraintTop_toBottomOf="@+id/scrollView4" />
 
     <Button
         android:id="@+id/buttonAdd"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="19dp"
-        android:layout_marginTop="19dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="48dp"
         android:text="Add Tasks"
         android:textAllCaps="false"
         app:layout_constraintStart_toEndOf="@+id/buttonEdit"
-        app:layout_constraintTop_toBottomOf="@+id/listViewTasks" />
+        app:layout_constraintTop_toBottomOf="@+id/scrollView4" />
 
     <Button
         android:id="@+id/buttonDelete"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="22dp"
-        android:layout_marginTop="19dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="48dp"
         android:text="Delete"
         android:textAllCaps="false"
         app:layout_constraintStart_toEndOf="@+id/buttonAdd"
-        app:layout_constraintTop_toBottomOf="@+id/listViewTasks" />
+        app:layout_constraintTop_toBottomOf="@+id/scrollView4" />
 
     <Button
         android:id="@+id/buttonConfirm"
@@ -80,4 +71,21 @@
         android:textAllCaps="false"
         app:layout_constraintStart_toEndOf="@+id/buttonConfirm"
         app:layout_constraintTop_toBottomOf="@+id/buttonAdd" />
+
+
+    <ScrollView
+        android:id="@+id/scrollView4"
+        android:layout_width="368dp"
+        android:layout_height="312dp"
+        android:layout_marginTop="28dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/taskAssignmentTitle">
+
+        <LinearLayout
+            android:id="@+id/TaskList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

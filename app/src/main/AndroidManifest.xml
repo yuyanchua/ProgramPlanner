@@ -34,7 +34,7 @@
         <activity android:name=".GraphActivity"/>
         <activity android:name=".NotebookActivity"/>
         <activity android:name=".InviteActivity"/>
-
+        <activity android:name=".ViewFeedbackActivity"/>
 
     </application>
 </manifest>
