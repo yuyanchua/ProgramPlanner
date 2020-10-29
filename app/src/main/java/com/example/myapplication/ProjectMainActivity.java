@@ -78,7 +78,7 @@ public class ProjectMainActivity extends AppCompatActivity {
         projectLayout = findViewById(R.id.projectList);
         System.out.println("Project List: " + projectList.toString());
         for(int i = 0; i < projectList.size(); i ++){
-            TextView projectView = new TextView(this);
+            final TextView projectView = new TextView(this);
             Roles temp = projectList.get(i);
             String role = temp.projectId + ": " + temp.projectName;
 
@@ -93,7 +93,8 @@ public class ProjectMainActivity extends AppCompatActivity {
             projectView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    toProjectActivity();
+                    int index = projectLayout.indexOfChild(projectView);
+                    toProjectActivity(index);
                 }
             });
 
@@ -144,7 +145,17 @@ public class ProjectMainActivity extends AppCompatActivity {
         startActivity(new Intent(ProjectMainActivity.this, JoinProjectActivity.class));
     }
 
-    private void toProjectActivity(){
+    private void toProjectActivity(int projectIndex){
+        Roles role = projectList.get(projectIndex);
+        Project.projectId = Long.parseLong(role.projectId);
+        Project.projectName = role.projectName;
+
+        String userRole = role.roles;
+        if(userRole.equals("developer"))
+            startActivity(new Intent(ProjectMainActivity.this, DeveloperActivity.class));
+        else{
+            startActivity(new Intent(ProjectMainActivity.this, CustomerActivity.class));
+        }
 
     }
 

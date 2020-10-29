@@ -98,7 +98,7 @@ public class NotebookActivity extends AppCompatActivity {
         btBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                finish();
+                finish();
             }
         });
     }
@@ -112,6 +112,8 @@ public class NotebookActivity extends AppCompatActivity {
         newNotebook = new Notebook(username, note);
         getNoteId();
         addNoteToDatabase();
+        noteEdit.getText().clear();
+
     }
 
     private void addNoteToDatabase(){
@@ -121,6 +123,7 @@ public class NotebookActivity extends AppCompatActivity {
                 db_ref.child(Integer.toString(noteId)).setValue(newNotebook);
                 Toast.makeText(getApplicationContext(), "New Note is Added", Toast.LENGTH_SHORT).show();
                 recreate();
+
             }
 
             @Override
