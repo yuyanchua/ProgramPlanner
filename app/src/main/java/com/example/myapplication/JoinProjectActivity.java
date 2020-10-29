@@ -82,25 +82,28 @@ public class JoinProjectActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 boolean isValid = false;
                 for(DataSnapshot snap: dataSnapshot.getChildren()){
-                    String name = snap.child("projectName").getValue().toString();
-                    if(!projectName.equals(name)){
-                        continue;
-                    }
-                    long projectId = Long.parseLong(snap.getKey().toString());
+                    try {
+                        String name = snap.child("projectName").getValue().toString();
+                        if (!projectName.equals(name)) {
+                            continue;
+                        }
+                        long projectId = Long.parseLong(snap.getKey().toString());
 
-                    String clientCode = snap.child("clientCode").getValue().toString();
-                    String devCode = snap.child("devCode").getValue().toString();
-                    if(inviteCode.equals(clientCode)){
-                        setProjectValue(projectId, name, clientCode, devCode);
-                        isValid = true;
-                        toClient();
+                        String clientCode = snap.child("clientCode").getValue().toString();
+                        String devCode = snap.child("devCode").getValue().toString();
+                        if (inviteCode.equals(clientCode)) {
+                            setProjectValue(projectId, name, clientCode, devCode);
+                            isValid = true;
+                            toClient();
+                        }
+                        if (inviteCode.equals(devCode)) {
+                            setProjectValue(projectId, name, clientCode, devCode);
+                            isValid = true;
+                            toDeveloper();
+                        }
+                    }catch(Exception exception){
+                        exception.printStackTrace();
                     }
-                    if(inviteCode.equals(devCode)){
-                        setProjectValue(projectId, name, clientCode, devCode);
-                        isValid = true;
-                        toDeveloper();
-                    }
-
                 }
                 if(!isValid) {
                     errView.setText("Either Project Does Not Exist or Invite Code Incorrect");

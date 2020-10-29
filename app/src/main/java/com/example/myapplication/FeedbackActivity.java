@@ -84,12 +84,10 @@ public class FeedbackActivity extends AppCompatActivity {
         db_ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                int maxId = 0;
                 for(DataSnapshot snap : dataSnapshot.getChildren()){
-                    maxId = Integer.parseInt(snap.getKey());
+                    feedbackId = Integer.parseInt(snap.getKey()) + 1;
 
                 }
-                feedbackId = maxId + 1;
             }
 
             @Override

@@ -1,24 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<!--ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:fillViewport="true"-->
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-        <ListView
-            android:id="@+id/listViewNote"
-            android:layout_width="376dp"
-            android:layout_height="234dp"
-            android:layout_marginStart="19dp"
-            android:layout_marginTop="13dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/noteListTip" />
 
         <TextView
             android:id="@+id/noteBookTitle"
@@ -33,8 +28,8 @@
 
         <EditText
             android:id="@+id/editTextNote"
-            android:layout_width="310dp"
-            android:layout_height="150dp"
+            android:layout_width="314dp"
+            android:layout_height="94dp"
             android:layout_marginStart="52dp"
             android:layout_marginTop="21dp"
             android:background="#DDF1FA"
@@ -59,12 +54,12 @@
             android:id="@+id/addNoteTip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="145dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginStart="144dp"
+            android:layout_marginTop="12dp"
             android:text="Add New Note:"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/listViewNote" />
+            app:layout_constraintTop_toBottomOf="@+id/noteScroll" />
 
         <Button
             android:id="@+id/buttonSubmit"
@@ -87,5 +82,20 @@
             android:textAllCaps="false"
             app:layout_constraintStart_toEndOf="@+id/buttonSubmit"
             app:layout_constraintTop_toBottomOf="@+id/editTextNote" />
+
+        <ScrollView
+            android:id="@+id/noteScroll"
+            android:layout_width="406dp"
+            android:layout_height="208dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/noteListTip">
+
+            <LinearLayout
+                android:id="@+id/noteList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>

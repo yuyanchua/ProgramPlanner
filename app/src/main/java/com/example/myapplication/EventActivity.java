@@ -105,7 +105,7 @@ public class EventActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                System.out.println(eventId);
+//                System.out.println(eventId);
 
                 db_ref.child(Integer.toString(eventId)).setValue(newEvent);
                 Toast.makeText(getApplicationContext(), "New Event is Created", Toast.LENGTH_SHORT).show();
