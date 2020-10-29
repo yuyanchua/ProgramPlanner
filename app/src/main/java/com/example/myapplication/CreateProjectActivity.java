@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -24,9 +25,10 @@ import java.util.Set;
 public class CreateProjectActivity extends AppCompatActivity {
     TextView errView;
     FirebaseDatabase firebase;
-    DatabaseReference db_ref;
+    DatabaseReference db_ref, db_ref_roles;
 
     Project newProject;
+    String projectName;
     long projectId;
     Set<String> allCodes;
 
@@ -40,8 +42,11 @@ public class CreateProjectActivity extends AppCompatActivity {
 
         firebase = FirebaseDatabase.getInstance();
         db_ref = firebase.getReference("Project");
+        db_ref_roles = firebase.getReference("Roles");
+
         allCodes = new HashSet<>();
         getAllCodes();
+        generateProjectId();
 
         Button btConfirm = findViewById(R.id.buttonConfirm);
 //        Button btConfirm = null;
@@ -56,23 +61,26 @@ public class CreateProjectActivity extends AppCompatActivity {
         btCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+//                finish();
+                backToMain();
             }
+
         });
     }
 
     private void createProject(){
         EditText projectEdit = findViewById(R.id.textBoxProjectName);
 //        EditText projectEdit = null;
-        String projectName = projectEdit.getText().toString();
+        projectName = projectEdit.getText().toString();
 
         //Create new project
         String client_invite = getInviteCode(true);
         String dev_invite = getInviteCode(false);
 
+
+
         newProject = new Project(projectId, projectName, client_invite, dev_invite);
 
-        generateProjectId();
         addProjectToDatabase();
 
     }
@@ -82,15 +90,15 @@ public class CreateProjectActivity extends AppCompatActivity {
         db_ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                int maxId = 0;
+//                int maxId = 0;
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
 //                Project post = (Project) postSnapshot.getValue();
 //                    System.out.println("Get Data: " + postSnapshot.getKey());
-                    maxId = Integer.parseInt(postSnapshot.getKey());
+                    projectId = Integer.parseInt(postSnapshot.getKey()) + 1;
                 }
 
-                projectId = maxId + 1;
-                newProject.projectId = projectId;
+//                projectId = maxId + 1;
+//                newProject.projectId = projectId;
 //                projectId = 0;
             }
 
@@ -112,7 +120,7 @@ public class CreateProjectActivity extends AppCompatActivity {
                     String devCode = snap.child("devCode").getValue().toString();
                     allCodes.add(clientCode);
                     allCodes.add(devCode);
-                    System.out.printf("Client Code: %s, Dev Code: %s", clientCode, devCode);
+//                    System.out.printf("Client Code: %s, Dev Code: %s", clientCode, devCode);
                 }
 
             }
@@ -150,8 +158,9 @@ public class CreateProjectActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 db_ref.child(Long.toString(projectId)).setValue(newProject);
+                System.out.println("ProjectId in db_ref: " + projectId);
                 Toast.makeText(getApplicationContext(), "New Project Created Successfully", Toast.LENGTH_SHORT).show();
-                finish();
+//                finish();
             }
 
             @Override
@@ -159,5 +168,30 @@ public class CreateProjectActivity extends AppCompatActivity {
 
             }
         });
+
+        System.out.println("ProjectId out: " + projectId);
+
+        db_ref_roles.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                System.out.println("ProjectId in db_ref_roles: " + projectId);
+                db_ref_roles.child(Long.toString(projectId)).child("ProjectName").setValue(projectName);
+                db_ref_roles.child(Long.toString(projectId )).child(User.username).child("Roles").setValue("developer");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+//        finish();
+        backToMain();
+    }
+
+    private void backToMain(){
+        Intent intent = new Intent(CreateProjectActivity.this, ProjectMainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 }

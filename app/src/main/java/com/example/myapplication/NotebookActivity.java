@@ -61,8 +61,6 @@ public class NotebookActivity extends AppCompatActivity {
             noteLayout.addView(noteView);
         }
 
-
-
     }
 
     private void getNoteList(){

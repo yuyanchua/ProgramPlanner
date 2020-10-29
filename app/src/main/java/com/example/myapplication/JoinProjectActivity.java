@@ -21,7 +21,8 @@ public class JoinProjectActivity extends AppCompatActivity {
 
     TextView errView;
     FirebaseDatabase firebase;
-    DatabaseReference db_ref;
+    DatabaseReference db_ref, db_ref_roles;
+    boolean isExist, isValid, isDeveloper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,6 +34,7 @@ public class JoinProjectActivity extends AppCompatActivity {
 
         firebase = FirebaseDatabase.getInstance();
         db_ref = firebase.getReference("Project");
+        db_ref_roles = firebase.getReference("Roles");
 
         Button btJoin = findViewById(R.id.buttonJoin);
         btJoin.setOnClickListener(new View.OnClickListener() {
@@ -46,7 +48,10 @@ public class JoinProjectActivity extends AppCompatActivity {
         btCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+//                finish();
+                Intent intent = new Intent(JoinProjectActivity.this, ProjectMainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
         });
     }
@@ -80,7 +85,7 @@ public class JoinProjectActivity extends AppCompatActivity {
         db_ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                boolean isValid = false;
+                isValid = false;
                 for(DataSnapshot snap: dataSnapshot.getChildren()){
                     try {
                         String name = snap.child("projectName").getValue().toString();
@@ -88,18 +93,21 @@ public class JoinProjectActivity extends AppCompatActivity {
                             continue;
                         }
                         long projectId = Long.parseLong(snap.getKey().toString());
+                        Project.projectId = projectId;
 
                         String clientCode = snap.child("clientCode").getValue().toString();
                         String devCode = snap.child("devCode").getValue().toString();
                         if (inviteCode.equals(clientCode)) {
                             setProjectValue(projectId, name, clientCode, devCode);
                             isValid = true;
-                            toClient();
+                            isDeveloper = false;
+//                            toClient();
                         }
                         if (inviteCode.equals(devCode)) {
                             setProjectValue(projectId, name, clientCode, devCode);
                             isValid = true;
-                            toDeveloper();
+                            isDeveloper = true;
+//                            toDeveloper();
                         }
                     }catch(Exception exception){
                         exception.printStackTrace();
@@ -116,6 +124,37 @@ public class JoinProjectActivity extends AppCompatActivity {
 
             }
         });
+
+        db_ref_roles.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(isValid){
+                    String projectIdStr = Long.toString(Project.projectId);
+                    boolean isExist = dataSnapshot.child(projectIdStr).child(User.username).exists();
+                    if(!isExist){
+                        if(isDeveloper){
+                            db_ref_roles.child(projectIdStr).child("ProjectName").setValue(projectName);
+                            db_ref_roles.child(projectIdStr).child(User.username).child("Roles").setValue("developer");
+                            toDeveloper();
+                        }else{
+                            db_ref_roles.child(projectIdStr).child("ProjectName").setValue(projectName);
+                            db_ref_roles.child(projectIdStr).child(User.username).child("Roles").setValue("client");
+                            toClient();
+                        }
+                    }
+                }
+                if(isExist){
+                    errView.setText("The User already join the project");
+                    errView.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         //If not, return error message
     }
 
@@ -127,7 +166,6 @@ public class JoinProjectActivity extends AppCompatActivity {
     }
 
     private void toDeveloper(){
-
         startActivity(new Intent(JoinProjectActivity.this, DeveloperActivity.class));
     }
 
