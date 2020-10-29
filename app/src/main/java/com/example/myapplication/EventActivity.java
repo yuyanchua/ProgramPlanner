@@ -58,7 +58,7 @@ public class EventActivity extends AppCompatActivity {
                 getEventValue();
             }
         }catch (Exception ex){
-
+            ex.printStackTrace();
         }
 
         dateView = findViewById(R.id.textViewDate);

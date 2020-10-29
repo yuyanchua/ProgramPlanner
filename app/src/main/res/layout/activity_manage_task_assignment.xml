@@ -65,7 +65,7 @@
             android:layout_marginTop="29dp"
             android:text="Choose a member you want to add:"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/scrollView5" />
+            app:layout_constraintTop_toBottomOf="@+id/childScroll" />
 
         <Spinner
             android:id="@+id/spinnerTeamMember"
@@ -132,8 +132,8 @@
             app:layout_constraintStart_toEndOf="@+id/buttonAddTask"
             app:layout_constraintTop_toBottomOf="@+id/buttonRemove" />
 
-        <ScrollView
-            android:id="@+id/scrollView5"
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/childScroll"
             android:layout_width="319dp"
             android:layout_height="109dp"
             android:layout_marginTop="52dp"
@@ -146,7 +146,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical" />
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

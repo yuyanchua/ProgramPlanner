@@ -8,13 +8,13 @@ public class Task {
     public String taskId;
     public List<String> memberList;
 
-    public Task(String task){
-        this.task = task;
+    public Task(String taskName){
+        this.task = taskName;
         this.memberList = new ArrayList<>();
     }
 
-    public Task(String task, List<String> memberList){
-        this.task = task;
+    public Task(String taskName, List<String> memberList){
+        this.task = taskName;
         this.memberList = memberList;
     }
 }

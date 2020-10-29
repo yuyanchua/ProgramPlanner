@@ -40,8 +40,6 @@ public class TimelineActivity extends AppCompatActivity {
         firebase = FirebaseDatabase.getInstance();
         db_ref = firebase.getReference("Project").child(Long.toString(Project.projectId)).child("Event");
 
-
-
         eventList = new ArrayList<>();
         deleteList = new ArrayList<>();
 
@@ -172,7 +170,8 @@ public class TimelineActivity extends AppCompatActivity {
 //            resetEventLayout();
             btAdd.setVisibility(View.VISIBLE);
             btBack.setVisibility(View.VISIBLE);
-            btDelete.setText("Delete");
+            btDelete.setVisibility(View.VISIBLE);
+//            btDelete.setText("Delete");
             btEdit.setText("Edit");
         }
     }
@@ -245,9 +244,10 @@ public class TimelineActivity extends AppCompatActivity {
             if(visible != View.GONE){
                 eventList.add(tempEventList.get(i));
             }
-            recreate();
+//            recreate();
 //            eventLayout.removeAllViews();
         }
+        recreate();
     }
 
 

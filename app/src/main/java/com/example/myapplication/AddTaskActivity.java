@@ -2,11 +2,13 @@ package com.example.myapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,9 +34,11 @@ public class AddTaskActivity extends AppCompatActivity {
     Spinner spinMember;
     LinearLayout memberLayout;
     List<String> memberList, addMemberList;
-    boolean isRemove = false;
+    boolean isRemove = false, isEdit = false;
     int taskId;
-    Task newTask;
+    String taskIdStr;
+    Task newTask, lastTask;
+    Intent lastIntent;
 
     Button btAddPart, btAddTask, btRemove, btBack;
     FirebaseDatabase firebase;
@@ -48,13 +52,22 @@ public class AddTaskActivity extends AppCompatActivity {
         errView = findViewById(R.id.errorMessageTip);
         errView.setVisibility(View.INVISIBLE);
 
-        Intent intent = getIntent();
-        String mode = intent.getStringExtra("mode");
-
-
         firebase = FirebaseDatabase.getInstance();
         db_ref = firebase.getReference("Project").child(Long.toString(Project.projectId)).child("Task");
         db_ref_roles = firebase.getReference("Roles").child(Long.toString(Project.projectId));
+
+        lastIntent = getIntent();
+        try{
+            String taskId = lastIntent.getStringExtra("taskId");
+            if(!taskId.isEmpty()){
+                isEdit = true;
+                this.taskId = Integer.parseInt(taskId);
+                taskIdStr = taskId;
+                getTaskValue();
+            }
+        }catch (Exception exception){
+            exception.printStackTrace();
+        }
 
         memberLayout = findViewById(R.id.memberLayout);
 
@@ -64,6 +77,48 @@ public class AddTaskActivity extends AppCompatActivity {
         getMemberList();
 
         setupButton();
+    }
+
+    private void getTaskValue(){
+        db_ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                String title = dataSnapshot.child(taskIdStr).child("task").getValue().toString();
+                List<String> memberList = new ArrayList<>();
+
+                DataSnapshot memberSnap = dataSnapshot.child(taskIdStr).child("memberList");
+                for(DataSnapshot snap : memberSnap.getChildren()){
+                    String key = snap.getKey();
+                    System.out.println(snap.getValue().toString());
+                    String member = snap.getValue().toString();
+                    memberList.add(member);
+                }
+
+                lastTask = new Task(title, memberList);
+//                setTask();
+                EditText titleEdit = findViewById(R.id.textBoxTaskName);
+                titleEdit.setText(lastTask.task);
+
+                for(String member : memberList) {
+                    toAddParticipants(member);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void setTask(){
+//        EditText titleEdit = findViewById(R.id.textBoxTaskName);
+//        titleEdit.setText(lastTask.task);
+//
+//        for(String member : memberList) {
+//            toAddParticipants(member);
+//        }
     }
 
     private void setupSpinner(){
@@ -112,6 +167,8 @@ public class AddTaskActivity extends AppCompatActivity {
         });
 
         btAddTask = findViewById(R.id.buttonAddTask);
+        if(isEdit)
+            btAddTask.setText("Edit Task");
         btAddTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,13 +195,17 @@ public class AddTaskActivity extends AppCompatActivity {
     }
 
 
-
-
     private void toAddParticipants(){
         String memberName = spinMember.getSelectedItem().toString();
+        toAddParticipants(memberName);
+    }
+
+    private void toAddParticipants(String memberName){
         if(addMemberList.contains(memberName)){
-           errView.setText("Already added the member");
-           errView.setVisibility(View.VISIBLE);
+            if(!isEdit) {
+                errView.setText("Already added the member");
+                errView.setVisibility(View.VISIBLE);
+            }
         }else {
             addMemberList.add(memberName);
             final TextView tempView = new TextView(this);
@@ -165,6 +226,7 @@ public class AddTaskActivity extends AppCompatActivity {
         }
     }
 
+
     private void toAddTask(){
         EditText taskEdit = findViewById(R.id.textBoxTaskName);
         String taskName = taskEdit.getText().toString();
@@ -173,8 +235,8 @@ public class AddTaskActivity extends AppCompatActivity {
             errView.setVisibility(View.VISIBLE);
         }else {
             newTask = new Task(taskName, addMemberList);
-
-            getTaskIdFromDatabase();
+            if(!isEdit)
+                getTaskIdFromDatabase();
             addTaskToDatabase();
         }
     }
