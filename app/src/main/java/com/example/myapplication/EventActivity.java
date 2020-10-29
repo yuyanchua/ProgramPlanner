@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -25,12 +26,15 @@ import java.util.Calendar;
 public class EventActivity extends AppCompatActivity {
 
     TextView errView, dateView;
+    EditText titleEdit;
     DatePickerDialog datePicker;
     Calendar calendar;
     int year, month, day;
 
-    Event newEvent;
+    Event newEvent, lastEvent;
+    boolean isEdit = false;
     int eventId;
+    Intent lastIntent;
     FirebaseDatabase firebase;
     DatabaseReference db_ref;
 
@@ -44,6 +48,18 @@ public class EventActivity extends AppCompatActivity {
 
         errView = findViewById(R.id.errorMessageTip);
         errView.setVisibility(View.INVISIBLE);
+
+        lastIntent = getIntent();
+        try{
+            String eventId = lastIntent.getStringExtra("eventId");
+            if(!eventId.isEmpty()){
+                isEdit = true;
+                this.eventId = Integer.parseInt(eventId);
+                getEventValue();
+            }
+        }catch (Exception ex){
+
+        }
 
         dateView = findViewById(R.id.textViewDate);
         dateView.setOnClickListener(new View.OnClickListener() {
@@ -82,22 +98,68 @@ public class EventActivity extends AppCompatActivity {
         });
     }
 
+    private void getEventValue(){
+        db_ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                String eventDate = dataSnapshot.child(Integer.toString(eventId)).child("eventDate").getValue().toString();
+                String eventTitle = dataSnapshot.child(Integer.toString(eventId)).child("eventTitle").getValue().toString();
+                boolean isNotify = Boolean.getBoolean(dataSnapshot.child(Integer.toString(eventId)).child("isNotify").getValue().toString());
+
+                lastEvent = new Event(eventTitle, eventDate, isNotify);
+                lastEvent.isNotify = isNotify;
+
+                setEvent();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void setEvent(){
+        titleEdit = findViewById(R.id.textBoxEventName);
+        titleEdit.setText(lastEvent.eventTitle);
+
+        dateView = findViewById(R.id.textViewDate);
+        dateView.setText(lastEvent.eventDate);
+
+        CheckBox notify = findViewById(R.id.checkBox);
+        notify.setChecked(lastEvent.isNotify);
+    }
+
 
     private void addEvent(){
-        EditText titleEdit = findViewById(R.id.textBoxEventName);
+        titleEdit = findViewById(R.id.textBoxEventName);
         String title = titleEdit.getText().toString();
+        boolean isValid = true;
 
+        if(title.isEmpty()){
+            isValid = false;
+
+        }
         String date = dateView.getText().toString();
+
+        if(date.equals("Select to Choose Date")){
+            isValid = false;
+        }
 
         CheckBox notify = findViewById(R.id.checkBox);
         boolean isNotify = notify.isChecked();
 
-        newEvent = new Event(title, date, isNotify);
-        getEventId();
-
-        //TODO: add to database
-        addEventToDatabase();
-
+        if(isValid) {
+            newEvent = new Event(title, date, isNotify);
+            if(!isEdit)
+                getEventId();
+            //TODO: add to database
+            addEventToDatabase();
+        }else{
+            errView.setText("Either title or date is invalid");
+            errView.setVisibility(View.VISIBLE);
+        }
     }
 
     private void addEventToDatabase(){
@@ -109,7 +171,7 @@ public class EventActivity extends AppCompatActivity {
 
                 db_ref.child(Integer.toString(eventId)).setValue(newEvent);
                 Toast.makeText(getApplicationContext(), "New Event is Created", Toast.LENGTH_SHORT).show();
-                finish();
+                returnPage();
             }
 
             @Override
@@ -136,4 +198,17 @@ public class EventActivity extends AppCompatActivity {
         });
     }
 
+    private void returnPage(){
+        boolean isTimeline = lastIntent.getExtras().getBoolean("isTimeline");
+        System.out.println("Timeline: " + isTimeline);
+        if(isTimeline || isEdit){
+
+            Intent intent = new Intent(EventActivity.this, TimelineActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra("isDeveloper", true);
+            startActivity(intent);
+        }else{
+            finish();
+        }
+    }
 }

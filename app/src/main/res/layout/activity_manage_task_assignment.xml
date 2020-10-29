@@ -62,10 +62,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="92dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="29dp"
             android:text="Choose a member you want to add:"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/memberList" />
+            app:layout_constraintTop_toBottomOf="@+id/scrollView5" />
 
         <Spinner
             android:id="@+id/spinnerTeamMember"
@@ -132,15 +132,21 @@
             app:layout_constraintStart_toEndOf="@+id/buttonAddTask"
             app:layout_constraintTop_toBottomOf="@+id/buttonRemove" />
 
-        <ListView
-            android:id="@+id/memberList"
-            android:layout_width="312dp"
-            android:layout_height="129dp"
-            android:layout_marginTop="18dp"
+        <ScrollView
+            android:id="@+id/scrollView5"
+            android:layout_width="319dp"
+            android:layout_height="109dp"
+            android:layout_marginTop="52dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.494"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/teamMemberTip" />
+            app:layout_constraintTop_toBottomOf="@+id/teamMemberTip">
+
+            <LinearLayout
+                android:id="@+id/memberLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
