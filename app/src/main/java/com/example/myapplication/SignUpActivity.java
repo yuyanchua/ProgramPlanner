@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -126,8 +127,10 @@ public class SignUpActivity extends AppCompatActivity {
                 else {
                     users.child(Name).setValue(user);
                     Toast.makeText(getApplicationContext(), "Sign up successfully!", Toast.LENGTH_SHORT).show();
-                    finish();
                 }
+                Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
