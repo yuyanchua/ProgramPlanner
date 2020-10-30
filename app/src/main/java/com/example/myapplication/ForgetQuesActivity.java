@@ -99,7 +99,8 @@ public class ForgetQuesActivity extends AppCompatActivity {
     //TODO: Implement Question
     // If we don't use Email, how do we implement this. Or could we use the cell phone to receive the verify message
     private String getQuestion(int ques_index){
-        return "Question " + ques_index;
+        String question = Question.QUESTION[ques_index];
+        return question;
     }
 
 

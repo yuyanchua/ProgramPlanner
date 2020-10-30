@@ -43,10 +43,10 @@ public class SignUpActivity extends AppCompatActivity {
         users = DB.getReference("Users");
 
         //TODO:set the value for question spinner
-        String [] questionArray = {"Question 1", "Question 2", "Question 3"};
+
         questionSpin = findViewById(R.id.spinnerSecurityQuestion);
 
-        ArrayAdapter questionAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, questionArray);
+        ArrayAdapter questionAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, Question.QUESTION);
         questionAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         questionSpin.setAdapter(questionAdapter);
 

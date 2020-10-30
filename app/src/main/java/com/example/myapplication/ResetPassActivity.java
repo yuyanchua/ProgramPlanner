@@ -61,9 +61,7 @@ public class ResetPassActivity extends AppCompatActivity {
 
         //Update password to databas
         updatePassword(pass);
-        Intent intent = new Intent(ResetPassActivity.this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
+
 
     }
 
@@ -88,6 +86,9 @@ public class ResetPassActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 db_ref.child(username).child("password").setValue(pass_str);
+                Intent intent = new Intent(ResetPassActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
 
             @Override
