@@ -41,6 +41,7 @@ public class GraphActivity extends AppCompatActivity{
    private ImageAdapter IAdapter;
    private DatabaseReference DB_Ref;
    private List<Image> Limages;
+   private ProgressBar pro_Cir;
 
 
     @Override
@@ -48,12 +49,21 @@ public class GraphActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph_view);
 
+        /*runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                RecView = findViewById(R.id.recycler_vi);
+                RecView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                RecView.setHasFixedSize(true);
+            }
+        });*/
         RecView = findViewById(R.id.recycler_vi);
-        LinearLayoutManager manager = new LinearLayoutManager(this);
-        RecView.setLayoutManager(manager);
+        RecView.setLayoutManager(new LinearLayoutManager(this));
         RecView.setHasFixedSize(true);
 
+        pro_Cir = findViewById(R.id.progress_circular);
         Limages = new ArrayList<>();
+
         DB_Ref = FirebaseDatabase.getInstance().getReference("Project").child(Long.toString(Project.projectId)).child("Images");
         Read_Images();
         setupImage();
@@ -65,18 +75,21 @@ public class GraphActivity extends AppCompatActivity{
         DB_Ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Limages.clear();
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Image images = snapshot.getValue(Image.class);
                     Limages.add(images);
                 }
                 IAdapter = new ImageAdapter(GraphActivity.this, Limages);
                 RecView.setAdapter(IAdapter);
-
+                //IAdapter.notifyDataSetChanged();
+                pro_Cir.setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Toast.makeText(getApplicationContext(), "Error!", Toast.LENGTH_SHORT).show();
+                pro_Cir.setVisibility(View.INVISIBLE);
             }
         });
     }
