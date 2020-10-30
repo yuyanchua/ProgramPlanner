@@ -37,11 +37,11 @@ import java.util.List;
 
 public class GraphActivity extends AppCompatActivity{
 
-   private RecyclerView RecView;
-   private ImageAdapter IAdapter;
-   private DatabaseReference DB_Ref;
-   private List<Image> Limages;
-   private ProgressBar pro_Cir;
+    private RecyclerView RecView;
+    private ImageAdapter IAdapter;
+    private DatabaseReference DB_Ref;
+    private List<Image> Limages;
+    private ProgressBar pro_Cir;
 
 
     @Override
@@ -77,9 +77,12 @@ public class GraphActivity extends AppCompatActivity{
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Limages.clear();
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    String imageUrl = snapshot.getValue().toString();
+//                    System.out.println(imageUrl);
                     Image images = snapshot.getValue(Image.class);
                     Limages.add(images);
                 }
+//                System.out.println(Limages.size());
                 IAdapter = new ImageAdapter(GraphActivity.this, Limages);
                 RecView.setAdapter(IAdapter);
                 //IAdapter.notifyDataSetChanged();
