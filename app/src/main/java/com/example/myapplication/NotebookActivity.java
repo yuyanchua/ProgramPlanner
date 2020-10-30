@@ -50,7 +50,7 @@ public class NotebookActivity extends AppCompatActivity {
         LinearLayout noteLayout = findViewById(R.id.noteList);
         System.out.println("BookList: "  +      bookList);
         for(int i = 0; i < bookList.size(); i ++){
-            final TextView noteView = new TextView(this);
+            TextView noteView = new TextView(this);
             Notebook temp = bookList.get(i);
             String note = temp.content + "\nBy: " + temp.username;
 
@@ -70,8 +70,8 @@ public class NotebookActivity extends AppCompatActivity {
                 for(DataSnapshot snap: dataSnapshot.getChildren()){
                     String username = snap.child("username").getValue().toString();
                     String content = snap.child("content").getValue().toString();
-                    System.out.println("username: " + username);
-                    System.out.println("Content: " + content);
+//                    System.out.println("username: " + username);
+//                    System.out.println("Content: " + content);
                     Notebook tempBook = new Notebook(username, content);
                     bookList.add(tempBook);
                 }

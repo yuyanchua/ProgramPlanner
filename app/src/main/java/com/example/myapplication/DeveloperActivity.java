@@ -126,7 +126,7 @@ public class DeveloperActivity extends AppCompatActivity {
     }
 
     private void toViewFeedback(){
-
+        startActivity(new Intent(DeveloperActivity.this, ViewFeedbackActivity.class));
     }
 
     private void toEvent(){

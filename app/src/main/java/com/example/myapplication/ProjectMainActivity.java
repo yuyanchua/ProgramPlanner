@@ -109,10 +109,10 @@ public class ProjectMainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot snap: dataSnapshot.getChildren()){
                     boolean isExist = snap.child(User.username).exists();
-                    System.out.println("IsExist = " + isExist);
-                    System.out.println("Key: " + snap.getKey());
-
-                    System.out.println(snap.getValue().toString());
+//                    System.out.println("IsExist = " + isExist);
+//                    System.out.println("Key: " + snap.getKey());
+//
+//                    System.out.println(snap.getValue().toString());
                     if(isExist) {
                         String projectName = snap.child("ProjectName").getValue().toString();
                         String projectId = snap.getKey();
