@@ -18,6 +18,7 @@ import java.util.List;
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageHolder> {
     private Context context;
     private List<Image> images;
+    private OnItemClickListen Listener;
 
     public ImageAdapter(Context Icontext, List<Image> image){
 
@@ -50,13 +51,56 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageHolder>
         return images.size();
     }
 
-    public class ImageHolder extends RecyclerView.ViewHolder {
+    public class ImageHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
+            View.OnCreateContextMenuListener, MenuItem.OnMenuItemClickListener{
         public ImageView imageView;
 
         public ImageHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.image_view_upload);
 
+            itemView.setOnClickListener(this);
+            itemView.setOnCreateContextMenuListener(this);
         }
+
+        @Override
+        public void onClick(View v) {
+            if(Listener != null){
+                int position = getAdapterPosition();
+                if(position != RecyclerView.NO_POSITION){
+                    Listener.onItemClick(position);
+                }
+            }
+        }
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+            menu.setHeaderTitle("Select Action");
+            MenuItem delete = menu.add(menu.NONE, 1, 1, "Delete");
+
+            delete.setOnMenuItemClickListener(this);
+        }
+
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            if(Listener != null){
+                int position = getAdapterPosition();
+                if(position != RecyclerView.NO_POSITION){
+                    switch(item.getItemId()){
+                        case 1:
+                            Listener.OnDeleteClick(position);
+                            return true;
+                    }
+                }
+            }
+            return false;
+        }
+    }
+    public interface OnItemClickListen{
+        void onItemClick(int position);
+        void OnDeleteClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListen listener){
+        Listener = listener;
     }
 }

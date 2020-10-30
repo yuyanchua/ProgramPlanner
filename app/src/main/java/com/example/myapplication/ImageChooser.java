@@ -27,6 +27,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+
 public class ImageChooser extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
     private ProgressBar ProBar;
@@ -42,7 +43,7 @@ public class ImageChooser extends AppCompatActivity {
 
         StorageRef = FirebaseStorage.getInstance().getReference("Images");
         DB_Ref = FirebaseDatabase.getInstance().getReference("Project").child(Long.toString(Project.projectId)).child("Images");
-        //DB_Ref = FirebaseDatabase.getInstance().getReference("Images");
+
         setupButton();
         ImageV = findViewById(R.id.image_view);
         ProBar = findViewById(R.id.pro_bar);

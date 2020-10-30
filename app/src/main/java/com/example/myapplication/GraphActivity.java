@@ -35,13 +35,14 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GraphActivity extends AppCompatActivity{
-
+public class GraphActivity extends AppCompatActivity implements ImageAdapter.OnItemClickListen {
     private RecyclerView RecView;
     private ImageAdapter IAdapter;
     private DatabaseReference DB_Ref;
+    private FirebaseStorage Storage;
     private List<Image> Limages;
     private ProgressBar pro_Cir;
+    private ArrayList<String> Del_list;
 
 
     @Override
@@ -49,25 +50,22 @@ public class GraphActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph_view);
 
-        /*runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                RecView = findViewById(R.id.recycler_vi);
-                RecView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                RecView.setHasFixedSize(true);
-            }
-        });*/
         RecView = findViewById(R.id.recycler_vi);
         RecView.setLayoutManager(new LinearLayoutManager(this));
         RecView.setHasFixedSize(true);
 
         pro_Cir = findViewById(R.id.progress_circular);
         Limages = new ArrayList<>();
+        Del_list = new ArrayList<>();
+
+        IAdapter = new ImageAdapter(GraphActivity.this, Limages);
+        RecView.setAdapter(IAdapter);
+        IAdapter.setOnItemClickListener(GraphActivity.this);
 
         DB_Ref = FirebaseDatabase.getInstance().getReference("Project").child(Long.toString(Project.projectId)).child("Images");
+        Storage = FirebaseStorage.getInstance();
+
         Read_Images();
-        setupImage();
-        setupView();
         setupButton();
     }
 
@@ -75,17 +73,16 @@ public class GraphActivity extends AppCompatActivity{
         DB_Ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Del_list.clear();
                 Limages.clear();
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    String imageUrl = snapshot.getValue().toString();
-//                    System.out.println(imageUrl);
                     Image images = snapshot.getValue(Image.class);
+                    Del_list.add(snapshot.getKey());
                     Limages.add(images);
                 }
-//                System.out.println(Limages.size());
-                IAdapter = new ImageAdapter(GraphActivity.this, Limages);
-                RecView.setAdapter(IAdapter);
-                //IAdapter.notifyDataSetChanged();
+
+
+                IAdapter.notifyDataSetChanged();
                 pro_Cir.setVisibility(View.INVISIBLE);
             }
 
@@ -97,30 +94,12 @@ public class GraphActivity extends AppCompatActivity{
         });
     }
 
-    private void setupImage(){
-
-    }
-
-    private void setupView(){
-
-        //ImageView graphList = findViewById(R.id.ImageView);
-
-    }
-
     private void setupButton(){
         Button btUpload = findViewById(R.id.buttonUpload);
         btUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(GraphActivity.this, ImageChooser.class));
-            }
-        });
-
-        Button btDelete = findViewById(R.id.buttonDelete);
-        btDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteGraph();
             }
         });
 
@@ -134,13 +113,24 @@ public class GraphActivity extends AppCompatActivity{
 
     }
 
-    private void uploadGraph(){
-
+    @Override
+    public void onItemClick(int position) {
+        Toast.makeText(getApplicationContext(), "Normal click!", Toast.LENGTH_SHORT).show();
     }
 
-
-    private void deleteGraph(){
-
+    @Override
+    public void OnDeleteClick(int position) {
+        Image Item = Limages.get(position);
+        final String Key = Del_list.get(position);
+        final int pot = position;
+        StorageReference S_Ref = Storage.getReferenceFromUrl(Item.ImageUrl);
+        S_Ref.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                DB_Ref.child(Key).removeValue();
+                Del_list.remove(pot);
+                Toast.makeText(getApplicationContext(), "Item Deleted", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
-
 }
