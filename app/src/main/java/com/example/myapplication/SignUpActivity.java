@@ -85,18 +85,15 @@ public class SignUpActivity extends AppCompatActivity {
             errView.setVisibility(View.VISIBLE);
             return;
         }
-
+        if(name.length() == 0 || pass.length() == 0 || repass.length() == 0
+                || answer.length() == 0){
+            errView.setText("Fields are empty");
+            errView.setVisibility(View.VISIBLE);
+            return;
+        }
         //TODO: Password policy Verification?
 
-
-        //check whether is possible to signup
         signUpToDatabase(name, pass, quesIndex, answer);
-        /*boolean result = signUpToDatabase(name, pass, quesIndex, answer);
-        if(!result){
-            errView.setText("Username is already in database");
-            errView.setVisibility(View.VISIBLE);
-            return ;
-        }*/
     }
 
     private void signUpToDatabase(String name, String pass, int quesIndex, String answer){

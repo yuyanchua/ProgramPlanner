@@ -1,0 +1,136 @@
+package com.example.myapplication;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.ContentResolver;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Handler;
+import android.view.View;
+import android.webkit.MimeTypeMap;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
+
+public class ImageChooser extends AppCompatActivity {
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private ProgressBar ProBar;
+    private Uri ImageUri;
+    private ImageView ImageV;
+    private StorageReference StorageRef;
+    private DatabaseReference DB_Ref;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_image_chooser);
+
+        StorageRef = FirebaseStorage.getInstance().getReference("Images");
+        DB_Ref = FirebaseDatabase.getInstance().getReference("Project").child(Long.toString(Project.projectId)).child("Images");
+        //DB_Ref = FirebaseDatabase.getInstance().getReference("Images");
+        setupButton();
+        ImageV = findViewById(R.id.image_view);
+        ProBar = findViewById(R.id.pro_bar);
+    }
+
+    private void setupButton(){
+        Button bt_image = findViewById(R.id.bt_choose_image);
+            bt_image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FileChooser();
+                }
+            });
+        Button bt_upload = findViewById(R.id.bt_upload_image);
+        bt_upload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Upload();
+            }
+        });
+        Button bt_back = findViewById(R.id.bt_back);
+        bt_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+    }
+    private void FileChooser(){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null){
+            ImageUri = data.getData();
+            Picasso.with(this).load(ImageUri).into(ImageV);
+        }
+    }
+
+    private void Upload(){
+        if(ImageUri != null){
+            StorageReference Ref = StorageRef.child(System.currentTimeMillis()
+                    + "." + FileExt(ImageUri));
+            Ref.putFile(ImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            ProBar.setProgress(0);
+                        }
+                    }, 500);
+                    Image image = new Image(taskSnapshot.getMetadata().getReference().getDownloadUrl().toString());
+                    String uploadID = DB_Ref.push().getKey();
+                    DB_Ref.child(uploadID).setValue(image);
+                    Toast.makeText(getApplicationContext(), "Upload Successfully!", Toast.LENGTH_SHORT).show();
+                    finish();
+
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(getApplicationContext(), "Upload failed!", Toast.LENGTH_SHORT).show();
+                }
+            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                    double progress = (100.0 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                    ProBar.setProgress((int) progress);
+                }
+            });
+        }
+        else{
+            Toast.makeText(getApplicationContext(), "No file selected!", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    private String FileExt(Uri uri){
+        ContentResolver cr = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cr.getType(uri));
+    }
+}

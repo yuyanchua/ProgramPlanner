@@ -1,5 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.myapplication">
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -8,33 +11,33 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER"/>
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity"/>
-        <activity android:name=".ForgetPassActivity"/>
-        <activity android:name=".SignUpActivity"/>
-        <activity android:name=".ResetPassActivity"/>
-        <activity android:name=".ForgetQuesActivity"/>
-        <activity android:name=".ProjectMainActivity"/>
-        <activity android:name=".CreateProjectActivity"/>
-        <activity android:name=".JoinProjectActivity"/>
-        <activity android:name=".CustomerActivity"/>
-        <activity android:name=".DeveloperActivity"/>
-        <activity android:name=".FeedbackActivity"/>
-        <activity android:name=".TimelineActivity"/>
-        <activity android:name=".TaskAssignActivity"/>
-        <activity android:name=".AddTaskActivity"/>
-        <activity android:name=".EventActivity"/>
-        <activity android:name=".LogViewActivity"/>
-        <activity android:name=".GraphActivity"/>
-        <activity android:name=".NotebookActivity"/>
-        <activity android:name=".InviteActivity"/>
-
-
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".ForgetPassActivity" />
+        <activity android:name=".SignUpActivity" />
+        <activity android:name=".ResetPassActivity" />
+        <activity android:name=".ForgetQuesActivity" />
+        <activity android:name=".ProjectMainActivity" />
+        <activity android:name=".CreateProjectActivity" />
+        <activity android:name=".JoinProjectActivity" />
+        <activity android:name=".CustomerActivity" />
+        <activity android:name=".DeveloperActivity" />
+        <activity android:name=".FeedbackActivity" />
+        <activity android:name=".TimelineActivity" />
+        <activity android:name=".TaskAssignActivity" />
+        <activity android:name=".AddTaskActivity" />
+        <activity android:name=".EventActivity" />
+        <activity android:name=".LogViewActivity" />
+        <activity android:name=".GraphActivity" />
+        <activity android:name=".NotebookActivity" />
+        <activity android:name=".InviteActivity" />
+        <activity android:name=".ImageChooser" />
     </application>
+
 </manifest>
