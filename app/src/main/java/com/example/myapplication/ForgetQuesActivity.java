@@ -5,11 +5,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,9 +19,7 @@ public class ForgetQuesActivity extends AppCompatActivity {
 
     private TextView errView;
     private TextView quesView;
-
     private String username;
-
     private FirebaseDatabase firebase;
     private DatabaseReference db_ref;
 
@@ -101,6 +97,7 @@ public class ForgetQuesActivity extends AppCompatActivity {
     }
 
     //TODO: Implement Question
+    // if we don't use Email, how do we implement this. Or could use the cell phone to receive the verify message
     private String getQuestion(int ques_index){
         return "Question " + ques_index;
     }
