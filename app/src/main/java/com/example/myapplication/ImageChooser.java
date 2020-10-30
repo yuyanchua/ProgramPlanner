@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.health.SystemHealthManager;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -102,11 +103,23 @@ public class ImageChooser extends AppCompatActivity {
                             ProBar.setProgress(0);
                         }
                     }, 500);
-                    Image image = new Image(taskSnapshot.getMetadata().getReference().getDownloadUrl().toString());
-                    String uploadID = DB_Ref.push().getKey();
-                    DB_Ref.child(uploadID).setValue(image);
+
                     Toast.makeText(getApplicationContext(), "Upload Successfully!", Toast.LENGTH_SHORT).show();
+
+                    com.google.android.gms.tasks.Task<Uri> downloadUri = taskSnapshot.getStorage().getDownloadUrl();
+                    downloadUri.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            String uploadId = DB_Ref.push().getKey();
+                            String imageUri = uri.toString();
+                            Image image = new Image(imageUri);
+                            System.out.println("ImageUri = " + imageUri);
+                            DB_Ref.child(uploadId).setValue(image);
+                        }
+                    });
                     finish();
+
+
 
                 }
             }).addOnFailureListener(new OnFailureListener() {
