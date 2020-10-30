@@ -6,8 +6,8 @@ import static org.junit.Assert.*;
 import com.example.myapplication.Event;
 
 /**
- * Tests the Feedback class.
- * Currently just constructor Test.
+ * Tests the Event class.
+ * Tests for all current methods
  * ~/app/src/main/java/com/example/myapplication/Event.java
  */
 public class EventTest {
@@ -40,10 +40,10 @@ public class EventTest {
     //</Constructor Tests>
 
 
-    /**
+    /*
      * Test the equals function to verify
      * same date and different other fields is equal.
-     */
+     *
     @Test
     public void testEqualsEqual() {
         Event testEvent = new Event("blank", "Date 1", false);
@@ -54,13 +54,13 @@ public class EventTest {
     /**
      * Test the equals function to verify
      * different date and same other fields isn't equal.
-     */
+     *
     @Test
     public void testEqualsNot() {
         Event testEvent = new Event("blank", "Date 1", false);
         Event testEvent1 = new Event("blank", "Date 2", false);
         assertFalse("Event equals did not say events with different date weren't equal.", testEvent.equals(testEvent1));
-    }
+    }*/
 
     /**
      * Test the toString function.
