@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Program Planner</string>
     <string name="enter_name">Account Name:</string>
     <string name="enter_password">Password:</string>
     <string name="re_enter_password">Re-enter Password:</string>
