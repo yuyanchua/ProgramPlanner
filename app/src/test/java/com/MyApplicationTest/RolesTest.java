@@ -1,9 +1,8 @@
 package com.MyApplicationTest;
 
-import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import com.example.myapplication.Roles;
+import com.example.myapplication.element.Roles;
 
 /**
  * Tests the Roles class.

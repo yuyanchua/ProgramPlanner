@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.element.Image;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

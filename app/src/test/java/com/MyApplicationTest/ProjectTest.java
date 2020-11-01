@@ -1,9 +1,8 @@
 package com.MyApplicationTest;
 
-import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import com.example.myapplication.Project;
+import com.example.myapplication.element.Project;
 
 /**
  * Tests all methods in the Project class

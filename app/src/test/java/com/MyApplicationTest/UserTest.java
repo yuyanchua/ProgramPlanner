@@ -1,9 +1,8 @@
 package com.MyApplicationTest;
 
-import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import com.example.myapplication.User;
+import com.example.myapplication.element.User;
 
 /**
  * Tests the user class.

@@ -1,0 +1,52 @@
+Index: app/src/main/java/com/example/myapplication/Image.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.myapplication;\r\n\r\nimport com.google.firebase.database.Exclude;\r\n\r\npublic class Image {\r\n    public String ImageUrl;\r\n    //private String mKey;\r\n\r\n    public Image(String ImageUrl){\r\n        this.ImageUrl =  ImageUrl;\r\n    }\r\n\r\n    /*@Exclude\r\n    public String getmKey(){\r\n        return mKey;\r\n    }\r\n\r\n    @Exclude\r\n    public void setKey(String key){\r\n        mKey = key;\r\n    }*/\r\n    public Image(){}\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/myapplication/Image.java	(revision 8deda9ef76881ae2827ebbeead60412a3a07bdbd)
++++ app/src/main/java/com/example/myapplication/Image.java	(date 1604070460606)
+@@ -4,20 +4,13 @@
+ 
+ public class Image {
+     public String ImageUrl;
++    public String uploadId;
++
+     //private String mKey;
+ 
+     public Image(String ImageUrl){
+         this.ImageUrl =  ImageUrl;
+     }
+ 
+-    /*@Exclude
+-    public String getmKey(){
+-        return mKey;
+-    }
+-
+-    @Exclude
+-    public void setKey(String key){
+-        mKey = key;
+-    }*/
+     public Image(){}
+ }
+Index: app/src/main/java/com/example/myapplication/ImageAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.myapplication;\r\n\r\nimport android.content.Context;\r\nimport android.view.ContextMenu;\r\nimport android.view.LayoutInflater;\r\nimport android.view.MenuItem;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.ImageView;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport com.squareup.picasso.Picasso;\r\n\r\nimport java.util.List;\r\n\r\npublic class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageHolder> {\r\n    private Context context;\r\n    private List<Image> images;\r\n\r\n    public ImageAdapter(Context Icontext, List<Image> image){\r\n\r\n        context = Icontext;\r\n        images = image;\r\n    }\r\n    @NonNull\r\n    @Override\r\n    public ImageHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {\r\n        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.image_item, parent, false);\r\n        return new ImageHolder(v);\r\n    }\r\n\r\n    @Override\r\n    public void onBindViewHolder(@NonNull ImageHolder holder, int position) {\r\n        Image curr = images.get(position);\r\n\r\n        Picasso.with(context)\r\n                .load(curr.ImageUrl)\r\n                .placeholder(R.mipmap.ic_launcher)\r\n                .fit()\r\n                .centerCrop()\r\n                .into(holder.imageView);\r\n\r\n\r\n    }\r\n\r\n    @Override\r\n    public int getItemCount() {\r\n        return images.size();\r\n    }\r\n\r\n    public class ImageHolder extends RecyclerView.ViewHolder {\r\n        public ImageView imageView;\r\n\r\n        public ImageHolder(@NonNull View itemView) {\r\n            super(itemView);\r\n            imageView = itemView.findViewById(R.id.image_view_upload);\r\n\r\n        }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/myapplication/ImageAdapter.java	(revision 8deda9ef76881ae2827ebbeead60412a3a07bdbd)
++++ app/src/main/java/com/example/myapplication/ImageAdapter.java	(date 1604071998085)
+@@ -42,8 +42,9 @@
+                 .centerCrop()
+                 .into(holder.imageView);
+ 
++    }
+ 
+-    }
++
+ 
+     @Override
+     public int getItemCount() {

@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.element;
 
 public class Notebook {
     public String username;

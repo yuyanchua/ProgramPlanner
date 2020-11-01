@@ -1,10 +1,9 @@
 package com.MyApplicationTest;
 
-import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import java.util.ArrayList;
-import com.example.myapplication.Task;
+import com.example.myapplication.element.Task;
 
 /**
  * Tests the Task class.

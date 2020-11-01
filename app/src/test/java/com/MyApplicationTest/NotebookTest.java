@@ -1,9 +1,8 @@
 package com.MyApplicationTest;
 
-import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import com.example.myapplication.Notebook;
+import com.example.myapplication.element.Notebook;
 
 /**
  * Tests the Notebook class.

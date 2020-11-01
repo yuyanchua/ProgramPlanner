@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.element;
 
 public class Event{
     public String eventId;

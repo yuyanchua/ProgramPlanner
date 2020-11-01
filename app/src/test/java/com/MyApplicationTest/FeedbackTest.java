@@ -1,9 +1,8 @@
 package com.MyApplicationTest;
 
-import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import com.example.myapplication.Feedback;
+import com.example.myapplication.element.Feedback;
 
 /**
  * Tests the Feedback class.
