@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.element.Feedback;
 import com.example.myapplication.element.Project;
+import com.example.myapplication.element.Session;
 import com.example.myapplication.element.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,16 +24,21 @@ public class FeedbackActivity extends AppCompatActivity {
 
     FirebaseDatabase firebase;
     DatabaseReference db_ref;
+    Session session;
     Feedback newFeedback;
     int feedbackId;
+    String projectIdStr;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback_view);
 
+        session = Session.getInstance();
+        projectIdStr = session.getProjectId();
+
         firebase = FirebaseDatabase.getInstance();
-        db_ref = firebase.getReference("Project").child(Long.toString(Project.projectId)).child("feedback");
+        db_ref = firebase.getReference("Project").child(projectIdStr).child("feedback");
 
         Button btConfirm = findViewById(R.id.button);
         btConfirm.setOnClickListener(new View.OnClickListener() {
@@ -54,7 +60,7 @@ public class FeedbackActivity extends AppCompatActivity {
     private void submitFeedback(){
         EditText feedEdit = findViewById(R.id.textBoxFeedBack);
         String feedback = feedEdit.getText().toString();
-        newFeedback = new Feedback(User.username, feedback);
+        newFeedback = new Feedback(session.getUserName(), feedback);
 //        if(!feedback.isEmpty())
         getFeedbackId();
         addFeedbackToDatabase();
@@ -64,8 +70,8 @@ public class FeedbackActivity extends AppCompatActivity {
         db_ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String projectId = Long.toString(Project.projectId);
-                System.out.println("Project Id " + projectId);
+//                String projectId = projectIdStr;
+                System.out.println("Project Id " + projectIdStr);
                 //TODO: add feedback class, with id, username, comment
 //                db_ref.child("feedback").setValue(User.username);
 //                db_ref.child("feedback").child(User.username);

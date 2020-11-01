@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.element.Project;
+import com.example.myapplication.element.Session;
 import com.example.myapplication.element.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -40,7 +41,7 @@ public class TaskAssignActivity extends AppCompatActivity {
         setContentView(R.layout.activity_task_assignment_view);
 
         firebase = FirebaseDatabase.getInstance();
-        db_ref = firebase.getReference("Project").child(Long.toString(Project.projectId)).child("Task");
+        db_ref = firebase.getReference("Project").child(Session.getInstance().getProjectId()).child("Task");
 
         taskList = new ArrayList<>();
         deleteList = new ArrayList<>();

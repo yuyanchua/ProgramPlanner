@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.myapplication.element.Image;
 import com.example.myapplication.element.Project;
+import com.example.myapplication.element.Session;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
@@ -42,8 +43,9 @@ public class ImageChooser extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_chooser);
 
+        String projectIdStr = Session.getInstance().getProjectId();
         StorageRef = FirebaseStorage.getInstance().getReference("Images");
-        DB_Ref = FirebaseDatabase.getInstance().getReference("Project").child(Long.toString(Project.projectId)).child("Images");
+        DB_Ref = FirebaseDatabase.getInstance().getReference("Project").child(projectIdStr).child("Images");
 
         setupButton();
         ImageV = findViewById(R.id.image_view);

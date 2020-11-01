@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.element.Project;
+import com.example.myapplication.element.Session;
 import com.example.myapplication.element.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,6 +25,7 @@ public class JoinProjectActivity extends AppCompatActivity {
     TextView errView;
     FirebaseDatabase firebase;
     DatabaseReference db_ref, db_ref_roles;
+    Session session;
     boolean isExist, isValid, isDeveloper;
 
     @Override
@@ -37,6 +39,7 @@ public class JoinProjectActivity extends AppCompatActivity {
         firebase = FirebaseDatabase.getInstance();
         db_ref = firebase.getReference("Project");
         db_ref_roles = firebase.getReference("Roles");
+        session = Session.getInstance();
 
         Button btJoin = findViewById(R.id.buttonJoin);
         btJoin.setOnClickListener(new View.OnClickListener() {
@@ -95,7 +98,10 @@ public class JoinProjectActivity extends AppCompatActivity {
                             continue;
                         }
                         long projectId = Long.parseLong(snap.getKey().toString());
-                        Project.projectId = projectId;
+//                        Project.projectId = projectId;
+
+                        //TODO: check whether is redundant
+                        session.getCurrProject().projectId = projectId;
 
                         String clientCode = snap.child("clientCode").getValue().toString();
                         String devCode = snap.child("devCode").getValue().toString();
@@ -130,17 +136,19 @@ public class JoinProjectActivity extends AppCompatActivity {
         db_ref_roles.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String username = session.getUserName();
                 if(isValid){
-                    String projectIdStr = Long.toString(Project.projectId);
-                    boolean isExist = dataSnapshot.child(projectIdStr).child(User.username).exists();
+//                    Project project = session.getCurrProject();
+                    String projectIdStr = session.getProjectId();
+                    boolean isExist = dataSnapshot.child(projectIdStr).child(username).exists();
                     if(!isExist){
                         if(isDeveloper){
                             db_ref_roles.child(projectIdStr).child("ProjectName").setValue(projectName);
-                            db_ref_roles.child(projectIdStr).child(User.username).child("Roles").setValue("developer");
+                            db_ref_roles.child(projectIdStr).child(username).child("Roles").setValue("developer");
                             toDeveloper();
                         }else{
                             db_ref_roles.child(projectIdStr).child("ProjectName").setValue(projectName);
-                            db_ref_roles.child(projectIdStr).child(User.username).child("Roles").setValue("client");
+                            db_ref_roles.child(projectIdStr).child(username).child("Roles").setValue("client");
                             toClient();
                         }
                     }
@@ -161,10 +169,12 @@ public class JoinProjectActivity extends AppCompatActivity {
     }
 
     private void setProjectValue(long projectId, String projectName, String clientCode, String devCode){
-        Project.projectId = projectId;
-        Project.projectName = projectName;
-        Project.clientCode = clientCode;
-        Project.devCode = devCode;
+//        Project.projectId = projectId;
+//        Project.projectName = projectName;
+//        Project.clientCode = clientCode;
+//        Project.devCode = devCode;
+        Project temp = new Project(projectId, projectName, clientCode, devCode);
+        session.setCurrProject(temp);
     }
 
     private void toDeveloper(){

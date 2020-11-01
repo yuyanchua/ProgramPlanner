@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapplication.element.Session;
 import com.example.myapplication.element.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
@@ -50,7 +51,8 @@ public class ForgetPassActivity extends AppCompatActivity {
         //Check database
         Intent intent = new Intent(ForgetPassActivity.this, ForgetQuesActivity.class);
 //        intent.putExtra("username", username);
-        User.username = username;
+        Session.getInstance().setUserName(username);
+//        = username;
         startActivity(intent);
     }
 

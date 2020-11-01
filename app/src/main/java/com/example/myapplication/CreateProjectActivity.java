@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.element.Project;
+import com.example.myapplication.element.Session;
 import com.example.myapplication.element.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,6 +28,7 @@ public class CreateProjectActivity extends AppCompatActivity {
     TextView errView;
     FirebaseDatabase firebase;
     DatabaseReference db_ref, db_ref_roles;
+    Session session;
 
     Project newProject;
     String projectName;
@@ -44,6 +46,7 @@ public class CreateProjectActivity extends AppCompatActivity {
         firebase = FirebaseDatabase.getInstance();
         db_ref = firebase.getReference("Project");
         db_ref_roles = firebase.getReference("Roles");
+        session = Session.getInstance();
 
         allCodes = new HashSet<>();
         getAllCodes();
@@ -98,9 +101,6 @@ public class CreateProjectActivity extends AppCompatActivity {
                     projectId = Integer.parseInt(postSnapshot.getKey()) + 1;
                 }
 
-//                projectId = maxId + 1;
-//                newProject.projectId = projectId;
-//                projectId = 0;
             }
 
             @Override
@@ -177,7 +177,7 @@ public class CreateProjectActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 System.out.println("ProjectId in db_ref_roles: " + projectId);
                 db_ref_roles.child(Long.toString(projectId)).child("ProjectName").setValue(projectName);
-                db_ref_roles.child(Long.toString(projectId )).child(User.username).child("Roles").setValue("developer");
+                db_ref_roles.child(Long.toString(projectId )).child(session.getUserName()).child("Roles").setValue("developer");
             }
 
             @Override

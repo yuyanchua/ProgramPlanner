@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.element.Log;
 import com.example.myapplication.element.Project;
+import com.example.myapplication.element.Session;
 import com.example.myapplication.element.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,6 +31,7 @@ public class LogViewActivity extends AppCompatActivity {
 
     FirebaseDatabase firebase;
     DatabaseReference db_ref;
+    Session session;
     List<Log> logList;
     Calendar calendar;
     SimpleDateFormat fmtDate;
@@ -42,8 +44,9 @@ public class LogViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_view);
 
+        session = Session.getInstance();
         firebase = FirebaseDatabase.getInstance();
-        db_ref = firebase.getReference("Project").child(Long.toString(Project.projectId)).child("Log");
+        db_ref = firebase.getReference("Project").child(session.getProjectId()).child("Log");
 
         calendar = Calendar.getInstance();
         fmtDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -120,7 +123,7 @@ public class LogViewActivity extends AppCompatActivity {
         String logContent = logEdit.getText().toString();
 
         String currDate = fmtDate.format(calendar.getTime());
-        String username = User.username;
+        String username = session.getUserName();
 
         newLog = new Log(currDate, logContent, username);
         getLogId();

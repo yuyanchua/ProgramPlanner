@@ -1,7 +1,7 @@
 package com.example.myapplication.element;
 
 public class User {
-    public static String username;
+    public String username;
     public String password;
     public int questionIndex;
     public String answer;

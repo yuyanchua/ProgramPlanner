@@ -10,8 +10,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.element.Project;
+import com.example.myapplication.element.Session;
 
 public class DeveloperActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -21,7 +23,7 @@ public class DeveloperActivity extends AppCompatActivity {
         setup();
 
         TextView projectNameView = findViewById(R.id.ProjectNameTitle);
-        projectNameView.setText(Project.projectName);
+        projectNameView.setText(Session.getInstance().getProjectName());
 
 
     }

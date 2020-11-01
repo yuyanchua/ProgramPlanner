@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.element.Project;
 import com.example.myapplication.element.Roles;
+import com.example.myapplication.element.Session;
 import com.example.myapplication.element.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,18 +31,20 @@ public class ProjectMainActivity extends AppCompatActivity {
     List<Roles> projectList;
     List<Integer> projectIdList;
     LinearLayout projectLayout;
+    Session session;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_project_view);
-        String welcome = "Welcome, " + User.username;
 
         firebase = FirebaseDatabase.getInstance();
         db_ref = firebase.getReference("Roles");
+        session = Session.getInstance();
 
         TextView welcomeView = findViewById(R.id.WelcomeMessage);
+        String welcome = "Welcome, " + session.getUserName();
         welcomeView.setText(welcome);
 
         projectList = new ArrayList<>();
@@ -110,7 +113,8 @@ public class ProjectMainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot snap: dataSnapshot.getChildren()){
-                    boolean isExist = snap.child(User.username).exists();
+
+                    boolean isExist = snap.child(session.getUserName()).exists();
 //                    System.out.println("IsExist = " + isExist);
 //                    System.out.println("Key: " + snap.getKey());
 //
@@ -118,7 +122,7 @@ public class ProjectMainActivity extends AppCompatActivity {
                     if(isExist) {
                         String projectName = snap.child("ProjectName").getValue().toString();
                         String projectId = snap.getKey();
-                        String role = snap.child(User.username).child("Roles").getValue().toString();
+                        String role = snap.child(session.getUserName()).child("Roles").getValue().toString();
 
                         Roles tempRoles = new Roles(projectId, projectName, role);
                         System.out.println(projectList);
@@ -149,8 +153,12 @@ public class ProjectMainActivity extends AppCompatActivity {
 
     private void toProjectActivity(int projectIndex){
         Roles role = projectList.get(projectIndex);
-        Project.projectId = Long.parseLong(role.projectId);
-        Project.projectName = role.projectName;
+
+        long projectId = Long.parseLong(role.projectId);
+        String projectName = role.projectName;
+
+        Project project = new Project(projectId, projectName);
+        session.setCurrProject(project);
 
         String userRole = role.roles;
         if(userRole.equals("developer"))

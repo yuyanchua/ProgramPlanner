@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.element.Question;
+import com.example.myapplication.element.Session;
 import com.example.myapplication.element.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
@@ -39,9 +40,9 @@ public class ForgetQuesActivity extends AppCompatActivity {
         db_ref = firebase.getReference("Users");
 
         //TODO: get question index from database
-        TextView ques_view = findViewById(R.id.securityQuestionTip);
-        Intent intent = getIntent();
-        username = User.username;
+//        TextView ques_view = findViewById(R.id.securityQuestionTip);
+//        Intent intent = getIntent();
+        username = Session.getInstance().getUserName();
 
         setSecurityQuestion();
 

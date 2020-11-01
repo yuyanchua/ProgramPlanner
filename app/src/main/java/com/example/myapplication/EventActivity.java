@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.element.Event;
 import com.example.myapplication.element.Project;
+import com.example.myapplication.element.Session;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,7 +47,8 @@ public class EventActivity extends AppCompatActivity {
         setContentView(R.layout.activity_event_view);
 
         firebase = FirebaseDatabase.getInstance();
-        db_ref = firebase.getReference("Project").child(Long.toString(Project.projectId)).child("Event");
+        String projectIdStr = Session.getInstance().getProjectId();
+        db_ref = firebase.getReference("Project").child(projectIdStr).child("Event");
 
         errView = findViewById(R.id.errorMessageTip);
         errView.setVisibility(View.INVISIBLE);

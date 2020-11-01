@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.element.Notebook;
 import com.example.myapplication.element.Project;
+import com.example.myapplication.element.Session;
 import com.example.myapplication.element.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,6 +28,7 @@ import java.util.List;
 public class NotebookActivity extends AppCompatActivity {
     FirebaseDatabase firebase;
     DatabaseReference db_ref;
+    Session session = Session.getInstance();
     List<Notebook> bookList;
     Notebook newNotebook;
     int noteId;
@@ -37,7 +39,7 @@ public class NotebookActivity extends AppCompatActivity {
         setContentView(R.layout.activity_notebook_view);
 
         firebase = FirebaseDatabase.getInstance();
-        db_ref = firebase.getReference("Project").child(Long.toString(Project.projectId)).child("Notebook");
+        db_ref = firebase.getReference("Project").child(session.getProjectId()).child("Notebook");
 
         bookList = new ArrayList<>();
         getNoteList();
@@ -108,8 +110,8 @@ public class NotebookActivity extends AppCompatActivity {
         EditText noteEdit = findViewById(R.id.editTextNote);
         String note = noteEdit.getText().toString();
 
-        String username = User.username;
-
+//        String username = User.username;
+        String username = session.getUserName();
         newNotebook = new Notebook(username, note);
         getNoteId();
         addNoteToDatabase();

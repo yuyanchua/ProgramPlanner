@@ -10,15 +10,20 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.element.Project;
+import com.example.myapplication.element.Session;
 
 public class CustomerActivity extends AppCompatActivity {
+
+    Session session = Session.getInstance();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_main);
 
         TextView titleView = findViewById(R.id.ProjectNameTitle);
-        titleView.setText(Project.projectName);
+//        titleView.setText(Project.projectName);
+        titleView.setText(session.getCurrProject().projectName);
 
         Button btFeedback = findViewById(R.id.buttonLeaveFeedBack);
         btFeedback.setOnClickListener(new View.OnClickListener() {

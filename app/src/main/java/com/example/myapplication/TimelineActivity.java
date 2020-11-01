@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.element.Event;
 import com.example.myapplication.element.Project;
+import com.example.myapplication.element.Session;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,6 +28,7 @@ public class TimelineActivity extends AppCompatActivity {
 
     FirebaseDatabase firebase;
     DatabaseReference db_ref;
+    Session session;
     List<Event> eventList;
     List<String> deleteList;
 
@@ -39,8 +41,9 @@ public class TimelineActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline_view);
 
+        session = Session.getInstance();
         firebase = FirebaseDatabase.getInstance();
-        db_ref = firebase.getReference("Project").child(Long.toString(Project.projectId)).child("Event");
+        db_ref = firebase.getReference("Project").child(session.getProjectId()).child("Event");
 
         eventList = new ArrayList<>();
         deleteList = new ArrayList<>();

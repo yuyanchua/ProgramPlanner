@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.element.Project;
+import com.example.myapplication.element.Session;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,7 +28,7 @@ public class InviteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_invite_code_page);
 
         firebase = FirebaseDatabase.getInstance();
-        db_ref = firebase.getReference("Project").child(Long.toString(Project.projectId));
+        db_ref = firebase.getReference("Project").child(Session.getInstance().getProjectId());
 
         setupCode();
         Button btDone = findViewById(R.id.buttonDone);

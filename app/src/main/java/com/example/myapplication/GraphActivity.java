@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.element.Image;
 import com.example.myapplication.element.Project;
+import com.example.myapplication.element.Session;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -54,7 +55,7 @@ public class GraphActivity extends AppCompatActivity implements ImageAdapter.OnI
         RecView.setAdapter(IAdapter);
         IAdapter.setOnItemClickListener(GraphActivity.this);
 
-        DB_Ref = FirebaseDatabase.getInstance().getReference("Project").child(Long.toString(Project.projectId)).child("Images");
+        DB_Ref = FirebaseDatabase.getInstance().getReference("Project").child(Session.getInstance().getProjectId()).child("Images");
         Storage = FirebaseStorage.getInstance();
 
         Read_Images();

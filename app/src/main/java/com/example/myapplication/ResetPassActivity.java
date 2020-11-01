@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapplication.element.Session;
 import com.example.myapplication.element.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
@@ -34,7 +35,7 @@ public class ResetPassActivity extends AppCompatActivity {
 
         errView = findViewById(R.id.errorMessage);
         errView.setVisibility(View.INVISIBLE);
-        username = User.username;
+        username = Session.getInstance().getUserName();
         firebase = FirebaseDatabase.getInstance();
         db_ref = firebase.getReference("Users");
 

@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.element.Feedback;
 import com.example.myapplication.element.Project;
+import com.example.myapplication.element.Session;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,7 +35,8 @@ public class ViewFeedbackActivity extends AppCompatActivity {
         setContentView(R.layout.activity_developer_feedback_view);
 
         firebase = FirebaseDatabase.getInstance();
-        db_ref = firebase.getReference("Project").child(Long.toString(Project.projectId)).child("feedback");
+        String projectIdStr = Session.getInstance().getProjectId();
+        db_ref = firebase.getReference("Project").child(projectIdStr).child("feedback");
 
         feedbackList = new ArrayList<>();
         getFeedbackList();
