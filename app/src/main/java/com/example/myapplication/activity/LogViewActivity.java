@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.activity;
 
 import android.os.Bundle;
 import android.view.View;
@@ -12,10 +12,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapplication.R;
 import com.example.myapplication.element.Log;
 import com.example.myapplication.element.Project;
 import com.example.myapplication.element.Session;
 import com.example.myapplication.element.User;
+import com.example.myapplication.engine.ManageLog;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,14 +31,16 @@ import java.util.List;
 
 public class LogViewActivity extends AppCompatActivity {
 
-    FirebaseDatabase firebase;
-    DatabaseReference db_ref;
+//    FirebaseDatabase firebase;
+//    DatabaseReference db_ref;
     Session session;
     List<Log> logList;
     Calendar calendar;
+    ManageLog manageLog;
     SimpleDateFormat fmtDate;
     LinearLayout logLayout;
     Log newLog;
+
     int logId;
 
     @Override
@@ -45,44 +49,45 @@ public class LogViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_log_view);
 
         session = Session.getInstance();
-        firebase = FirebaseDatabase.getInstance();
-        db_ref = firebase.getReference("Project").child(session.getProjectId()).child("Log");
-
+//        firebase = FirebaseDatabase.getInstance();
+//        db_ref = firebase.getReference("Project").child(session.getProjectId()).child("Log");
+        manageLog = new ManageLog(this, session.getProjectId());
         calendar = Calendar.getInstance();
         fmtDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         logList = new ArrayList<>();
-        getLogList();
-
+//        getLogList();
+        manageLog.getLogList();
 
         setupButton();
     }
 
 
 
-    private void getLogList(){
-        db_ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot snap: dataSnapshot.getChildren()){
-                    String date = snap.child("date").getValue().toString();
-                    String content = snap.child("content").getValue().toString();
-                    String username = snap.child("username").getValue().toString();
+//    private void getLogList(){
+//        db_ref.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                for(DataSnapshot snap: dataSnapshot.getChildren()){
+//                    String date = snap.child("date").getValue().toString();
+//                    String content = snap.child("content").getValue().toString();
+//                    String username = snap.child("username").getValue().toString();
+//
+//                    Log tempLog = new Log(date, content, username);
+//                    logList.add(tempLog);
+//                }
+//                setupLogList();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
-                    Log tempLog = new Log(date, content, username);
-                    logList.add(tempLog);
-                }
-                setupLogList();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void setupLogList(){
+    public void setupLogList(List<Log> logList){
+        this.logList = logList;
         logLayout = findViewById(R.id.logList);
 
         for(int i = 0; i < logList.size(); i ++){
@@ -126,45 +131,51 @@ public class LogViewActivity extends AppCompatActivity {
         String username = session.getUserName();
 
         newLog = new Log(currDate, logContent, username);
-        getLogId();
-
-        addLogToDatabase();
+        manageLog.addLog(newLog);
+//        getLogId();
+//
+//        addLogToDatabase();
         logEdit.getText().clear();
 
     }
 
-    private void getLogId(){
-        db_ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot snap: dataSnapshot.getChildren()){
-                    logId = Integer.parseInt(snap.getKey()) + 1 ;
-                }
-            }
+//    private void getLogId(){
+//        db_ref.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                for(DataSnapshot snap: dataSnapshot.getChildren()){
+//                    logId = Integer.parseInt(snap.getKey()) + 1 ;
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void addLogToDatabase(){
-
-        db_ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                db_ref.child(Integer.toString(logId)).setValue(newLog);
-                Toast.makeText(getApplicationContext(), "New Log is Added", Toast.LENGTH_SHORT).show();
+    public void finishAddLog(){
+        Toast.makeText(getApplicationContext(), "New Log is Added", Toast.LENGTH_SHORT).show();
 //                recreate();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
     }
+
+//    private void addLogToDatabase(){
+//
+//        db_ref.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                db_ref.child(Integer.toString(logId)).setValue(newLog);
+//                Toast.makeText(getApplicationContext(), "New Log is Added", Toast.LENGTH_SHORT).show();
+////                recreate();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
 
 }

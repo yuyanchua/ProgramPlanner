@@ -12,6 +12,13 @@ public class Event{
         this.isNotify = isNotify;
     }
 
+    public Event(String eventId, String eventTitle, String eventDate, boolean isNotify){
+        this.eventId = eventId;
+        this.eventTitle = eventTitle;
+        this.eventDate = eventDate;
+        this.isNotify = isNotify;
+    }
+
     /*
     //Removed by Henry Koenig after notified that this method was not needed.
     public boolean equals(Event event){

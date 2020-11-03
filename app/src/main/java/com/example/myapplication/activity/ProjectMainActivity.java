@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,27 +7,22 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapplication.R;
 import com.example.myapplication.element.Project;
 import com.example.myapplication.element.Roles;
 import com.example.myapplication.element.Session;
-import com.example.myapplication.element.User;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.example.myapplication.engine.ProjectMain;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProjectMainActivity extends AppCompatActivity {
 
-    FirebaseDatabase firebase;
-    DatabaseReference db_ref;
+//    FirebaseDatabase firebase;
+//    DatabaseReference db_ref;
     List<Roles> projectList;
     List<Integer> projectIdList;
     LinearLayout projectLayout;
@@ -39,18 +34,19 @@ public class ProjectMainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_project_view);
 
-        firebase = FirebaseDatabase.getInstance();
-        db_ref = firebase.getReference("Roles");
+//        firebase = FirebaseDatabase.getInstance();
+//        db_ref = firebase.getReference("Roles");
         session = Session.getInstance();
 
         TextView welcomeView = findViewById(R.id.WelcomeMessage);
         String welcome = "Welcome, " + session.getUserName();
         welcomeView.setText(welcome);
 
-        projectList = new ArrayList<>();
+//        projectList = new ArrayList<>();
         projectIdList = new ArrayList<>();
-        getProjectList();
-
+//        getProjectList();
+        ProjectMain main = new ProjectMain(this, session.getUserName());
+        main.getProjectList();
 //        setupProjectList();
 
         Button btCreate = findViewById(R.id.buttonCreate);
@@ -79,7 +75,8 @@ public class ProjectMainActivity extends AppCompatActivity {
 
     }
 
-    private void setupProjectList(){
+    public void setupProjectList(List<Roles> projectList){
+        this.projectList = projectList;
         projectLayout = findViewById(R.id.projectList);
         System.out.println("Project List: " + projectList.toString());
         for(int i = 0; i < projectList.size(); i ++){
@@ -108,36 +105,38 @@ public class ProjectMainActivity extends AppCompatActivity {
 
     }
 
-    private void getProjectList(){
-        db_ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot snap: dataSnapshot.getChildren()){
-
-                    boolean isExist = snap.child(session.getUserName()).exists();
-//                    System.out.println("IsExist = " + isExist);
-//                    System.out.println("Key: " + snap.getKey());
+//    private void getProjectList(){
+//        db_ref.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                for(DataSnapshot snap: dataSnapshot.getChildren()){
 //
-//                    System.out.println(snap.getValue().toString());
-                    if(isExist) {
-                        String projectName = snap.child("ProjectName").getValue().toString();
-                        String projectId = snap.getKey();
-                        String role = snap.child(session.getUserName()).child("Roles").getValue().toString();
+//                    boolean isExist = snap.child(session.getUserName()).exists();
+////                    System.out.println("IsExist = " + isExist);
+////                    System.out.println("Key: " + snap.getKey());
+////
+////                    System.out.println(snap.getValue().toString());
+//                    if(isExist) {
+//                        String projectName = snap.child("ProjectName").getValue().toString();
+//                        String projectId = snap.getKey();
+//                        String role = snap.child(session.getUserName()).child("Roles").getValue().toString();
+//
+//                        Roles tempRoles = new Roles(projectId, projectName, role);
+//                        System.out.println(projectList);
+//                        projectList.add(tempRoles);
+//                    }
+//                }
+//                setupProjectList();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
-                        Roles tempRoles = new Roles(projectId, projectName, role);
-                        System.out.println(projectList);
-                        projectList.add(tempRoles);
-                    }
-                }
-                setupProjectList();
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
 
     private void createProject(){
         projectList.clear();

@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.engine;
 
 import android.content.Context;
 import android.view.ContextMenu;
@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.R;
 import com.example.myapplication.element.Image;
 import com.squareup.picasso.Picasso;
 

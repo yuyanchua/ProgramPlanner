@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.activity;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -11,18 +11,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapplication.R;
 import com.example.myapplication.element.Event;
-import com.example.myapplication.element.Project;
 import com.example.myapplication.element.Session;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.example.myapplication.engine.ManageEvent;
 
 import java.util.Calendar;
 
@@ -34,24 +29,28 @@ public class EventActivity extends AppCompatActivity {
     Calendar calendar;
     int year, month, day;
 
-    Event newEvent, lastEvent;
+    ManageEvent manage;
+    Event newEvent;
     boolean isEdit = false;
     int eventId;
     Intent lastIntent;
-    FirebaseDatabase firebase;
-    DatabaseReference db_ref;
+//    FirebaseDatabase firebase;
+//    DatabaseReference db_ref;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_view);
 
-        firebase = FirebaseDatabase.getInstance();
+//        firebase = FirebaseDatabase.getInstance();
         String projectIdStr = Session.getInstance().getProjectId();
-        db_ref = firebase.getReference("Project").child(projectIdStr).child("Event");
+//        db_ref = firebase.getReference("Project").child(projectIdStr).child("Event");
 
         errView = findViewById(R.id.errorMessageTip);
         errView.setVisibility(View.INVISIBLE);
+
+        manage = new ManageEvent(this, projectIdStr);
+
 
         lastIntent = getIntent();
         try{
@@ -59,7 +58,9 @@ public class EventActivity extends AppCompatActivity {
             if(!eventId.isEmpty()){
                 isEdit = true;
                 this.eventId = Integer.parseInt(eventId);
-                getEventValue();
+                manage.setEventId(this.eventId);
+                manage.getEventValue();
+//                getEventValue();
             }
         }catch (Exception ex){
             ex.printStackTrace();
@@ -102,37 +103,40 @@ public class EventActivity extends AppCompatActivity {
         });
     }
 
-    private void getEventValue(){
-        db_ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//    private void getEventValue(){
+//        db_ref.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//
+//                String eventDate = dataSnapshot.child(Integer.toString(eventId)).child("eventDate").getValue().toString();
+//                String eventTitle = dataSnapshot.child(Integer.toString(eventId)).child("eventTitle").getValue().toString();
+//                boolean isNotify = Boolean.getBoolean(dataSnapshot.child(Integer.toString(eventId)).child("isNotify").getValue().toString());
+//
+//                lastEvent = new Event(eventTitle, eventDate, isNotify);
+////                lastEvent.isNotify = isNotify;
+//                lastEvent.eventId = Integer.toString(eventId);
+//                setEvent();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
-                String eventDate = dataSnapshot.child(Integer.toString(eventId)).child("eventDate").getValue().toString();
-                String eventTitle = dataSnapshot.child(Integer.toString(eventId)).child("eventTitle").getValue().toString();
-                boolean isNotify = Boolean.getBoolean(dataSnapshot.child(Integer.toString(eventId)).child("isNotify").getValue().toString());
+    public void setEvent(Event event){
+        this.eventId = Integer.parseInt(event.eventId);
 
-                lastEvent = new Event(eventTitle, eventDate, isNotify);
-                lastEvent.isNotify = isNotify;
-
-                setEvent();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void setEvent(){
         titleEdit = findViewById(R.id.textBoxEventName);
-        titleEdit.setText(lastEvent.eventTitle);
+        titleEdit.setText(event.eventTitle);
 
         dateView = findViewById(R.id.textViewDate);
-        dateView.setText(lastEvent.eventDate);
+        dateView.setText(event.eventDate);
 
         CheckBox notify = findViewById(R.id.checkBox);
-        notify.setChecked(lastEvent.isNotify);
+        System.out.println("Check : " + event.isNotify);
+        notify.setChecked(event.isNotify);
     }
 
 
@@ -153,54 +157,64 @@ public class EventActivity extends AppCompatActivity {
 
         CheckBox notify = findViewById(R.id.checkBox);
         boolean isNotify = notify.isChecked();
+        System.out.println("IsNotify: " + isNotify);
 
         if(isValid) {
             newEvent = new Event(title, date, isNotify);
-            if(!isEdit)
-                getEventId();
-            //TODO: add to database
-            addEventToDatabase();
+//            if(!isEdit)
+//                getEventId();
+//            addEventToDatabase();
+            if(!isEdit){
+                manage.addNewEvent(newEvent);
+            }else{
+                manage.editEvent(eventId, newEvent);
+            }
         }else{
             errView.setText("Either title or date is invalid");
             errView.setVisibility(View.VISIBLE);
         }
     }
 
-    private void addEventToDatabase(){
-        db_ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//    private void addEventToDatabase(){
+//        db_ref.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//
+////                System.out.println(eventId);
+//
+//                db_ref.child(Integer.toString(eventId)).setValue(newEvent);
+//                Toast.makeText(getApplicationContext(), "New Event is Created", Toast.LENGTH_SHORT).show();
+//                returnPage();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
-//                System.out.println(eventId);
-
-                db_ref.child(Integer.toString(eventId)).setValue(newEvent);
-                Toast.makeText(getApplicationContext(), "New Event is Created", Toast.LENGTH_SHORT).show();
-                returnPage();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+    public void finishAdd(){
+        Toast.makeText(getApplicationContext(), "New Event is Created", Toast.LENGTH_SHORT).show();
+        returnPage();
     }
 
-    private void getEventId(){
-        db_ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                for(DataSnapshot snap : dataSnapshot.getChildren()){
-                    eventId = Integer.parseInt(snap.getKey()) + 1;
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
+//    private void getEventId(){
+//        db_ref.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//
+//                for(DataSnapshot snap : dataSnapshot.getChildren()){
+//                    eventId = Integer.parseInt(snap.getKey()) + 1;
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
     private void returnPage(){
         boolean isTimeline = lastIntent.getExtras().getBoolean("isTimeline");

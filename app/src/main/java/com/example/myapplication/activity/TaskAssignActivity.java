@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,28 +8,24 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.myapplication.element.Project;
+import com.example.myapplication.R;
 import com.example.myapplication.element.Session;
 import com.example.myapplication.element.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.example.myapplication.engine.ManageTaskView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TaskAssignActivity extends AppCompatActivity {
 
-    FirebaseDatabase firebase;
-    DatabaseReference db_ref;
+//    FirebaseDatabase firebase;
+//    DatabaseReference db_ref;
     List<Task> taskList;
     List<String> deleteList;
+    ManageTaskView manageTaskView;
 
     LinearLayout taskLayout;
     boolean canDelete = false, isEdit = false;
@@ -40,14 +36,17 @@ public class TaskAssignActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_assignment_view);
 
-        firebase = FirebaseDatabase.getInstance();
-        db_ref = firebase.getReference("Project").child(Session.getInstance().getProjectId()).child("Task");
+//        firebase = FirebaseDatabase.getInstance();
+//        db_ref = firebase.getReference("Project").child(Session.getInstance().getProjectId()).child("Task");
 
         taskList = new ArrayList<>();
         deleteList = new ArrayList<>();
 
-        getTaskList();
-        setupTaskView();
+        manageTaskView = new ManageTaskView(this, Session.getInstance().getProjectId());
+        manageTaskView.getTaskList();
+
+//        getTaskList();
+//        setupTaskView();
         setupButton();
 
     }
@@ -83,7 +82,8 @@ public class TaskAssignActivity extends AppCompatActivity {
         btConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toConfirm();
+//                toConfirm();
+                manageTaskView.confirmRemove(deleteList);
             }
         });
 
@@ -96,31 +96,32 @@ public class TaskAssignActivity extends AppCompatActivity {
         });
     }
 
-    private void getTaskList(){
-        db_ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot snap : dataSnapshot.getChildren()){
-                    String taskId = snap.getKey();
-                    String taskName = snap.child("task").getValue().toString();
-//                    String
-                    Task tempTask = new Task(taskName);
-                    tempTask.taskId = taskId;
+//    private void getTaskList(){
+//        db_ref.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                for(DataSnapshot snap : dataSnapshot.getChildren()){
+//                    String taskId = snap.getKey();
+//                    String taskName = snap.child("task").getValue().toString();
+////                    String
+//                    Task tempTask = new Task(taskName);
+//                    tempTask.taskId = taskId;
+//
+//                    taskList.add(tempTask);
+//                }
+//                setupTaskView();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//
+//    }
 
-                    taskList.add(tempTask);
-                }
-                setupTaskView();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-    }
-
-    private void setupTaskView(){
+    public void setupTaskView(List<Task> list){
+        this.taskList = list;
         taskLayout = findViewById(R.id.TaskList);
         for(int i = 0; i < taskList.size(); i ++){
             final TextView taskView = new TextView(this);
@@ -213,48 +214,52 @@ public class TaskAssignActivity extends AppCompatActivity {
     }
 
 
-    private void deleteTaskFromDatabase(final String taskId, int index){
-        db_ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//    private void deleteTaskFromDatabase(final String taskId, int index){
+//        db_ref.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//
+//                db_ref.child(taskId).removeValue();
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//
+//        taskList.remove(index);
+////        taskIdList.remove(index);
+//    }
 
-                db_ref.child(taskId).removeValue();
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-        taskList.remove(index);
-//        taskIdList.remove(index);
+    public void reset(){
+        deleteList.clear();
+        toDelete();
     }
 
-    private void toConfirm(){
-        db_ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(String taskId : deleteList){
-                    db_ref.child(taskId).removeValue();
-                }
-
-                deleteList.clear();
-                toDelete();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
+//    private void toConfirm(){
+//        db_ref.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                for(String taskId : deleteList){
+//                    db_ref.child(taskId).removeValue();
+//                }
+//
+//                deleteList.clear();
+//                toDelete();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
     private void resetTaskLayout(){
         int count = taskLayout.getChildCount();
-        List<Task> tempTaskList = new ArrayList<>();
-        tempTaskList.addAll(taskList);
+        List<Task> tempTaskList = new ArrayList<>(taskList);
 
         taskList.clear();
         for(int i = 0; i < count; i ++){

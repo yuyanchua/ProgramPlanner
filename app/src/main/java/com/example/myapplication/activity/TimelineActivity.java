@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,29 +8,25 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapplication.R;
 import com.example.myapplication.element.Event;
-import com.example.myapplication.element.Project;
 import com.example.myapplication.element.Session;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.example.myapplication.engine.ManageTimeline;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TimelineActivity extends AppCompatActivity {
 
-    FirebaseDatabase firebase;
-    DatabaseReference db_ref;
+//    FirebaseDatabase firebase;
+//    DatabaseReference db_ref;
     Session session;
     List<Event> eventList;
     List<String> deleteList;
+    ManageTimeline manage;
 
     LinearLayout  eventLayout;
     Button btAdd, btDelete, btConfirm, btEdit, btBack;
@@ -42,13 +38,15 @@ public class TimelineActivity extends AppCompatActivity {
         setContentView(R.layout.activity_timeline_view);
 
         session = Session.getInstance();
-        firebase = FirebaseDatabase.getInstance();
-        db_ref = firebase.getReference("Project").child(session.getProjectId()).child("Event");
+        manage = new ManageTimeline(this, session.getProjectId());
+//        firebase = FirebaseDatabase.getInstance();
+//        db_ref = firebase.getReference("Project").child(session.getProjectId()).child("Event");
 
         eventList = new ArrayList<>();
         deleteList = new ArrayList<>();
 
-        getEventList();
+//        getEventList();
+        manage.getEventList();
 
         Intent intent = getIntent();
         boolean isDeveloper = intent.getExtras().getBoolean("isDeveloper");
@@ -88,7 +86,8 @@ public class TimelineActivity extends AppCompatActivity {
         btConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toConfirm();
+//                confirm();
+                manage.confirmRemove(deleteList);
             }
         });
 
@@ -108,33 +107,34 @@ public class TimelineActivity extends AppCompatActivity {
         }
     }
 
-    private void getEventList(){
-        db_ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot snap : dataSnapshot.getChildren()){
+//    private void getEventList(){
+//        db_ref.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                for(DataSnapshot snap : dataSnapshot.getChildren()){
+//
+//                    String eventId = snap.getKey();
+//                    String date = snap.child("eventDate").getValue().toString();
+//                    String eventTitle = snap.child("eventTitle").getValue().toString();
+//                    boolean isNotify = Boolean.getBoolean(snap.child("isNotify").getValue().toString());
+//
+//                    Event tempEvent = new Event(eventTitle, date, isNotify);
+//                    System.out.println(tempEvent.toString());
+//                    tempEvent.eventId = eventId;
+//                    eventList.add(tempEvent);
+//                }
+//                setupEventList();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
-                    String eventId = snap.getKey();
-                    String date = snap.child("eventDate").getValue().toString();
-                    String eventTitle = snap.child("eventTitle").getValue().toString();
-                    boolean isNotify = Boolean.getBoolean(snap.child("isNotify").getValue().toString());
-
-                    Event tempEvent = new Event(eventTitle, date, isNotify);
-                    System.out.println(tempEvent.toString());
-                    tempEvent.eventId = eventId;
-                    eventList.add(tempEvent);
-                }
-                setupEventList();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void setupEventList(){
+    public void setupEventList(List<Event> list){
+        this.eventList = list;
         eventLayout = findViewById(R.id.EventLayout);
         for(int i = 0; i < eventList.size(); i ++){
             final TextView eventView = new TextView(this);
@@ -161,7 +161,7 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     private void toEdit(){
-        if(isEdit == false){
+        if(!isEdit){
             isEdit = true;
             btAdd.setVisibility(View.INVISIBLE);
 //            btEdit.setVisibility(View.INVISIBLE);
@@ -196,7 +196,7 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     private void toDelete(){
-        if(isDelete == false){
+        if(!isDelete){
             isDelete = true;
             btAdd.setVisibility(View.INVISIBLE);
             btEdit.setVisibility(View.INVISIBLE);
@@ -215,32 +215,40 @@ public class TimelineActivity extends AppCompatActivity {
         }
     }
 
+//    public void confirm(){
+//        manage.confirmRemove(deleteList);
+//        deleteList.clear();
+//        toDelete();
+//    }
 
-
-    private void toConfirm(){
-        db_ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(String eventId : deleteList){
-                    db_ref.child(eventId).removeValue();
-                }
-
-                deleteList.clear();
-                toDelete();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+    public void reset(){
+        deleteList.clear();
+        toDelete();
     }
+
+//    private void toConfirm(){
+//        db_ref.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                for(String eventId : deleteList){
+//                    db_ref.child(eventId).removeValue();
+//                }
+//
+//                deleteList.clear();
+//                toDelete();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
     private void resetEventLayout(){
         int count = eventLayout.getChildCount();
 
-        List<Event> tempEventList = new ArrayList<>();
-        tempEventList.addAll(eventList);
+        List<Event> tempEventList = new ArrayList<>(eventList);
 
         eventList.clear();
         for(int i = 0; i < count; i ++){

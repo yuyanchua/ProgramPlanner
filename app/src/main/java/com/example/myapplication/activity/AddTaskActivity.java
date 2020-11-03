@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,18 +11,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.myapplication.element.Project;
+import com.example.myapplication.R;
 import com.example.myapplication.element.Session;
 import com.example.myapplication.element.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.example.myapplication.engine.ManageTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +26,7 @@ public class AddTaskActivity extends AppCompatActivity {
 
     TextView errView;
     Spinner spinMember;
+    ManageTask manageTask;
     LinearLayout memberLayout;
     List<String> memberList, addMemberList;
     boolean isRemove = false, isEdit = false;
@@ -40,8 +36,8 @@ public class AddTaskActivity extends AppCompatActivity {
     Intent lastIntent;
 
     Button btAddPart, btAddTask, btRemove, btBack;
-    FirebaseDatabase firebase;
-    DatabaseReference db_ref, db_ref_roles;
+//    FirebaseDatabase firebase;
+//    DatabaseReference db_ref, db_ref_roles;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,10 +49,11 @@ public class AddTaskActivity extends AppCompatActivity {
 
         String projectIdStr = Session.getInstance().getProjectId();
 
-        firebase = FirebaseDatabase.getInstance();
-        db_ref = firebase.getReference("Project").child(projectIdStr).child("Task");
-        db_ref_roles = firebase.getReference("Roles").child(projectIdStr);
+//        firebase = FirebaseDatabase.getInstance();
+//        db_ref = firebase.getReference("Project").child(projectIdStr).child("Task");
+//        db_ref_roles = firebase.getReference("Roles").child(projectIdStr);
 
+        manageTask = new ManageTask(this, projectIdStr);
         lastIntent = getIntent();
         try{
             String taskId = lastIntent.getStringExtra("taskId");
@@ -64,7 +61,9 @@ public class AddTaskActivity extends AppCompatActivity {
                 isEdit = true;
                 this.taskId = Integer.parseInt(taskId);
                 taskIdStr = taskId;
-                getTaskValue();
+//                getTaskValue();
+                manageTask.setTaskId(this.taskId);
+                manageTask.getTaskValue();
             }
         }catch (Exception exception){
             exception.printStackTrace();
@@ -75,54 +74,56 @@ public class AddTaskActivity extends AppCompatActivity {
         memberList = new ArrayList<>();
         addMemberList = new ArrayList<>();
 
-        getMemberList();
+//        getMemberList();
+        manageTask.getMemberList();
 
         setupButton();
     }
 
-    private void getTaskValue(){
-        db_ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                String title = dataSnapshot.child(taskIdStr).child("task").getValue().toString();
-                List<String> memberList = new ArrayList<>();
-
-                DataSnapshot memberSnap = dataSnapshot.child(taskIdStr).child("memberList");
-                for(DataSnapshot snap : memberSnap.getChildren()){
-                    String key = snap.getKey();
-                    System.out.println(snap.getValue().toString());
-                    String member = snap.getValue().toString();
-                    memberList.add(member);
-                }
-
-                lastTask = new Task(title, memberList);
-//                setTask();
-                EditText titleEdit = findViewById(R.id.textBoxTaskName);
-                titleEdit.setText(lastTask.task);
-
-                for(String member : memberList) {
-                    toAddParticipants(member);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void setTask(){
-//        EditText titleEdit = findViewById(R.id.textBoxTaskName);
-//        titleEdit.setText(lastTask.task);
+//    private void getTaskValue(){
+//        db_ref.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 //
-//        for(String member : memberList) {
-//            toAddParticipants(member);
-//        }
+//                String title = dataSnapshot.child(taskIdStr).child("task").getValue().toString();
+//                List<String> memberList = new ArrayList<>();
+//
+//                DataSnapshot memberSnap = dataSnapshot.child(taskIdStr).child("memberList");
+//                for(DataSnapshot snap : memberSnap.getChildren()){
+//                    String key = snap.getKey();
+//                    System.out.println(snap.getValue().toString());
+//                    String member = snap.getValue().toString();
+//                    memberList.add(member);
+//                }
+//
+//                lastTask = new Task(title, memberList);
+////                setTask();
+//                EditText titleEdit = findViewById(R.id.textBoxTaskName);
+//                titleEdit.setText(lastTask.task);
+//
+//                for(String member : memberList) {
+//                    toAddParticipants(member);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
+
+    public void setTask(Task task, List<String> memberList){
+        EditText titleEdit = findViewById(R.id.textBoxTaskName);
+        titleEdit.setText(task.task);
+
+        for(String member : memberList) {
+            toAddParticipants(member);
+        }
     }
 
-    private void setupSpinner(){
+    public void setupSpinner(List<String> list){
+        this.memberList = list;
         spinMember = findViewById(R.id.spinnerTeamMember);
         System.out.println(memberList.toString());
         ArrayAdapter memberAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, memberList);
@@ -130,33 +131,33 @@ public class AddTaskActivity extends AppCompatActivity {
         spinMember.setAdapter(memberAdapter);
     }
 
-    private void getMemberList(){
-        db_ref_roles.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot snap: dataSnapshot.getChildren()){
-                    String member = snap.getKey();
-                    boolean isMember = snap.child("Roles").exists();
-                    System.out.println(member + ": " + isMember);
-                    if(isMember){
-                        String role = snap.child("Roles").getValue().toString();
-                        if(role.equals("developer")){
-                            System.out.println(member + " is developer");
-                            memberList.add(member);
-                        }
-                    }
-
-                }
-                setupSpinner();
-            }
-
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
+//    private void getMemberList(){
+//        db_ref_roles.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                for(DataSnapshot snap: dataSnapshot.getChildren()){
+//                    String member = snap.getKey();
+//                    boolean isMember = snap.child("Roles").exists();
+//                    System.out.println(member + ": " + isMember);
+//                    if(isMember){
+//                        String role = snap.child("Roles").getValue().toString();
+//                        if(role.equals("developer")){
+//                            System.out.println(member + " is developer");
+//                            memberList.add(member);
+//                        }
+//                    }
+//
+//                }
+//                setupSpinner();
+//            }
+//
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
     private void setupButton(){
         btAddPart = findViewById(R.id.buttonAddParticipants);
@@ -236,43 +237,52 @@ public class AddTaskActivity extends AppCompatActivity {
             errView.setVisibility(View.VISIBLE);
         }else {
             newTask = new Task(taskName, addMemberList);
-            if(!isEdit)
-                getTaskIdFromDatabase();
-            addTaskToDatabase();
+            if(!isEdit){
+                manageTask.addNewTask(newTask);
+            }else{
+                manageTask.editTask(newTask, taskId);
+            }
+//                getTaskIdFromDatabase();
+//            addTaskToDatabase();
         }
     }
 
-    private void getTaskIdFromDatabase(){
-        db_ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot snap: dataSnapshot.getChildren()){
-                    taskId = Integer.parseInt(snap.getKey()) + 1;
-                }
-            }
+//    private void getTaskIdFromDatabase(){
+//        db_ref.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                for(DataSnapshot snap: dataSnapshot.getChildren()){
+//                    taskId = Integer.parseInt(snap.getKey()) + 1;
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+    public void finishAddTask(){
+        Toast.makeText(getApplicationContext(), "New Task is Added", Toast.LENGTH_SHORT).show();
+        backToLastPage();
     }
 
-    private void addTaskToDatabase(){
-        db_ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                db_ref.child(Integer.toString(taskId)).setValue(newTask);
-                Toast.makeText(getApplicationContext(), "New Task is Added", Toast.LENGTH_SHORT).show();
-                backToLastPage();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
+//    private void addTaskToDatabase(){
+//        db_ref.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                db_ref.child(Integer.toString(taskId)).setValue(newTask);
+//                Toast.makeText(getApplicationContext(), "New Task is Added", Toast.LENGTH_SHORT).show();
+//                backToLastPage();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
     private void backToLastPage(){
         Intent intent = new Intent(AddTaskActivity.this, TaskAssignActivity.class);

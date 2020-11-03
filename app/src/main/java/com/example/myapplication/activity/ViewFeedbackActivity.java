@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.activity;
 
 import android.os.Bundle;
 import android.view.View;
@@ -10,9 +10,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapplication.R;
 import com.example.myapplication.element.Feedback;
 import com.example.myapplication.element.Project;
 import com.example.myapplication.element.Session;
+import com.example.myapplication.engine.ManageFeedback;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,8 +26,8 @@ import java.util.List;
 
 public class ViewFeedbackActivity extends AppCompatActivity {
 
-    FirebaseDatabase firebase;
-    DatabaseReference db_ref;
+//    FirebaseDatabase firebase;
+//    DatabaseReference db_ref;
     List<Feedback> feedbackList;
 
 
@@ -34,12 +36,14 @@ public class ViewFeedbackActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_developer_feedback_view);
 
-        firebase = FirebaseDatabase.getInstance();
+//        firebase = FirebaseDatabase.getInstance();
         String projectIdStr = Session.getInstance().getProjectId();
-        db_ref = firebase.getReference("Project").child(projectIdStr).child("feedback");
+//        db_ref = firebase.getReference("Project").child(projectIdStr).child("feedback");
 
-        feedbackList = new ArrayList<>();
-        getFeedbackList();
+//        feedbackList = new ArrayList<>();
+//        getFeedbackList();
+        ManageFeedback manage = new ManageFeedback(this, projectIdStr);
+        manage.getFeedbackList();
 
         Button btBack = findViewById(R.id.buttonBack);
         btBack.setOnClickListener(new View.OnClickListener() {
@@ -51,28 +55,28 @@ public class ViewFeedbackActivity extends AppCompatActivity {
 
     }
 
-    private void getFeedbackList(){
-        db_ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot snap : dataSnapshot.getChildren()){
-                    String feedbackId = snap.getKey();
-                    String username = snap.child("username").getValue().toString();
-                    String comment = snap.child("comment").getValue().toString();
-                    Feedback tempFeed = new Feedback(username, comment);
-                    feedbackList.add(tempFeed);
-                }
-                setupFeedbackList();
-            }
+//    private void getFeedbackList(){
+//        db_ref.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                for(DataSnapshot snap : dataSnapshot.getChildren()){
+//                    String feedbackId = snap.getKey();
+//                    String username = snap.child("username").getValue().toString();
+//                    String comment = snap.child("comment").getValue().toString();
+//                    Feedback tempFeed = new Feedback(username, comment);
+//                    feedbackList.add(tempFeed);
+//                }
+//                setupFeedbackList();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void setupFeedbackList(){
+    public void setupFeedbackList(List<Feedback> feedbackList){
         LinearLayout feedLayout = findViewById(R.id.feedbackList);
         for(int i = 0; i < feedbackList.size(); i ++){
             TextView feedView = new TextView(this);
