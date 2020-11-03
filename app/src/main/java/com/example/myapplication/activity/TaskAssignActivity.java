@@ -39,10 +39,11 @@ public class TaskAssignActivity extends AppCompatActivity {
 //        firebase = FirebaseDatabase.getInstance();
 //        db_ref = firebase.getReference("Project").child(Session.getInstance().getProjectId()).child("Task");
 
+        manageTaskView = new ManageTaskView(this, Session.getInstance().getProjectId());
+
         taskList = new ArrayList<>();
         deleteList = new ArrayList<>();
 
-        manageTaskView = new ManageTaskView(this, Session.getInstance().getProjectId());
         manageTaskView.getTaskList();
 
 //        getTaskList();
@@ -122,6 +123,11 @@ public class TaskAssignActivity extends AppCompatActivity {
 
     public void setupTaskView(List<Task> list){
         this.taskList = list;
+        setupTaskView();
+    }
+
+    private void setupTaskView(){
+//        this.taskList = list;
         taskLayout = findViewById(R.id.TaskList);
         for(int i = 0; i < taskList.size(); i ++){
             final TextView taskView = new TextView(this);
@@ -144,6 +150,7 @@ public class TaskAssignActivity extends AppCompatActivity {
 //                        taskLayout.getChildAt(index).setVisibility(View.GONE);
                     }else if(isEdit){
 //                        toManage(false);
+                        System.out.println("TaskId: " + taskList.get(index).toString());
                         editTask(taskList.get(index).taskId);
                     }
                 }
@@ -153,7 +160,7 @@ public class TaskAssignActivity extends AppCompatActivity {
     }
 
     private void toEdit(){
-        if(isEdit == false){
+        if(!isEdit){
             isEdit = true;
             btAdd.setVisibility(View.INVISIBLE);
 //            btEdit.setVisibility(View.INVISIBLE);

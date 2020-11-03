@@ -30,12 +30,14 @@ public class ProjectCreate {
         db_ref_roles = firebase.getReference("Roles");
 
         this.activity = activity;
+        inviteCodeSet = new HashSet<>();
         getAllCodes();
+        generateProjectId();
     }
 
     public String generateInviteCode(boolean isClient){
         boolean  isValid = false;
-        String inviteCode = ""  ;
+        String inviteCode = "" ;
         do{
             inviteCode = Project.generateCode(isClient);
             if(inviteCodeSet.contains(inviteCode)){
@@ -44,7 +46,7 @@ public class ProjectCreate {
                 inviteCodeSet.add(inviteCode);
                 isValid = true;
             }
-        }while(isValid);
+        }while(!isValid);
         return inviteCode;
     }
 
@@ -52,8 +54,7 @@ public class ProjectCreate {
         db_ref_project.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                inviteCodeSet = new HashSet<>();
-
+//                inviteCodeSet = new HashSet<>();
                 for(DataSnapshot snap : snapshot.getChildren()){
                     String clientCode = snap.child("clientCode").getValue().toString();
                     String devCode = snap.child("devCode").getValue().toString();
@@ -70,12 +71,17 @@ public class ProjectCreate {
         });
     }
 
-    public void createProject(String projectName){
-        generateProjectId();
+    public void createProject(String projectName, String username){
+        this.username = username;
+        this.projectName = projectName;
+
+        System.out.println("In Create ");
+//        generateProjectId();
         String clientCode = generateInviteCode(true);
         String devCode = generateInviteCode(false);
-
+        System.out.println("Client code: " + clientCode + " Developer Code: " + devCode);
         project = new Project(projectId, projectName, clientCode, devCode);
+        System.out.println("New project: " + project.toString());
         addProjectToDatabase();
     }
 
@@ -83,9 +89,11 @@ public class ProjectCreate {
         db_ref_project.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                System.out.println("Generating code");
                 for(DataSnapshot snap : snapshot.getChildren()){
                     projectId = Integer.parseInt(snap.getKey()) + 1;
                 }
+                System.out.println("Generated ");
             }
 
             @Override
@@ -100,6 +108,8 @@ public class ProjectCreate {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 db_ref_project.child(Long.toString(projectId)).setValue(project);
+                System.out.println(project.toString());
+                System.out.println("Add to db");
                 activity.finishAddProject();
             }
 
@@ -114,7 +124,8 @@ public class ProjectCreate {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 db_ref_roles.child(Long.toString(projectId)).child("ProjectName").setValue(projectName);
                 db_ref_roles.child(Long.toString(projectId)).child(username).child("Roles").setValue("developer");
-
+                System.out.println("Projectname in role : " + projectName);
+                System.out.println("Username in role: " + username);
             }
 
             @Override
@@ -122,5 +133,7 @@ public class ProjectCreate {
 
             }
         });
+
+        activity.backToMain();
     }
 }

@@ -54,6 +54,11 @@ public class Project {
         return code;
     }
 
+    public String toString(){
+        return String.format("Name: %s, Id: %d, Client: %s, Dev: %s", projectName, projectId, clientCode, devCode);
+
+    }
+
 //    //Changed to instance vars
 //    public String getProjectName(){
 //        return this.projectName;

@@ -134,7 +134,10 @@ public class DeveloperActivity extends AppCompatActivity {
     }
 
     private void toEvent(){
-        startActivity(new Intent(DeveloperActivity.this, EventActivity.class));
+        Intent intent = new Intent(DeveloperActivity.this, EventActivity.class);
+        intent.putExtra("isTimeline", false);
+        startActivity(intent);
+//        startActivity(new Intent(DeveloperActivity.this, EventActivity.class));
     }
 
     @Override

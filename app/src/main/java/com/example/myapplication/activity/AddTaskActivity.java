@@ -39,6 +39,7 @@ public class AddTaskActivity extends AppCompatActivity {
 //    FirebaseDatabase firebase;
 //    DatabaseReference db_ref, db_ref_roles;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,9 +56,11 @@ public class AddTaskActivity extends AppCompatActivity {
 
         manageTask = new ManageTask(this, projectIdStr);
         lastIntent = getIntent();
+
         try{
             String taskId = lastIntent.getStringExtra("taskId");
             if(!taskId.isEmpty()){
+                System.out.println("Task id : " + taskId);
                 isEdit = true;
                 this.taskId = Integer.parseInt(taskId);
                 taskIdStr = taskId;

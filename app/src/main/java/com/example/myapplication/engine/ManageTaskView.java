@@ -42,7 +42,7 @@ public class ManageTaskView {
                         for(DataSnapshot snap : snapshot.getChildren()){
                             String taskId = snap.getKey();
                             String taskName = snap.child("task").getValue().toString();
-                            Task tempTask = new Task(taskName);
+                            Task tempTask = new Task(taskId, taskName);
 
                             taskList.add(tempTask);
 

@@ -8,7 +8,8 @@ public class Task {
     public String taskId;
     public List<String> memberList;
 
-    public Task(String taskName){
+    public Task(String taskId, String taskName){
+        this.taskId = taskId;
         this.task = taskName;
         this.memberList = new ArrayList<>();
     }
@@ -16,5 +17,16 @@ public class Task {
     public Task(String taskName, List<String> memberList){
         this.task = taskName;
         this.memberList = memberList;
+    }
+
+    public Task(String taskId, String taskName, List<String> memberList){
+        this.taskId = taskId;
+        this.task = taskName;
+        this.memberList = memberList;
+    }
+
+    public String toString(){
+        String output = String.format("Task: %s\n, TaskId: %s,\n", task, taskId);
+        return output;
     }
 }

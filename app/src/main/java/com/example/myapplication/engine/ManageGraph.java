@@ -43,6 +43,7 @@ public class ManageGraph {
                     Image image = snap.getValue(Image.class);
                     keyList.add(snap.getKey());
                     imageList.add(image);
+                    System.out.println("Image: " + image.ImageUrl);
                 }
 
                 activity.setImage(imageList, keyList);

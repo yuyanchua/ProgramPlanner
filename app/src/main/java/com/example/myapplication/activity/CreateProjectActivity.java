@@ -69,8 +69,8 @@ public class CreateProjectActivity extends AppCompatActivity {
     private void createProject(){
         EditText nameEdit = findViewById(R.id.textBoxProjectName);
         projectName = nameEdit.getText().toString();
-
-        projectCreate.createProject(projectName);
+        System.out.println(projectName);
+        projectCreate.createProject(projectName, session.getUserName());
     }
 
 //    private void createProject(){
@@ -197,7 +197,7 @@ public class CreateProjectActivity extends AppCompatActivity {
 //        backToMain();
 //    }
 
-    private void backToMain(){
+    public void backToMain(){
         Intent intent = new Intent(CreateProjectActivity.this, ProjectMainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);

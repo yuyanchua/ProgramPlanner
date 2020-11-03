@@ -46,8 +46,8 @@ public class ManageTask {
                     String member = snap.getValue().toString();
                     memberList.add(member);
                 }
-
-                Task temp = new Task(title, memberList);
+                System.out.println("Task in engine: " + taskIdStr);
+                Task temp = new Task(taskIdStr, title, memberList);
                 activity.setTask(temp, memberList);
             }
 
@@ -115,7 +115,7 @@ public class ManageTask {
     }
 
     public  void addTaskToDatabase(){
-        db_ref_project.addValueEventListener(new ValueEventListener() {
+        db_ref_project.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 db_ref_project.child(Integer.toString(taskId)).setValue(task);
