@@ -82,8 +82,8 @@ public class ProjectMainActivity extends AppCompatActivity {
         for(int i = 0; i < projectList.size(); i ++){
             final TextView projectView = new TextView(this);
             Roles temp = projectList.get(i);
-            String role = temp.projectId + ": " + temp.projectName;
-
+//            String role = temp.projectId + ": " + temp.projectName;
+            String role = String.format("%s:%s  (%s)", temp.projectId, temp.projectName, temp.roles);
             int viewId = View.generateViewId();
             projectIdList.add(viewId);
 

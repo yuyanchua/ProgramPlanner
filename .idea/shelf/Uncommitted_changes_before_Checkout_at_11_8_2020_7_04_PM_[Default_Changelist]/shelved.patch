@@ -1,0 +1,400 @@
+Index: app/src/main/java/com/example/myapplication/engine/Login.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.myapplication.engine;\r\n\r\nimport androidx.annotation.NonNull;\r\n\r\nimport com.example.myapplication.activity.LoginActivity;\r\nimport com.example.myapplication.element.User;\r\nimport com.google.firebase.database.DataSnapshot;\r\nimport com.google.firebase.database.DatabaseError;\r\nimport com.google.firebase.database.DatabaseReference;\r\nimport com.google.firebase.database.FirebaseDatabase;\r\nimport com.google.firebase.database.ValueEventListener;\r\n\r\npublic class Login {\r\n    FirebaseDatabase firebase;\r\n    DatabaseReference db_ref;\r\n\r\n    LoginActivity activity;\r\n    User user;\r\n    String hashPass;\r\n\r\n    public Login(LoginActivity activity, User user){\r\n        firebase = FirebaseDatabase.getInstance();\r\n        db_ref = firebase.getReference(\"Users\");\r\n        this.activity = activity;\r\n        this.user = user;\r\n\r\n        login();\r\n    }\r\n\r\n    public void login(){\r\n        hashPass = User.hashPassword(user.password);\r\n        if(hashPass == null){\r\n            activity.setErrText(\"Encounter unexpected error\");\r\n        }else{\r\n            verifyDatabase();\r\n        }\r\n    }\r\n\r\n     private void verifyDatabase(){\r\n        db_ref.addValueEventListener(new ValueEventListener() {\r\n            @Override\r\n            public void onDataChange(@NonNull DataSnapshot snapshot) {\r\n                try{\r\n                    boolean isExist = snapshot.child(user.username).exists();\r\n                    String dbHashPass = snapshot.child(user.username).child(\"password\").getValue().toString();\r\n\r\n                    boolean isMatch = hashPass.equals(dbHashPass);\r\n\r\n                    if(!isExist || !isMatch){\r\n                        activity.setErrText(\"Either Username and Password is Incorrect\");\r\n                    }else{\r\n                        activity.finishLogin(user.username);\r\n                    }\r\n\r\n                }catch (NullPointerException exception){\r\n//                    exception.printStackTrace();\r\n                    activity.setErrText(\"Please enter a username\");\r\n                }\r\n            }\r\n\r\n            @Override\r\n            public void onCancelled(@NonNull DatabaseError error) {\r\n\r\n            }\r\n        });\r\n     }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/myapplication/engine/Login.java	(revision d2e762eca89220989b101e095ee749942ab2d296)
++++ app/src/main/java/com/example/myapplication/engine/Login.java	(date 1604813999553)
+@@ -28,6 +28,10 @@
+     }
+ 
+     public void login(){
++        if(user.password.isEmpty()){
++            activity.setErrText("Please enter a password");
++            return;
++        }
+         hashPass = User.hashPassword(user.password);
+         if(hashPass == null){
+             activity.setErrText("Encounter unexpected error");
+Index: app/src/main/java/com/example/myapplication/activity/ProjectMainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.myapplication.activity;\r\n\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.LinearLayout;\r\nimport android.widget.TextView;\r\n\r\nimport androidx.annotation.Nullable;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport com.example.myapplication.R;\r\nimport com.example.myapplication.element.Project;\r\nimport com.example.myapplication.element.Roles;\r\nimport com.example.myapplication.element.Session;\r\nimport com.example.myapplication.engine.ProjectMain;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\npublic class ProjectMainActivity extends AppCompatActivity {\r\n\r\n//    FirebaseDatabase firebase;\r\n//    DatabaseReference db_ref;\r\n    List<Roles> projectList;\r\n    List<Integer> projectIdList;\r\n    LinearLayout projectLayout;\r\n    Session session;\r\n\r\n    @Override\r\n    protected void onCreate(@Nullable Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n\r\n        setContentView(R.layout.activity_project_view);\r\n\r\n//        firebase = FirebaseDatabase.getInstance();\r\n//        db_ref = firebase.getReference(\"Roles\");\r\n        session = Session.getInstance();\r\n\r\n        TextView welcomeView = findViewById(R.id.WelcomeMessage);\r\n        String welcome = \"Welcome, \" + session.getUserName();\r\n        welcomeView.setText(welcome);\r\n\r\n//        projectList = new ArrayList<>();\r\n        projectIdList = new ArrayList<>();\r\n//        getProjectList();\r\n        ProjectMain main = new ProjectMain(this, session.getUserName());\r\n        main.getProjectList();\r\n//        setupProjectList();\r\n\r\n        Button btCreate = findViewById(R.id.buttonCreate);\r\n        btCreate.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                createProject();\r\n            }\r\n        });\r\n\r\n        Button btJoin = findViewById(R.id.buttonJoin);\r\n        btJoin.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                joinProject();\r\n            }\r\n        });\r\n\r\n        Button btLogout = findViewById(R.id.buttonLogOut);\r\n        btLogout.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                logout();\r\n            }\r\n        });\r\n\r\n    }\r\n\r\n    public void setupProjectList(List<Roles> projectList){\r\n        this.projectList = projectList;\r\n        projectLayout = findViewById(R.id.projectList);\r\n        System.out.println(\"Project List: \" + projectList.toString());\r\n        for(int i = 0; i < projectList.size(); i ++){\r\n            final TextView projectView = new TextView(this);\r\n            Roles temp = projectList.get(i);\r\n            String role = temp.projectId + \": \" + temp.projectName;\r\n\r\n            int viewId = View.generateViewId();\r\n            projectIdList.add(viewId);\r\n\r\n            projectView.setId(viewId);\r\n            projectView.setText(role);\r\n            projectView.setTextSize(20);\r\n            projectView.setPadding(5, 5,5, 5);\r\n            projectView.setClickable(true);\r\n            projectView.setOnClickListener(new View.OnClickListener() {\r\n                @Override\r\n                public void onClick(View v) {\r\n                    int index = projectLayout.indexOfChild(projectView);\r\n                    toProjectActivity(index);\r\n                }\r\n            });\r\n\r\n            projectLayout.addView(projectView);\r\n        }\r\n\r\n    }\r\n\r\n//    private void getProjectList(){\r\n//        db_ref.addValueEventListener(new ValueEventListener() {\r\n//            @Override\r\n//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {\r\n//                for(DataSnapshot snap: dataSnapshot.getChildren()){\r\n//\r\n//                    boolean isExist = snap.child(session.getUserName()).exists();\r\n////                    System.out.println(\"IsExist = \" + isExist);\r\n////                    System.out.println(\"Key: \" + snap.getKey());\r\n////\r\n////                    System.out.println(snap.getValue().toString());\r\n//                    if(isExist) {\r\n//                        String projectName = snap.child(\"ProjectName\").getValue().toString();\r\n//                        String projectId = snap.getKey();\r\n//                        String role = snap.child(session.getUserName()).child(\"Roles\").getValue().toString();\r\n//\r\n//                        Roles tempRoles = new Roles(projectId, projectName, role);\r\n//                        System.out.println(projectList);\r\n//                        projectList.add(tempRoles);\r\n//                    }\r\n//                }\r\n//                setupProjectList();\r\n//            }\r\n//\r\n//            @Override\r\n//            public void onCancelled(@NonNull DatabaseError databaseError) {\r\n//\r\n//            }\r\n//        });\r\n//    }\r\n\r\n\r\n\r\n    private void createProject(){\r\n        projectList.clear();\r\n        projectIdList.clear();\r\n        startActivity(new Intent(ProjectMainActivity.this, CreateProjectActivity.class));\r\n    }\r\n\r\n    private void joinProject(){\r\n        projectList.clear();\r\n        projectIdList.clear();\r\n        startActivity(new Intent(ProjectMainActivity.this, JoinProjectActivity.class));\r\n    }\r\n\r\n    private void toProjectActivity(int projectIndex){\r\n        Roles role = projectList.get(projectIndex);\r\n\r\n        long projectId = Long.parseLong(role.projectId);\r\n        String projectName = role.projectName;\r\n\r\n        Project project = new Project(projectId, projectName);\r\n        session.setCurrProject(project);\r\n\r\n        String userRole = role.roles;\r\n        if(userRole.equals(\"developer\"))\r\n            startActivity(new Intent(ProjectMainActivity.this, DeveloperActivity.class));\r\n        else{\r\n            startActivity(new Intent(ProjectMainActivity.this, CustomerActivity.class));\r\n        }\r\n\r\n    }\r\n\r\n    private void logout(){\r\n        Intent intent = new Intent(ProjectMainActivity.this, MainActivity.class);\r\n        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);\r\n        startActivity(intent);\r\n    }\r\n\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/myapplication/activity/ProjectMainActivity.java	(revision d2e762eca89220989b101e095ee749942ab2d296)
++++ app/src/main/java/com/example/myapplication/activity/ProjectMainActivity.java	(date 1604881278617)
+@@ -82,13 +82,14 @@
+         for(int i = 0; i < projectList.size(); i ++){
+             final TextView projectView = new TextView(this);
+             Roles temp = projectList.get(i);
+-            String role = temp.projectId + ": " + temp.projectName;
++            String project = String.format("%s:%s  (%s)", temp.projectId, temp.projectName, temp.roles);
++//            String role = temp.projectId + ": " + temp.projectName + "   as: " + temp.roles;
+ 
+             int viewId = View.generateViewId();
+             projectIdList.add(viewId);
+ 
+             projectView.setId(viewId);
+-            projectView.setText(role);
++            projectView.setText(project);
+             projectView.setTextSize(20);
+             projectView.setPadding(5, 5,5, 5);
+             projectView.setClickable(true);
+@@ -137,6 +138,13 @@
+ //    }
+ 
+ 
++    @Override
++    public void onBackPressed() {
++//        super.onBackPressed();
++        Intent intent = new Intent(ProjectMainActivity.this, MainActivity.class);
++        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
++        startActivity(intent);
++    }
+ 
+     private void createProject(){
+         projectList.clear();
+@@ -169,9 +177,14 @@
+     }
+ 
+     private void logout(){
++
++        session.clear();
++        Session.getInstance().clear();
++
+         Intent intent = new Intent(ProjectMainActivity.this, MainActivity.class);
+-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
++        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+         startActivity(intent);
++//        finish();
+     }
+ 
+ 
+Index: app/src/main/java/com/example/myapplication/activity/SignUpActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.myapplication.activity;\r\n\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\nimport android.view.View;\r\nimport android.widget.ArrayAdapter;\r\nimport android.widget.EditText;\r\nimport android.widget.Spinner;\r\nimport android.widget.TextView;\r\n\r\nimport androidx.annotation.Nullable;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\n\r\nimport com.example.myapplication.R;\r\nimport com.example.myapplication.element.Question;\r\nimport com.example.myapplication.element.User;\r\nimport com.example.myapplication.engine.SignUp;\r\nimport com.google.android.material.floatingactionbutton.FloatingActionButton;\r\n\r\npublic class SignUpActivity extends AppCompatActivity {\r\n\r\n    TextView errView;\r\n    Spinner questionSpin;\r\n//    FirebaseDatabase DB;\r\n//    DatabaseReference users;\r\n\r\n    @Override\r\n    protected void onCreate(@Nullable Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_sign_up);\r\n\r\n        errView = findViewById(R.id.errorMessage);\r\n        errView.setVisibility(View.INVISIBLE);\r\n//        DB = FirebaseDatabase.getInstance();\r\n//        users = DB.getReference(\"Users\");\r\n\r\n        questionSpin = findViewById(R.id.spinnerSecurityQuestion);\r\n\r\n        ArrayAdapter questionAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, Question.QUESTION);\r\n        questionAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);\r\n        questionSpin.setAdapter(questionAdapter);\r\n\r\n\r\n        FloatingActionButton btSignUp = findViewById(R.id.buttonNextStep);\r\n        btSignUp.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                signup();\r\n            }\r\n        });\r\n    }\r\n\r\n    private String getEditValue(int id){\r\n        EditText tempEdit = findViewById(id);\r\n        return tempEdit.getText().toString();\r\n    }\r\n\r\n    private void signup(){\r\n\r\n        String name = getEditValue(R.id.enterAccountName);\r\n        String pass = getEditValue(R.id.enterPassword);\r\n        String repass = getEditValue(R.id.reEnterPassword);\r\n        String answer = getEditValue(R.id.enterAnswer);\r\n\r\n\r\n        questionSpin = findViewById(R.id.spinnerSecurityQuestion);\r\n        int quesIndex = questionSpin.getSelectedItemPosition();\r\n\r\n        if(!pass.equals(repass)){\r\n            //Error\r\n//            errView.setText(\"Password incorrect\");\r\n//            errView.setVisibility(View.VISIBLE);\r\n            setErrView(\"Password incorrect\");\r\n            return;\r\n        }\r\n\r\n        if(name.isEmpty() || pass.isEmpty() || repass.isEmpty() || answer.isEmpty()){\r\n            setErrView(\"Fields are Empty\");\r\n            return;\r\n        }\r\n\r\n//        if(name.length() == 0 || pass.length() == 0 || repass.length() == 0\r\n//                || answer.length() == 0){\r\n//            errView.setText(\"Fields are empty\");\r\n//            errView.setVisibility(View.VISIBLE);\r\n//            return;\r\n//        }\r\n        //TODO: Password policy Verification?\r\n\r\n        User user  = new User(name, pass, quesIndex, answer);\r\n        new SignUp(this, user);\r\n//        signupApp.signup();\r\n//        signUpToDatabase(name, pass, quesIndex, answer);\r\n    }\r\n\r\n//    private void signUpToDatabase(String name, String pass, int quesIndex, String answer){\r\n//        byte[] password = pass.getBytes();\r\n//        MessageDigest md = null;\r\n//        try {\r\n//            md = MessageDigest.getInstance(\"SHA-256\");\r\n//        } catch (NoSuchAlgorithmException e) {\r\n//            e.printStackTrace();\r\n//        }\r\n//        md.update(password);\r\n//        byte[] digest = md.digest();\r\n//        StringBuffer hex = new StringBuffer();\r\n//        for(int i = 0; i < digest.length; i++){\r\n//            hex.append(Integer.toString((digest[i]&0xff) + 0x100, 16).substring(1));\r\n//        }\r\n//        String pass_in_string = hex.toString();\r\n//        user = new User(name, pass_in_string, quesIndex, answer);\r\n//        final String Name = name;\r\n//        users.addListenerForSingleValueEvent(new ValueEventListener() {\r\n//            @Override\r\n//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {\r\n//                if(dataSnapshot.child(Name).exists()){\r\n//                    errView.setText(\"Username is already in database\");\r\n//                    errView.setVisibility(View.VISIBLE);\r\n//                }\r\n//                else {\r\n//                    users.child(Name).setValue(user);\r\n//                    Toast.makeText(getApplicationContext(), \"Sign up successfully!\", Toast.LENGTH_SHORT).show();\r\n//                }\r\n//                Intent intent = new Intent(SignUpActivity.this, MainActivity.class);\r\n//                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);\r\n//                startActivity(intent);\r\n//            }\r\n//            @Override\r\n//            public void onCancelled(@NonNull DatabaseError databaseError) {\r\n//            }\r\n//        });\r\n//    }\r\n\r\n    public void setErrView(String errMsg){\r\n        errView.setText(errMsg);\r\n        errView.setVisibility(View.VISIBLE);\r\n    }\r\n\r\n    public void finishSignUp(){\r\n        Intent intent = new Intent(SignUpActivity.this, MainActivity.class);\r\n        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);\r\n        startActivity(intent);\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/myapplication/activity/SignUpActivity.java	(revision d2e762eca89220989b101e095ee749942ab2d296)
++++ app/src/main/java/com/example/myapplication/activity/SignUpActivity.java	(date 1604866426895)
+@@ -138,9 +138,10 @@
+     }
+ 
+     public void finishSignUp(){
+-        Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+-        startActivity(intent);
++//        Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
++//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
++//        startActivity(intent);
++        finish();
+     }
+ 
+ }
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_10_30_2020_11_18_PM_[Default_Changelist]/shelved.patch
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Update_at_10_30_2020_11_18_PM_[Default_Changelist]/shelved.patch	(revision d2e762eca89220989b101e095ee749942ab2d296)
++++ .idea/shelf/Uncommitted_changes_before_Update_at_10_30_2020_11_18_PM_[Default_Changelist]/shelved.patch	(revision d2e762eca89220989b101e095ee749942ab2d296)
+@@ -1,182 +0,0 @@
+-Index: .idea/shelf/Uncommitted_changes_before_Update_at_10_30_2020_2_30_PM__Default_Changelist_.xml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+---- .idea/shelf/Uncommitted_changes_before_Update_at_10_30_2020_2_30_PM__Default_Changelist_.xml	(date 1604117041498)
+-+++ .idea/shelf/Uncommitted_changes_before_Update_at_10_30_2020_2_30_PM__Default_Changelist_.xml	(date 1604117041498)
+-@@ -0,0 +1,4 @@
+-+<changelist name="Uncommitted_changes_before_Update_at_10_30_2020_2_30_PM_[Default_Changelist]" date="1604086216740" recycled="false" toDelete="true">
+-+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_30_2020_2_30_PM_[Default_Changelist]/shelved.patch" />
+-+  <option name="DESCRIPTION" value="Uncommitted changes before Update at 10/30/2020 2:30 PM [Default Changelist]" />
+-+</changelist>
+-\ No newline at end of file
+-Index: .idea/shelf/Uncommitted_changes_before_Update_at_10_30_2020_2_30_PM__Default_Changelist_1.xml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+---- .idea/shelf/Uncommitted_changes_before_Update_at_10_30_2020_2_30_PM__Default_Changelist_1.xml	(date 1604117041884)
+-+++ .idea/shelf/Uncommitted_changes_before_Update_at_10_30_2020_2_30_PM__Default_Changelist_1.xml	(date 1604117041884)
+-@@ -0,0 +1,4 @@
+-+<changelist name="Uncommitted_changes_before_Update_at_10_30_2020_2_30_PM_[Default_Changelist]1" date="1604086250849" recycled="true" deleted="true">
+-+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_30_2020_2_30_PM_[Default_Changelist]1/shelved.patch" />
+-+  <option name="DESCRIPTION" value="Uncommitted changes before Update at 10/30/2020 2:30 PM [Default Changelist]" />
+-+</changelist>
+-\ No newline at end of file
+-Index: .idea/shelf/Uncommitted_changes_before_Update_at_10_30_2020_2_30_PM_[Default_Changelist]1/shelved.patch
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+---- .idea/shelf/Uncommitted_changes_before_Update_at_10_30_2020_2_30_PM_[Default_Changelist]1/shelved.patch	(date 1604086250848)
+-+++ .idea/shelf/Uncommitted_changes_before_Update_at_10_30_2020_2_30_PM_[Default_Changelist]1/shelved.patch	(date 1604086250848)
+-@@ -0,0 +1,52 @@
+-+Index: app/src/main/java/com/example/myapplication/Image.java
+-+IDEA additional info:
+-+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-+<+>package com.example.myapplication;\r\n\r\nimport com.google.firebase.database.Exclude;\r\n\r\npublic class Image {\r\n    public String ImageUrl;\r\n    //private String mKey;\r\n\r\n    public Image(String ImageUrl){\r\n        this.ImageUrl =  ImageUrl;\r\n    }\r\n\r\n    /*@Exclude\r\n    public String getmKey(){\r\n        return mKey;\r\n    }\r\n\r\n    @Exclude\r\n    public void setKey(String key){\r\n        mKey = key;\r\n    }*/\r\n    public Image(){}\r\n}\r\n
+-+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-+<+>UTF-8
+-+===================================================================
+-+--- app/src/main/java/com/example/myapplication/Image.java	(revision 8deda9ef76881ae2827ebbeead60412a3a07bdbd)
+-++++ app/src/main/java/com/example/myapplication/Image.java	(date 1604070460606)
+-+@@ -4,20 +4,13 @@
+-+ 
+-+ public class Image {
+-+     public String ImageUrl;
+-++    public String uploadId;
+-++
+-+     //private String mKey;
+-+ 
+-+     public Image(String ImageUrl){
+-+         this.ImageUrl =  ImageUrl;
+-+     }
+-+ 
+-+-    /*@Exclude
+-+-    public String getmKey(){
+-+-        return mKey;
+-+-    }
+-+-
+-+-    @Exclude
+-+-    public void setKey(String key){
+-+-        mKey = key;
+-+-    }*/
+-+     public Image(){}
+-+ }
+-+Index: app/src/main/java/com/example/myapplication/ImageAdapter.java
+-+IDEA additional info:
+-+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-+<+>package com.example.myapplication;\r\n\r\nimport android.content.Context;\r\nimport android.view.ContextMenu;\r\nimport android.view.LayoutInflater;\r\nimport android.view.MenuItem;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.ImageView;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport com.squareup.picasso.Picasso;\r\n\r\nimport java.util.List;\r\n\r\npublic class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageHolder> {\r\n    private Context context;\r\n    private List<Image> images;\r\n\r\n    public ImageAdapter(Context Icontext, List<Image> image){\r\n\r\n        context = Icontext;\r\n        images = image;\r\n    }\r\n    @NonNull\r\n    @Override\r\n    public ImageHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {\r\n        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.image_item, parent, false);\r\n        return new ImageHolder(v);\r\n    }\r\n\r\n    @Override\r\n    public void onBindViewHolder(@NonNull ImageHolder holder, int position) {\r\n        Image curr = images.get(position);\r\n\r\n        Picasso.with(context)\r\n                .load(curr.ImageUrl)\r\n                .placeholder(R.mipmap.ic_launcher)\r\n                .fit()\r\n                .centerCrop()\r\n                .into(holder.imageView);\r\n\r\n\r\n    }\r\n\r\n    @Override\r\n    public int getItemCount() {\r\n        return images.size();\r\n    }\r\n\r\n    public class ImageHolder extends RecyclerView.ViewHolder {\r\n        public ImageView imageView;\r\n\r\n        public ImageHolder(@NonNull View itemView) {\r\n            super(itemView);\r\n            imageView = itemView.findViewById(R.id.image_view_upload);\r\n\r\n        }\r\n    }\r\n}\r\n
+-+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-+<+>UTF-8
+-+===================================================================
+-+--- app/src/main/java/com/example/myapplication/ImageAdapter.java	(revision 8deda9ef76881ae2827ebbeead60412a3a07bdbd)
+-++++ app/src/main/java/com/example/myapplication/ImageAdapter.java	(date 1604071998085)
+-+@@ -42,8 +42,9 @@
+-+                 .centerCrop()
+-+                 .into(holder.imageView);
+-+ 
+-++    }
+-+ 
+-+-    }
+-++
+-+ 
+-+     @Override
+-+     public int getItemCount() {
+-Index: .idea/shelf/Uncommitted_changes_before_Update_at_10_30_2020_2_30_PM_[Default_Changelist]/shelved.patch
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+---- .idea/shelf/Uncommitted_changes_before_Update_at_10_30_2020_2_30_PM_[Default_Changelist]/shelved.patch	(date 1604086250839)
+-+++ .idea/shelf/Uncommitted_changes_before_Update_at_10_30_2020_2_30_PM_[Default_Changelist]/shelved.patch	(date 1604086250839)
+-@@ -0,0 +1,88 @@
+-+Index: app/src/main/java/com/example/myapplication/GraphActivity.java
+-+IDEA additional info:
+-+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-+<+>package com.example.myapplication;\r\n\r\nimport android.content.ContentResolver;\r\nimport android.content.Intent;\r\nimport android.net.Uri;\r\nimport android.os.Bundle;\r\nimport android.os.Handler;\r\nimport android.view.View;\r\nimport android.webkit.MimeTypeMap;\r\nimport android.widget.Button;\r\nimport android.widget.ImageView;\r\nimport android.widget.ListView;\r\nimport android.widget.ProgressBar;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.annotation.Nullable;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.recyclerview.widget.LinearLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport com.google.android.gms.tasks.OnFailureListener;\r\nimport com.google.android.gms.tasks.OnSuccessListener;\r\nimport com.google.firebase.database.DataSnapshot;\r\nimport com.google.firebase.database.DatabaseError;\r\nimport com.google.firebase.database.DatabaseReference;\r\nimport com.google.firebase.database.FirebaseDatabase;\r\nimport com.google.firebase.database.ValueEventListener;\r\nimport com.google.firebase.storage.FirebaseStorage;\r\nimport com.google.firebase.storage.OnProgressListener;\r\nimport com.google.firebase.storage.StorageReference;\r\nimport com.google.firebase.storage.UploadTask;\r\nimport com.squareup.picasso.Picasso;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\npublic class GraphActivity extends AppCompatActivity{\r\n\r\n    private RecyclerView RecView;\r\n    private ImageAdapter IAdapter;\r\n    private DatabaseReference DB_Ref;\r\n    private List<Image> Limages;\r\n    private ProgressBar pro_Cir;\r\n\r\n\r\n    @Override\r\n    protected void onCreate(@Nullable Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_graph_view);\r\n\r\n        /*runOnUiThread(new Runnable() {\r\n            @Override\r\n            public void run() {\r\n                RecView = findViewById(R.id.recycler_vi);\r\n                RecView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));\r\n                RecView.setHasFixedSize(true);\r\n            }\r\n        });*/\r\n        RecView = findViewById(R.id.recycler_vi);\r\n        RecView.setLayoutManager(new LinearLayoutManager(this));\r\n        RecView.setHasFixedSize(true);\r\n\r\n        pro_Cir = findViewById(R.id.progress_circular);\r\n        Limages = new ArrayList<>();\r\n\r\n        DB_Ref = FirebaseDatabase.getInstance().getReference(\"Project\").child(Long.toString(Project.projectId)).child(\"Images\");\r\n        Read_Images();\r\n        setupImage();\r\n        setupView();\r\n        setupButton();\r\n    }\r\n\r\n    private void Read_Images(){\r\n        DB_Ref.addValueEventListener(new ValueEventListener() {\r\n            @Override\r\n            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {\r\n                Limages.clear();\r\n                for(DataSnapshot snapshot : dataSnapshot.getChildren()){\r\n                    String imageUrl = snapshot.getValue().toString();\r\n//                    System.out.println(imageUrl);\r\n                    Image images = snapshot.getValue(Image.class);\r\n                    Limages.add(images);\r\n                }\r\n//                System.out.println(Limages.size());\r\n                IAdapter = new ImageAdapter(GraphActivity.this, Limages);\r\n                RecView.setAdapter(IAdapter);\r\n                //IAdapter.notifyDataSetChanged();\r\n                pro_Cir.setVisibility(View.INVISIBLE);\r\n            }\r\n\r\n            @Override\r\n            public void onCancelled(@NonNull DatabaseError databaseError) {\r\n                Toast.makeText(getApplicationContext(), \"Error!\", Toast.LENGTH_SHORT).show();\r\n                pro_Cir.setVisibility(View.INVISIBLE);\r\n            }\r\n        });\r\n    }\r\n\r\n    private void setupImage(){\r\n\r\n    }\r\n\r\n    private void setupView(){\r\n\r\n        //ImageView graphList = findViewById(R.id.ImageView);\r\n\r\n    }\r\n\r\n    private void setupButton(){\r\n        Button btUpload = findViewById(R.id.buttonUpload);\r\n        btUpload.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                startActivity(new Intent(GraphActivity.this, ImageChooser.class));\r\n            }\r\n        });\r\n\r\n        Button btDelete = findViewById(R.id.buttonDelete);\r\n        btDelete.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                deleteGraph();\r\n            }\r\n        });\r\n\r\n        Button btBack = findViewById(R.id.buttonBack);\r\n        btBack.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                finish();\r\n            }\r\n        });\r\n\r\n    }\r\n\r\n    private void uploadGraph(){\r\n\r\n    }\r\n\r\n\r\n    private void deleteGraph(){\r\n\r\n    }\r\n\r\n}\r\n
+-+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-+<+>UTF-8
+-+===================================================================
+-+--- app/src/main/java/com/example/myapplication/GraphActivity.java	(revision 8deda9ef76881ae2827ebbeead60412a3a07bdbd)
+-++++ app/src/main/java/com/example/myapplication/GraphActivity.java	(date 1604071314615)
+-+@@ -35,6 +35,8 @@
+-+ import java.util.ArrayList;
+-+ import java.util.List;
+-+ 
+-++import javax.annotation.RegEx;
+-++
+-+ public class GraphActivity extends AppCompatActivity{
+-+ 
+-+     private RecyclerView RecView;
+-+@@ -42,6 +44,8 @@
+-+     private DatabaseReference DB_Ref;
+-+     private List<Image> Limages;
+-+     private ProgressBar pro_Cir;
+-++    private boolean isDelete = false;
+-++    private Button btUpload, btDelete, btBack;
+-+ 
+-+ 
+-+     @Override
+-+@@ -82,9 +86,20 @@
+-+                     Image images = snapshot.getValue(Image.class);
+-+                     Limages.add(images);
+-+                 }
+-+-//                System.out.println(Limages.size());
+-++
+-+                 IAdapter = new ImageAdapter(GraphActivity.this, Limages);
+-++
+-+                 RecView.setAdapter(IAdapter);
+-++                RecView.setClickable(true);
+-++                RecView.setOnClickListener(new View.OnClickListener() {
+-++                    @Override
+-++                    public void onClick(View v) {
+-++                        int itemPos = RecView.getChildLayoutPosition(v);
+-++                        System.out.println("Item Pos: " + itemPos);
+-++                    }
+-++                });
+-++
+-++
+-+                 //IAdapter.notifyDataSetChanged();
+-+                 pro_Cir.setVisibility(View.INVISIBLE);
+-+             }
+-+@@ -108,7 +123,7 @@
+-+     }
+-+ 
+-+     private void setupButton(){
+-+-        Button btUpload = findViewById(R.id.buttonUpload);
+-++        btUpload = findViewById(R.id.buttonUpload);
+-+         btUpload.setOnClickListener(new View.OnClickListener() {
+-+             @Override
+-+             public void onClick(View v) {
+-+@@ -116,7 +131,7 @@
+-+             }
+-+         });
+-+ 
+-+-        Button btDelete = findViewById(R.id.buttonDelete);
+-++        btDelete = findViewById(R.id.buttonDelete);
+-+         btDelete.setOnClickListener(new View.OnClickListener() {
+-+             @Override
+-+             public void onClick(View v) {
+-+@@ -124,7 +139,7 @@
+-+             }
+-+         });
+-+ 
+-+-        Button btBack = findViewById(R.id.buttonBack);
+-++        btBack = findViewById(R.id.buttonBack);
+-+         btBack.setOnClickListener(new View.OnClickListener() {
+-+             @Override
+-+             public void onClick(View v) {
+-+@@ -134,11 +149,6 @@
+-+ 
+-+     }
+-+ 
+-+-    private void uploadGraph(){
+-+-
+-+-    }
+-+-
+-+-
+-+     private void deleteGraph(){
+-+ 
+-+     }
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_10_30_2020_2_30_PM__Default_Changelist_1.xml
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Update_at_10_30_2020_2_30_PM__Default_Changelist_1.xml	(revision d2e762eca89220989b101e095ee749942ab2d296)
++++ .idea/shelf/Uncommitted_changes_before_Update_at_10_30_2020_2_30_PM__Default_Changelist_1.xml	(revision d2e762eca89220989b101e095ee749942ab2d296)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Update_at_10_30_2020_2_30_PM_[Default_Changelist]1" date="1604086250849" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_30_2020_2_30_PM_[Default_Changelist]1/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Update at 10/30/2020 2:30 PM [Default Changelist]" />
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_10_30_2020_2_30_PM_[Default_Changelist]1/shelved.patch
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Update_at_10_30_2020_2_30_PM_[Default_Changelist]1/shelved.patch	(revision d2e762eca89220989b101e095ee749942ab2d296)
++++ .idea/shelf/Uncommitted_changes_before_Update_at_10_30_2020_2_30_PM_[Default_Changelist]1/shelved.patch	(revision d2e762eca89220989b101e095ee749942ab2d296)
+@@ -1,52 +0,0 @@
+-Index: app/src/main/java/com/example/myapplication/Image.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.example.myapplication;\r\n\r\nimport com.google.firebase.database.Exclude;\r\n\r\npublic class Image {\r\n    public String ImageUrl;\r\n    //private String mKey;\r\n\r\n    public Image(String ImageUrl){\r\n        this.ImageUrl =  ImageUrl;\r\n    }\r\n\r\n    /*@Exclude\r\n    public String getmKey(){\r\n        return mKey;\r\n    }\r\n\r\n    @Exclude\r\n    public void setKey(String key){\r\n        mKey = key;\r\n    }*/\r\n    public Image(){}\r\n}\r\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+---- app/src/main/java/com/example/myapplication/Image.java	(revision 8deda9ef76881ae2827ebbeead60412a3a07bdbd)
+-+++ app/src/main/java/com/example/myapplication/Image.java	(date 1604070460606)
+-@@ -4,20 +4,13 @@
+- 
+- public class Image {
+-     public String ImageUrl;
+-+    public String uploadId;
+-+
+-     //private String mKey;
+- 
+-     public Image(String ImageUrl){
+-         this.ImageUrl =  ImageUrl;
+-     }
+- 
+--    /*@Exclude
+--    public String getmKey(){
+--        return mKey;
+--    }
+--
+--    @Exclude
+--    public void setKey(String key){
+--        mKey = key;
+--    }*/
+-     public Image(){}
+- }
+-Index: app/src/main/java/com/example/myapplication/ImageAdapter.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.example.myapplication;\r\n\r\nimport android.content.Context;\r\nimport android.view.ContextMenu;\r\nimport android.view.LayoutInflater;\r\nimport android.view.MenuItem;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.ImageView;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport com.squareup.picasso.Picasso;\r\n\r\nimport java.util.List;\r\n\r\npublic class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageHolder> {\r\n    private Context context;\r\n    private List<Image> images;\r\n\r\n    public ImageAdapter(Context Icontext, List<Image> image){\r\n\r\n        context = Icontext;\r\n        images = image;\r\n    }\r\n    @NonNull\r\n    @Override\r\n    public ImageHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {\r\n        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.image_item, parent, false);\r\n        return new ImageHolder(v);\r\n    }\r\n\r\n    @Override\r\n    public void onBindViewHolder(@NonNull ImageHolder holder, int position) {\r\n        Image curr = images.get(position);\r\n\r\n        Picasso.with(context)\r\n                .load(curr.ImageUrl)\r\n                .placeholder(R.mipmap.ic_launcher)\r\n                .fit()\r\n                .centerCrop()\r\n                .into(holder.imageView);\r\n\r\n\r\n    }\r\n\r\n    @Override\r\n    public int getItemCount() {\r\n        return images.size();\r\n    }\r\n\r\n    public class ImageHolder extends RecyclerView.ViewHolder {\r\n        public ImageView imageView;\r\n\r\n        public ImageHolder(@NonNull View itemView) {\r\n            super(itemView);\r\n            imageView = itemView.findViewById(R.id.image_view_upload);\r\n\r\n        }\r\n    }\r\n}\r\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+---- app/src/main/java/com/example/myapplication/ImageAdapter.java	(revision 8deda9ef76881ae2827ebbeead60412a3a07bdbd)
+-+++ app/src/main/java/com/example/myapplication/ImageAdapter.java	(date 1604071998085)
+-@@ -42,8 +42,9 @@
+-                 .centerCrop()
+-                 .into(holder.imageView);
+- 
+-+    }
+- 
+--    }
+-+
+- 
+-     @Override
+-     public int getItemCount() {
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_10_30_2020_11_18_PM__Default_Changelist_.xml
+===================================================================
+--- .idea/shelf/Uncommitted_changes_before_Update_at_10_30_2020_11_18_PM__Default_Changelist_.xml	(revision d2e762eca89220989b101e095ee749942ab2d296)
++++ .idea/shelf/Uncommitted_changes_before_Update_at_10_30_2020_11_18_PM__Default_Changelist_.xml	(revision d2e762eca89220989b101e095ee749942ab2d296)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Update_at_10_30_2020_11_18_PM_[Default_Changelist]" date="1604117899672" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_30_2020_11_18_PM_[Default_Changelist]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Update at 10/30/2020 11:18 PM [Default Changelist]" />
+-</changelist>
+\ No newline at end of file
+Index: app/src/main/java/com/example/myapplication/element/Session.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.myapplication.element;\r\n\r\npublic class Session {\r\n    private static Session instance = new Session();\r\n    private String userName;\r\n    private Project currProject;\r\n\r\n    private Session(){}\r\n\r\n    public static Session getInstance(){\r\n        return instance;\r\n    }\r\n\r\n    public void setUserName(String userName){\r\n        this.userName = userName;\r\n        currProject = new Project();\r\n    }\r\n\r\n    public void setCurrProject(Project project){\r\n        this.currProject = project;\r\n    }\r\n\r\n    public String getUserName(){\r\n        return this.userName;\r\n    }\r\n\r\n    public Project getCurrProject(){\r\n        return this.currProject;\r\n    }\r\n\r\n    public String getProjectName(){\r\n        return this.currProject.projectName;\r\n    }\r\n\r\n    public String getProjectId(){\r\n        return Long.toString(this.currProject.projectId);\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/myapplication/element/Session.java	(revision d2e762eca89220989b101e095ee749942ab2d296)
++++ app/src/main/java/com/example/myapplication/element/Session.java	(date 1604865672413)
+@@ -16,6 +16,11 @@
+         currProject = new Project();
+     }
+ 
++    public void clear(){
++        this.userName = null;
++        this.currProject = null;
++    }
++
+     public void setCurrProject(Project project){
+         this.currProject = project;
+     }
+Index: README.md
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+># ProgramPlanner\r\n\r\nhttps://github.com/yuyanchua/ProgramPlanner/tree/v1.0\r\n\r\nCode Source\r\n\r\nhttps://github.com/yuyanchua/ProgramPlanner\r\n\r\nTo Checkout the Tagged Version of the Code\r\nUse the following git command:\r\ngit clone https://github.com/yuyanchua/ProgramPlanner.git\r\nTo get the code from the Git repository\r\n\r\ngit checkout tags/v1.0 \r\nTo checkout the tagged version of the code \r\n\r\nInstructions \r\nDownload the tagged version from GitHub. Import the code and run the simulation in android studio. This application should be adapted to run on any Android devices.\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- README.md	(revision d2e762eca89220989b101e095ee749942ab2d296)
++++ README.md	(date 1604612968747)
+@@ -16,3 +16,5 @@
+ 
+ Instructions 
+ Download the tagged version from GitHub. Import the code and run the simulation in android studio. This application should be adapted to run on any Android devices.
++
++
+diff --git .idea/shelf/Uncommitted_changes_before_Update_at_10_30_2020_2_30_PM__Default_Changelist_.xml .idea/shelf/Uncommitted_changes_before_Update_at_10_30_2020_2_30_PM__Default_Changelist_.xml

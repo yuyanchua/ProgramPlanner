@@ -47,4 +47,10 @@ public class User {
 
         return null;
     }
+
+    public boolean isEqual(User user){
+        if(username.equals(user.username) && password.equals(user.password))
+            return true;
+        return false;
+    }
 }
