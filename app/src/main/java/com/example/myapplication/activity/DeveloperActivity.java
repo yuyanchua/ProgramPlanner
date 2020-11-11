@@ -1,4 +1,4 @@
-package com.example.myapplication.activity;
+package com.example.myapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,11 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.myapplication.R;
-import com.example.myapplication.element.Session;
-
 public class DeveloperActivity extends AppCompatActivity {
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -23,7 +19,7 @@ public class DeveloperActivity extends AppCompatActivity {
         setup();
 
         TextView projectNameView = findViewById(R.id.ProjectNameTitle);
-        projectNameView.setText(Session.getInstance().getProjectName());
+        projectNameView.setText(Project.projectName);
 
 
     }
@@ -85,14 +81,6 @@ public class DeveloperActivity extends AppCompatActivity {
             }
         });
 
-        Button btEvent = findViewById(R.id.buttonEvent);
-        btEvent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toEvent();
-            }
-        });
-
         Button btBack = findViewById(R.id.buttonBack);
         btBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,10 +122,7 @@ public class DeveloperActivity extends AppCompatActivity {
     }
 
     private void toEvent(){
-        Intent intent = new Intent(DeveloperActivity.this, EventActivity.class);
-        intent.putExtra("isTimeline", false);
-        startActivity(intent);
-//        startActivity(new Intent(DeveloperActivity.this, EventActivity.class));
+        startActivity(new Intent(DeveloperActivity.this, EventActivity.class));
     }
 
     @Override

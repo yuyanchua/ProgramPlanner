@@ -39,7 +39,7 @@ public class ProjectMainActivity extends AppCompatActivity {
         session = Session.getInstance();
 
         TextView welcomeView = findViewById(R.id.WelcomeMessage);
-        String welcome = "Welcome, " + session.getUserName();
+        String welcome = session.getUserName();
         checkCrash();
         welcomeView.setText(welcome);
 
