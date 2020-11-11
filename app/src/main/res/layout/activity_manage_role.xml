@@ -48,13 +48,13 @@
         app:layout_constraintTop_toBottomOf="@+id/scrollView3" />
 
     <Button
-        android:id="@+id/buttonChangeOwner"
+        android:id="@+id/buttonChangeManager"
         android:layout_width="150dp"
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="19dp"
-        android:text="Change Owner"
+        android:text="Change Manager"
         android:textAllCaps="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewTipMessage" />
@@ -68,7 +68,7 @@
         android:layout_marginTop="19dp"
         android:text="Kick Member"
         android:textAllCaps="false"
-        app:layout_constraintStart_toEndOf="@+id/buttonChangeOwner"
+        app:layout_constraintStart_toEndOf="@+id/buttonChangeManager"
         app:layout_constraintTop_toBottomOf="@+id/textViewTipMessage" />
 
     <Button
@@ -81,7 +81,7 @@
         android:text="Change Role"
         android:textAllCaps="false"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonChangeOwner" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonChangeManager" />
 
     <Button
         android:id="@+id/buttonBack"
