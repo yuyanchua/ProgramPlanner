@@ -79,7 +79,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonInvite" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerRole" />
 
     <Button
         android:id="@+id/buttonJoin"
@@ -96,13 +96,12 @@
         android:id="@+id/buttonCancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="40dp"
         android:text="Cancel"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/errorMessageTip" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonInvite" />
 
     <Button
         android:id="@+id/buttonApply"
@@ -139,13 +138,13 @@
         android:id="@+id/buttonInvite"
         android:layout_width="188dp"
         android:layout_height="50dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="16dp"
         android:text="View Invitation"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerRole" />
+        app:layout_constraintTop_toBottomOf="@+id/errorMessageTip" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/notification"
