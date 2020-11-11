@@ -77,8 +77,9 @@
         android:text="@string/error_message"
         android:textColor="@color/design_default_color_error"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textBoxProjectName" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerRole" />
 
     <Button
         android:id="@+id/buttonJoin"
@@ -107,9 +108,29 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="44dp"
         android:text="Apply"
         android:textAllCaps="false"
         app:layout_constraintStart_toEndOf="@+id/textBoxProjectName"
         app:layout_constraintTop_toBottomOf="@+id/enterProjectTip" />
+
+    <Spinner
+        android:id="@+id/spinnerRole"
+        android:layout_width="151dp"
+        android:layout_height="43dp"
+        android:layout_marginStart="112dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textBoxProjectName" />
+
+    <TextView
+        android:id="@+id/selectRoleTip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="68dp"
+        android:layout_marginTop="28dp"
+        android:text="As:"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textBoxProjectName" />
 </androidx.constraintlayout.widget.ConstraintLayout>
