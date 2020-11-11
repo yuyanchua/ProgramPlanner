@@ -113,4 +113,27 @@ public class UserTest {
         System.out.println("***One java.lang.NullPointerException should be thrown from com.MyApplicationTest...testHashPasswordNull***");
     }
 
+    /**
+     * Test isEqual on users with same username/password
+     * should return true
+     */
+    @Test
+    public void testIsEqualTrue() {
+        User testUser0 = new User("testName", "testPass");
+        User testUser1 = new User("testName", "testPass");
+        assertTrue("IsEquals did not return true for 2 equal users.",
+                testUser0.isEqual(testUser1));
+    }
+
+    /**
+     * Test isEqual on users that aren't equal
+     * should return false
+     */
+    @Test
+    public void testIsEqualFalse() {
+        User testUser0 = new User("testName", "testPass");
+        User testUser1 = new User("testName1", "testPass1");
+        assertFalse("IsEquals did not return false for 2 non-equal users.",
+                testUser0.isEquals(testUser1));
+    }
 }

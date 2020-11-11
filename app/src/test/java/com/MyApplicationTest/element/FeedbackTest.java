@@ -6,8 +6,8 @@ import com.example.myapplication.element.Feedback;
 
 /**
  * Tests the Feedback class.
- * Currently just constructor Test.
- * ~/app/src/main/java/com/example/myapplication/User.java
+ * Tests all current methods
+ * ~/app/src/main/java/com/example/myapplication/Feedback.java
  */
 public class FeedbackTest {
     /*

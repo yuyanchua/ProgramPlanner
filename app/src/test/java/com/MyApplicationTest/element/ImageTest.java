@@ -5,9 +5,8 @@ import static org.junit.Assert.*;
 import com.example.myapplication.element.Image;
 
 /**
- * Tests all methods in the Project class
+ * Tests all methods in the Image class
  * See test comments for more details
- * Currently based on the november 1st commit by Yu Yan Chua.
  * May need to update in the future.
  * ~/app/src/main/java/com/example/myapplication/Image.java
  */
