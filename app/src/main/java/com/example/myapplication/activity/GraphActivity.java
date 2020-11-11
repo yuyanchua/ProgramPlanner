@@ -1,6 +1,7 @@
 package com.example.myapplication.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -140,7 +141,11 @@ public class GraphActivity extends AppCompatActivity implements ImageAdapter.OnI
 
     @Override
     public void onItemClick(int position) {
-        Toast.makeText(getApplicationContext(), "Normal click!", Toast.LENGTH_SHORT).show();
+        Image Item = Limages.get(position);
+        StorageReference S_Ref = Storage.getReferenceFromUrl(Item.ImageUrl);
+        Intent intent = new Intent(this, FullScreenImageActivity.class);
+        intent.setData(Uri.parse(Item.ImageUrl));
+        startActivity(intent);
     }
 
     public void finishDelete(int pos){
