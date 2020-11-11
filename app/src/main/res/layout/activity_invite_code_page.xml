@@ -9,13 +9,13 @@
         android:id="@+id/buttonApplication"
         android:layout_width="188dp"
         android:layout_height="50dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:text="View Application"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.461"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textUsername" />
+        app:layout_constraintTop_toBottomOf="@+id/errorMessageTip" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/notification"
@@ -57,13 +57,13 @@
     <TextView
         android:id="@+id/inviteCodeCustomer"
         android:layout_width="205dp"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:layout_marginStart="103dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="103dp"
         android:gravity="center"
         android:text="Invite Code"
-        android:textSize="24sp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -86,13 +86,13 @@
     <TextView
         android:id="@+id/inviteCodeDeveloper"
         android:layout_width="205dp"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:layout_marginStart="103dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="103dp"
         android:gravity="center"
         android:text="Invite Code"
-        android:textSize="24sp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -125,7 +125,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="56dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:autofillHints=""
         android:ems="10"
         android:gravity="center"
@@ -139,8 +139,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:text="Invite"
         app:layout_constraintStart_toEndOf="@+id/textUsername"
         app:layout_constraintTop_toBottomOf="@+id/inviteUsernameTip" />
+
+    <TextView
+        android:id="@+id/errorMessageTip"
+        android:layout_width="240dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="@string/error_message"
+        android:textColor="@color/design_default_color_error"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textUsername" />
 </androidx.constraintlayout.widget.ConstraintLayout>
