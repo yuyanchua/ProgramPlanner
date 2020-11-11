@@ -32,7 +32,7 @@ public class AddTaskActivity extends AppCompatActivity {
     boolean isRemove = false, isEdit = false;
     int taskId;
     String taskIdStr;
-    Task newTask, lastTask;
+    Task newTask;
     Intent lastIntent;
 
     Button btAddPart, btAddTask, btRemove, btBack;
@@ -299,7 +299,7 @@ public class AddTaskActivity extends AppCompatActivity {
     private void toRemoveParticipants(){
         //set remove
 
-        if(isRemove == false) {
+        if(!isRemove) {
             isRemove = true;
             btAddPart.setVisibility(View.INVISIBLE);
             btAddTask.setVisibility(View.INVISIBLE);

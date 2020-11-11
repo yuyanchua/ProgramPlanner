@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,9 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.myapplication.R;
+import com.example.myapplication.element.Session;
 
 public class DeveloperActivity extends AppCompatActivity {
 
@@ -19,7 +22,7 @@ public class DeveloperActivity extends AppCompatActivity {
         setup();
 
         TextView projectNameView = findViewById(R.id.ProjectNameTitle);
-        projectNameView.setText(Project.projectName);
+        projectNameView.setText(Session.getInstance().getProjectName());
 
 
     }
