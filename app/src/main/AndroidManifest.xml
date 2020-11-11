@@ -26,6 +26,7 @@
         <activity android:name=".activity.ProjectMainActivity" />
         <activity android:name=".activity.CreateProjectActivity" />
         <activity android:name=".activity.JoinProjectActivity" />
+        <activity android:name=".activity.ViewInviteActivity"/>
         <activity android:name=".activity.CustomerActivity" />
         <activity android:name=".activity.DeveloperActivity" />
         <activity android:name=".activity.FeedbackActivity" />

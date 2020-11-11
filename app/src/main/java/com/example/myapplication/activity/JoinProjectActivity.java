@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -78,7 +79,7 @@ public class JoinProjectActivity extends AppCompatActivity {
         btView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                toViewInvite();
             }
         });
 
@@ -126,6 +127,10 @@ public class JoinProjectActivity extends AppCompatActivity {
 
     }
 
+    private void toViewInvite(){
+        startActivity(new Intent(JoinProjectActivity.this, ViewInviteActivity.class));
+    }
+
     public void setProjectValue(Project project){
         session.setCurrProject(project);
     }
@@ -135,6 +140,11 @@ public class JoinProjectActivity extends AppCompatActivity {
             toDeveloper();
         else
             toClient();
+    }
+
+    public void finishApply() {
+        Toast.makeText(getApplicationContext(), "Apply Successfully!", Toast.LENGTH_SHORT).show();
+        finish();
     }
 
     public void setErrText(String errMsg){

@@ -209,7 +209,7 @@ public class JoinProject {
 //                Application app = new Application(username, roles);
                 db_ref_project.child(projectId).child("Application").setValue(appList);
                 System.out.println(projectName);
-//                activity.finish()
+                activity.finishApply();
             }
 
             @Override
