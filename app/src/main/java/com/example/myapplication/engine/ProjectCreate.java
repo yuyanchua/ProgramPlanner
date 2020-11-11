@@ -37,7 +37,7 @@ public class ProjectCreate {
 
     public String generateInviteCode(boolean isClient){
         boolean  isValid = false;
-        String inviteCode = "" ;
+        String inviteCode;
         do{
             inviteCode = Project.generateCode(isClient);
             if(inviteCodeSet.contains(inviteCode)){
@@ -55,12 +55,17 @@ public class ProjectCreate {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 //                inviteCodeSet = new HashSet<>();
-                for(DataSnapshot snap : snapshot.getChildren()){
-                    String clientCode = snap.child("clientCode").getValue().toString();
-                    String devCode = snap.child("devCode").getValue().toString();
+                for(DataSnapshot snap : snapshot.getChildren()) {
+                    try {
+                        System.out.println(snap.toString());
+                        String clientCode = snap.child("clientCode").getValue().toString();
+                        String devCode = snap.child("devCode").getValue().toString();
 
-                    inviteCodeSet.add(clientCode);
-                    inviteCodeSet.add(devCode);
+                        inviteCodeSet.add(clientCode);
+                        inviteCodeSet.add(devCode);
+                    } catch (NullPointerException exception){
+                        exception.printStackTrace();
+                    }
                 }
             }
 

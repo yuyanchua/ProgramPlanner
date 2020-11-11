@@ -1,0 +1,134 @@
+Index: app/src/main/java/com/example/myapplication/activity/AddTaskActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.myapplication.activity;\r\n\r\nimport android.content.Intent;\r\nimport android.os.Bundle;\r\nimport android.view.View;\r\nimport android.widget.ArrayAdapter;\r\nimport android.widget.Button;\r\nimport android.widget.EditText;\r\nimport android.widget.LinearLayout;\r\nimport android.widget.Spinner;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.annotation.Nullable;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport com.example.myapplication.R;\r\nimport com.example.myapplication.element.Session;\r\nimport com.example.myapplication.element.Task;\r\nimport com.example.myapplication.engine.ManageTask;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\npublic class AddTaskActivity extends AppCompatActivity {\r\n\r\n    TextView errView;\r\n    Spinner spinMember;\r\n    ManageTask manageTask;\r\n    LinearLayout memberLayout;\r\n    List<String> memberList, addMemberList;\r\n    boolean isRemove = false, isEdit = false;\r\n    int taskId;\r\n    String taskIdStr;\r\n    Task newTask, lastTask;\r\n    Intent lastIntent;\r\n\r\n    Button btAddPart, btAddTask, btRemove, btBack;\r\n//    FirebaseDatabase firebase;\r\n//    DatabaseReference db_ref, db_ref_roles;\r\n\r\n\r\n    @Override\r\n    protected void onCreate(@Nullable Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_manage_task_assignment);\r\n\r\n        errView = findViewById(R.id.errorMessageTip);\r\n        errView.setVisibility(View.INVISIBLE);\r\n\r\n        String projectIdStr = Session.getInstance().getProjectId();\r\n\r\n//        firebase = FirebaseDatabase.getInstance();\r\n//        db_ref = firebase.getReference(\"Project\").child(projectIdStr).child(\"Task\");\r\n//        db_ref_roles = firebase.getReference(\"Roles\").child(projectIdStr);\r\n\r\n        manageTask = new ManageTask(this, projectIdStr);\r\n        lastIntent = getIntent();\r\n\r\n        try{\r\n            String taskId = lastIntent.getStringExtra(\"taskId\");\r\n            if(!taskId.isEmpty()){\r\n//                System.out.println(\"Task id : \" + taskId);\r\n                isEdit = true;\r\n                this.taskId = Integer.parseInt(taskId);\r\n                taskIdStr = taskId;\r\n//                getTaskValue();\r\n                manageTask.setTaskId(this.taskId);\r\n                manageTask.getTaskValue();\r\n            }\r\n        }catch (Exception exception){\r\n            exception.printStackTrace();\r\n        }\r\n\r\n        memberLayout = findViewById(R.id.memberLayout);\r\n\r\n        memberList = new ArrayList<>();\r\n        addMemberList = new ArrayList<>();\r\n\r\n//        getMemberList();\r\n        manageTask.getMemberList();\r\n\r\n        setupButton();\r\n    }\r\n\r\n//    private void getTaskValue(){\r\n//        db_ref.addValueEventListener(new ValueEventListener() {\r\n//            @Override\r\n//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {\r\n//\r\n//                String title = dataSnapshot.child(taskIdStr).child(\"task\").getValue().toString();\r\n//                List<String> memberList = new ArrayList<>();\r\n//\r\n//                DataSnapshot memberSnap = dataSnapshot.child(taskIdStr).child(\"memberList\");\r\n//                for(DataSnapshot snap : memberSnap.getChildren()){\r\n//                    String key = snap.getKey();\r\n//                    System.out.println(snap.getValue().toString());\r\n//                    String member = snap.getValue().toString();\r\n//                    memberList.add(member);\r\n//                }\r\n//\r\n//                lastTask = new Task(title, memberList);\r\n////                setTask();\r\n//                EditText titleEdit = findViewById(R.id.textBoxTaskName);\r\n//                titleEdit.setText(lastTask.task);\r\n//\r\n//                for(String member : memberList) {\r\n//                    toAddParticipants(member);\r\n//                }\r\n//            }\r\n//\r\n//            @Override\r\n//            public void onCancelled(@NonNull DatabaseError databaseError) {\r\n//\r\n//            }\r\n//        });\r\n//    }\r\n\r\n    public void setTask(Task task, List<String> memberList){\r\n        EditText titleEdit = findViewById(R.id.textBoxTaskName);\r\n        titleEdit.setText(task.task);\r\n\r\n        for(String member : memberList) {\r\n            toAddParticipants(member);\r\n        }\r\n    }\r\n\r\n    public void setupSpinner(List<String> list){\r\n        this.memberList = list;\r\n        spinMember = findViewById(R.id.spinnerTeamMember);\r\n//        System.out.println(memberList.toString());\r\n        ArrayAdapter memberAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, memberList);\r\n        memberAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);\r\n        spinMember.setAdapter(memberAdapter);\r\n    }\r\n\r\n//    private void getMemberList(){\r\n//        db_ref_roles.addValueEventListener(new ValueEventListener() {\r\n//            @Override\r\n//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {\r\n//                for(DataSnapshot snap: dataSnapshot.getChildren()){\r\n//                    String member = snap.getKey();\r\n//                    boolean isMember = snap.child(\"Roles\").exists();\r\n//                    System.out.println(member + \": \" + isMember);\r\n//                    if(isMember){\r\n//                        String role = snap.child(\"Roles\").getValue().toString();\r\n//                        if(role.equals(\"developer\")){\r\n//                            System.out.println(member + \" is developer\");\r\n//                            memberList.add(member);\r\n//                        }\r\n//                    }\r\n//\r\n//                }\r\n//                setupSpinner();\r\n//            }\r\n//\r\n//\r\n//            @Override\r\n//            public void onCancelled(@NonNull DatabaseError databaseError) {\r\n//\r\n//            }\r\n//        });\r\n//    }\r\n\r\n    private void setupButton(){\r\n        btAddPart = findViewById(R.id.buttonAddParticipants);\r\n        btAddPart.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                toAddParticipants();\r\n            }\r\n        });\r\n\r\n        btAddTask = findViewById(R.id.buttonAddTask);\r\n        if(isEdit)\r\n            btAddTask.setText(\"Edit Task\");\r\n        btAddTask.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                toAddTask();\r\n            }\r\n        });\r\n\r\n        btRemove = findViewById(R.id.buttonRemove);\r\n        btRemove.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                toRemoveParticipants();\r\n            }\r\n        });\r\n\r\n        btBack = findViewById(R.id.buttonBack);\r\n        btBack.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n//                finish();\r\n                backToLastPage();\r\n            }\r\n        });\r\n    }\r\n\r\n\r\n    private void toAddParticipants(){\r\n        String memberName = spinMember.getSelectedItem().toString();\r\n        toAddParticipants(memberName);\r\n    }\r\n\r\n    private void toAddParticipants(String memberName){\r\n        if(addMemberList.contains(memberName)){\r\n            if(!isEdit) {\r\n                errView.setText(\"Already added the member\");\r\n                errView.setVisibility(View.VISIBLE);\r\n            }\r\n        }else {\r\n            addMemberList.add(memberName);\r\n            final TextView tempView = new TextView(this);\r\n            tempView.setTextSize(30);\r\n            tempView.setText(memberName);\r\n            tempView.setPadding(5, 5, 5, 5);\r\n            tempView.setClickable(true);\r\n            tempView.setOnClickListener(new View.OnClickListener() {\r\n                @Override\r\n                public void onClick(View v) {\r\n                    if (isRemove) {\r\n//                    memberLayout.indexOfChild(tempView);\r\n                        memberLayout.removeView(tempView);\r\n                    }\r\n                }\r\n            });\r\n            memberLayout.addView(tempView);\r\n        }\r\n    }\r\n\r\n\r\n    private void toAddTask(){\r\n        EditText taskEdit = findViewById(R.id.textBoxTaskName);\r\n        String taskName = taskEdit.getText().toString();\r\n        if(taskName.isEmpty()){\r\n            errView.setText(\"Please enter a value for task name\");\r\n            errView.setVisibility(View.VISIBLE);\r\n        }else if (addMemberList.size() == 0){\r\n            errView.setText(\"Please add at least one member\");\r\n            errView.setVisibility(View.VISIBLE);\r\n        }else {\r\n            newTask = new Task(taskName, addMemberList);\r\n            if(!isEdit){\r\n                manageTask.addNewTask(newTask);\r\n            }else{\r\n                manageTask.editTask(newTask, taskId);\r\n            }\r\n//                getTaskIdFromDatabase();\r\n//            addTaskToDatabase();\r\n        }\r\n    }\r\n\r\n//    private void getTaskIdFromDatabase(){\r\n//        db_ref.addValueEventListener(new ValueEventListener() {\r\n//            @Override\r\n//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {\r\n//                for(DataSnapshot snap: dataSnapshot.getChildren()){\r\n//                    taskId = Integer.parseInt(snap.getKey()) + 1;\r\n//                }\r\n//            }\r\n//\r\n//            @Override\r\n//            public void onCancelled(@NonNull DatabaseError databaseError) {\r\n//\r\n//            }\r\n//        });\r\n//    }\r\n\r\n    public void finishAddTask(){\r\n        Toast.makeText(getApplicationContext(), \"New Task is Added\", Toast.LENGTH_SHORT).show();\r\n        backToLastPage();\r\n    }\r\n\r\n//    private void addTaskToDatabase(){\r\n//        db_ref.addListenerForSingleValueEvent(new ValueEventListener() {\r\n//            @Override\r\n//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {\r\n//                db_ref.child(Integer.toString(taskId)).setValue(newTask);\r\n//                Toast.makeText(getApplicationContext(), \"New Task is Added\", Toast.LENGTH_SHORT).show();\r\n//                backToLastPage();\r\n//            }\r\n//\r\n//            @Override\r\n//            public void onCancelled(@NonNull DatabaseError databaseError) {\r\n//\r\n//            }\r\n//        });\r\n//    }\r\n\r\n    private void backToLastPage(){\r\n        Intent intent = new Intent(AddTaskActivity.this, TaskAssignActivity.class);\r\n        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);\r\n        startActivity(intent);\r\n    }\r\n\r\n    private void toRemoveParticipants(){\r\n        //set remove\r\n\r\n        if(isRemove == false) {\r\n            isRemove = true;\r\n            btAddPart.setVisibility(View.INVISIBLE);\r\n            btAddTask.setVisibility(View.INVISIBLE);\r\n            btBack.setVisibility(View.INVISIBLE);\r\n            btRemove.setText(\"Finish Remove\");\r\n        }else {\r\n            resetAddMemberList();\r\n            isRemove = false;\r\n            btAddPart.setVisibility(View.VISIBLE);\r\n            btAddTask.setVisibility(View.VISIBLE);\r\n            btBack.setVisibility(View.VISIBLE);\r\n            btRemove.setText(\"Remove Members\");\r\n        }\r\n    }\r\n\r\n    private void resetAddMemberList(){\r\n        int count = memberLayout.getChildCount();\r\n        addMemberList.clear();\r\n\r\n        for(int i = 0; i < count; i ++){\r\n            TextView memberView = (TextView)memberLayout.getChildAt(i);\r\n            String tempMemberName = memberView.getText().toString();\r\n            addMemberList.add(tempMemberName);\r\n        }\r\n    }\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/myapplication/activity/AddTaskActivity.java	(revision 08230f85a6059240672c9ac9b6e2598f2fc828b8)
++++ app/src/main/java/com/example/myapplication/activity/AddTaskActivity.java	(date 1605069005441)
+@@ -32,7 +32,7 @@
+     boolean isRemove = false, isEdit = false;
+     int taskId;
+     String taskIdStr;
+-    Task newTask, lastTask;
++    Task newTask;
+     Intent lastIntent;
+ 
+     Button btAddPart, btAddTask, btRemove, btBack;
+@@ -299,7 +299,7 @@
+     private void toRemoveParticipants(){
+         //set remove
+ 
+-        if(isRemove == false) {
++        if(!isRemove) {
+             isRemove = true;
+             btAddPart.setVisibility(View.INVISIBLE);
+             btAddTask.setVisibility(View.INVISIBLE);
+Index: app/src/main/java/com/example/myapplication/engine/InviteUser.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.myapplication.engine;\r\n\r\npublic class InviteUser {\r\n    public InviteUser(){\r\n\r\n    }\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/myapplication/engine/InviteUser.java	(revision 08230f85a6059240672c9ac9b6e2598f2fc828b8)
++++ app/src/main/java/com/example/myapplication/engine/InviteUser.java	(date 1605081138445)
+@@ -1,9 +1,13 @@
+ package com.example.myapplication.engine;
+ 
+ public class InviteUser {
++
++
+     public InviteUser(){
+ 
+     }
+ 
+ 
++
++
+ }
+Index: app/src/test/java/com/MyApplicationTest/SearchTest.java
+===================================================================
+--- app/src/test/java/com/MyApplicationTest/SearchTest.java	(revision 08230f85a6059240672c9ac9b6e2598f2fc828b8)
++++ app/src/test/java/com/MyApplicationTest/SearchTest.java	(revision 08230f85a6059240672c9ac9b6e2598f2fc828b8)
+@@ -1,41 +0,0 @@
+-package com.MyApplicationTest;
+-
+-import org.junit.Test;
+-
+-import com.example.myapplication.engine.SearchProject;
+-
+-public class SearchTest {
+-
+-    @Test
+-    void testSearch_existedProject(){
+-        SearchProject testSearch = new SearchProject("project");
+-
+-    }
+-
+-    @Test
+-    void testSearch_existedUser(){
+-
+-    }
+-
+-    @Test
+-    void testSearch_emptyProjectField(){
+-
+-    }
+-
+-    @Test
+-    void testSearch_emptyUserField(){
+-
+-    }
+-
+-    @Test
+-    void testSearch_notExistProject(){
+-
+-    }
+-
+-    @Test
+-    void testSearch_notExistUser(){
+-
+-    }
+-
+-
+-}
+Index: app/src/main/java/com/example/myapplication/engine/ProjectDelete.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/myapplication/engine/ProjectDelete.java	(date 1605081067959)
++++ app/src/main/java/com/example/myapplication/engine/ProjectDelete.java	(date 1605081067959)
+@@ -0,0 +1,18 @@
++package com.example.myapplication.engine;
++
++import com.google.firebase.database.DatabaseReference;
++import com.google.firebase.database.FirebaseDatabase;
++
++public class ProjectDelete {
++
++    FirebaseDatabase firebase;
++    DatabaseReference db_ref_project, db_ref_roles;
++
++    public ProjectDelete(){
++        this.firebase = FirebaseDatabase.getInstance();
++        this.db_ref_project = firebase.getReference("Project");
++        this.db_ref_roles = firebase.getReference("Roles");
++    }
++
++
++}
+Index: app/src/main/java/com/example/myapplication/engine/ManageRoles.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/myapplication/engine/ManageRoles.java	(date 1605080885751)
++++ app/src/main/java/com/example/myapplication/engine/ManageRoles.java	(date 1605080885751)
+@@ -0,0 +1,4 @@
++package com.example.myapplication.engine;
++
++public class ManageRoles {
++}
