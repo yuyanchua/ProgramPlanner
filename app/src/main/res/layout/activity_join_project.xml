@@ -20,18 +20,19 @@
         android:id="@+id/enterProjectTip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="125dp"
-        android:layout_marginTop="65dp"
+        android:layout_marginTop="60dp"
         android:text="Enter Project Name:"
         android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.517"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/joinProgramTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/textBoxInvitationCode" />
 
     <EditText
         android:id="@+id/textBoxProjectName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="103dp"
+        android:layout_marginStart="56dp"
         android:layout_marginTop="16dp"
         android:autofillHints=""
         android:ems="10"
@@ -45,19 +46,20 @@
         android:id="@+id/invitationCodeTip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="120dp"
-        android:layout_marginTop="37dp"
+        android:layout_marginTop="60dp"
         android:text="Enter Invitation Code:"
         android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textBoxProjectName" />
+        app:layout_constraintTop_toBottomOf="@+id/joinProgramTitle" />
 
     <EditText
         android:id="@+id/textBoxInvitationCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="16dp"
         android:autofillHints=""
         android:ems="10"
         android:gravity="center"
@@ -70,33 +72,44 @@
         android:id="@+id/errorMessageTip"
         android:layout_width="240dp"
         android:layout_height="50dp"
-        android:layout_marginStart="85dp"
-        android:layout_marginTop="39dp"
+        android:layout_marginTop="40dp"
         android:gravity="center"
         android:text="@string/error_message"
         android:textColor="@color/design_default_color_error"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textBoxInvitationCode" />
+        app:layout_constraintTop_toBottomOf="@+id/textBoxProjectName" />
 
     <Button
         android:id="@+id/buttonJoin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
         android:text="Join"
         android:textAllCaps="false"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/errorMessageTip" />
+        app:layout_constraintStart_toEndOf="@+id/textBoxInvitationCode"
+        app:layout_constraintTop_toBottomOf="@+id/invitationCodeTip" />
 
     <Button
         android:id="@+id/buttonCancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
         android:layout_marginTop="40dp"
         android:text="Cancel"
         android:textAllCaps="false"
-        app:layout_constraintStart_toEndOf="@+id/buttonJoin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/errorMessageTip" />
+
+    <Button
+        android:id="@+id/buttonApply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:text="Apply"
+        android:textAllCaps="false"
+        app:layout_constraintStart_toEndOf="@+id/textBoxProjectName"
+        app:layout_constraintTop_toBottomOf="@+id/enterProjectTip" />
 </androidx.constraintlayout.widget.ConstraintLayout>
