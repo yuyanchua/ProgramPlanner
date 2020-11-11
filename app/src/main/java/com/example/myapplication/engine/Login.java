@@ -54,7 +54,7 @@ public class Login {
                     String username = snap.getKey();
                     String passHash = snap.child("password").getValue().toString();
                     User temp = new User(username, passHash);
-                    System.out.println(temp);
+//                    System.out.println(temp);
                     userList.add(temp);
                 }
 

@@ -29,6 +29,9 @@ public class SignUp {
 
     public void signUp(){
 //        user.password = hashPass(user.password);
+        if(!validatePassword(user.password)) {
+            return;
+        }
         user.password = User.hashPassword(user.password);
         if(user.password == null){
             activity.setErrView("Encountered unexpected error");
@@ -36,6 +39,16 @@ public class SignUp {
             updateDatabase();
         }
     }
+
+    private boolean validatePassword(String password){
+        if(password.length() < 6) {
+            activity.setErrView("Password Length must at least 6 characters");
+            return false;
+        }
+        return true;
+    }
+
+
 
     private void updateDatabase(){
         db_ref.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -45,7 +58,6 @@ public class SignUp {
                     activity.setErrView("Username is already exist in database");
                 }else{
                     db_ref.child(user.username).setValue(user);
-                    Toast.makeText(activity.getApplicationContext(), "SignUp successfully", Toast.LENGTH_SHORT).show();
                     activity.finishSignUp();
                 }
             }

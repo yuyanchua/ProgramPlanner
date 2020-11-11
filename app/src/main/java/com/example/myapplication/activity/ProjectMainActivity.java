@@ -40,6 +40,7 @@ public class ProjectMainActivity extends AppCompatActivity {
 
         TextView welcomeView = findViewById(R.id.WelcomeMessage);
         String welcome = "Welcome, " + session.getUserName();
+        checkCrash();
         welcomeView.setText(welcome);
 
 //        projectList = new ArrayList<>();
@@ -73,6 +74,12 @@ public class ProjectMainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void checkCrash(){
+        if(session.getUserName() == null){
+            logout();
+        }
     }
 
     public void setupProjectList(List<Roles> projectList){

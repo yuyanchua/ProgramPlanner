@@ -75,13 +75,13 @@ public class ProjectCreate {
         this.username = username;
         this.projectName = projectName;
 
-        System.out.println("In Create ");
+//        System.out.println("In Create ");
 //        generateProjectId();
         String clientCode = generateInviteCode(true);
         String devCode = generateInviteCode(false);
-        System.out.println("Client code: " + clientCode + " Developer Code: " + devCode);
+//        System.out.println("Client code: " + clientCode + " Developer Code: " + devCode);
         project = new Project(projectId, projectName, clientCode, devCode);
-        System.out.println("New project: " + project.toString());
+//        System.out.println("New project: " + project.toString());
         addProjectToDatabase();
     }
 
@@ -89,11 +89,11 @@ public class ProjectCreate {
         db_ref_project.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                System.out.println("Generating code");
+//                System.out.println("Generating code");
                 for(DataSnapshot snap : snapshot.getChildren()){
                     projectId = Integer.parseInt(snap.getKey()) + 1;
                 }
-                System.out.println("Generated ");
+//                System.out.println("Generated ");
             }
 
             @Override
@@ -108,8 +108,8 @@ public class ProjectCreate {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 db_ref_project.child(Long.toString(projectId)).setValue(project);
-                System.out.println(project.toString());
-                System.out.println("Add to db");
+//                System.out.println(project.toString());
+//                System.out.println("Add to db");
                 activity.finishAddProject();
             }
 
@@ -124,8 +124,8 @@ public class ProjectCreate {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 db_ref_roles.child(Long.toString(projectId)).child("ProjectName").setValue(projectName);
                 db_ref_roles.child(Long.toString(projectId)).child(username).child("Roles").setValue("developer");
-                System.out.println("Projectname in role : " + projectName);
-                System.out.println("Username in role: " + username);
+//                System.out.println("Projectname in role : " + projectName);
+//                System.out.println("Username in role: " + username);
             }
 
             @Override
