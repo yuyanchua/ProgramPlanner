@@ -14,6 +14,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.element.Project;
 import com.example.myapplication.element.Roles;
 import com.example.myapplication.element.Session;
+import com.example.myapplication.engine.NotMyAccount;
 import com.example.myapplication.engine.ProjectMain;
 
 import java.util.ArrayList;
@@ -39,7 +40,9 @@ public class ProjectMainActivity extends AppCompatActivity {
         session = Session.getInstance();
 
         TextView welcomeView = findViewById(R.id.WelcomeMessage);
-        String welcome = "Welcome, " + session.getUserName();
+
+        String welcome = session.getUserName();
+        checkCrash();
         welcomeView.setText(welcome);
 
 //        projectList = new ArrayList<>();
@@ -73,6 +76,20 @@ public class ProjectMainActivity extends AppCompatActivity {
             }
         });
 
+        TextView NotAccount = findViewById(R.id.notYourAccountTip);
+        NotAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OpenDia();
+            }
+        });
+
+    }
+
+    private void checkCrash(){
+        if(session.getUserName() == null){
+            logout();
+        }
     }
 
     public void setupProjectList(List<Roles> projectList){
@@ -82,8 +99,8 @@ public class ProjectMainActivity extends AppCompatActivity {
         for(int i = 0; i < projectList.size(); i ++){
             final TextView projectView = new TextView(this);
             Roles temp = projectList.get(i);
-            String role = temp.projectId + ": " + temp.projectName;
-
+//            String role = temp.projectId + ": " + temp.projectName;
+            String role = String.format("%s:%s  (%s)", temp.projectId, temp.projectName, temp.roles);
             int viewId = View.generateViewId();
             projectIdList.add(viewId);
 
@@ -174,6 +191,9 @@ public class ProjectMainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
+    public void OpenDia(){
+        NotMyAccount acc = new NotMyAccount();
+        acc.show(getSupportFragmentManager(), "NotMyAccount");
+    }
 
 }

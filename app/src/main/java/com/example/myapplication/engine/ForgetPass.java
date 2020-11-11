@@ -48,8 +48,8 @@ public class ForgetPass {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 boolean isExist = snapshot.child(username).exists();
-                System.out.println(username);
-                System.out.println(isExist);
+//                System.out.println(username);
+//                System.out.println(isExist);
                 if(isExist){
                     passActivity.toForgetQuestion(username);
                 }else{

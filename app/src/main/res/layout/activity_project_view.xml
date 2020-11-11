@@ -18,14 +18,25 @@
         app:layout_constraintStart_toEndOf="@+id/buttonCreate"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <TextView
         android:id="@+id/WelcomeMessage"
         android:layout_width="136dp"
         android:layout_height="29dp"
-        android:layout_marginStart="11dp"
-        android:layout_marginTop="35dp"
-        android:gravity="center"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
         android:text="Hi Skylake!"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="136dp"
+        android:layout_height="29dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:text="Welcome,"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/projectViewTitle" />
@@ -34,7 +45,7 @@
         android:id="@+id/buttonCreate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="52dp"
+        android:layout_marginStart="36dp"
         android:layout_marginTop="28dp"
         android:text="Create"
         android:textAllCaps="false"
@@ -75,10 +86,11 @@
 
     <ScrollView
         android:id="@+id/scrollView2"
-        android:layout_width="414dp"
+        android:layout_width="390dp"
         android:layout_height="299dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="36dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonCreate">
 
@@ -88,4 +100,5 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" />
     </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

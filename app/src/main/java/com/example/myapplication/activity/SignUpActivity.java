@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -138,6 +139,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public void finishSignUp(){
+        Toast.makeText(getApplicationContext(), "SignUp successfully", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);

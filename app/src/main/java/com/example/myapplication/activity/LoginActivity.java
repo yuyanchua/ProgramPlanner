@@ -25,6 +25,7 @@ public class LoginActivity extends AppCompatActivity {
 //    FirebaseDatabase DB;
 //    DatabaseReference users;
     Session session =  Session.getInstance();
+    Login login;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,6 +38,7 @@ public class LoginActivity extends AppCompatActivity {
         userEdit = findViewById(R.id.editTextAccountName);
         passEdit = findViewById(R.id.editTextPassword);
 
+        login = new Login(this);
         setup();
 //        DB = FirebaseDatabase.getInstance();
 //        users = DB.getReference("Users");
@@ -82,7 +84,9 @@ public class LoginActivity extends AppCompatActivity {
         String pass = passEdit.getText().toString();
 
         User user = new User(username, pass);
-        new Login(this, user);
+//        new Login(this, user);
+
+        login.login(user);
     }
 
     public void setErrText(String errMsg){

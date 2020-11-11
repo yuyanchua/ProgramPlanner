@@ -46,7 +46,7 @@ public class ManageTask {
                     String member = snap.getValue().toString();
                     memberList.add(member);
                 }
-                System.out.println("Task in engine: " + taskIdStr);
+//                System.out.println("Task in engine: " + taskIdStr);
                 Task temp = new Task(taskIdStr, title, memberList);
                 activity.setTask(temp, memberList);
             }

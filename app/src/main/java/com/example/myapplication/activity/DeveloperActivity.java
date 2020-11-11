@@ -14,7 +14,6 @@ import com.example.myapplication.element.Session;
 
 public class DeveloperActivity extends AppCompatActivity {
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,14 +84,6 @@ public class DeveloperActivity extends AppCompatActivity {
             }
         });
 
-        Button btEvent = findViewById(R.id.buttonEvent);
-        btEvent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toEvent();
-            }
-        });
-
         Button btBack = findViewById(R.id.buttonBack);
         btBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,10 +125,7 @@ public class DeveloperActivity extends AppCompatActivity {
     }
 
     private void toEvent(){
-        Intent intent = new Intent(DeveloperActivity.this, EventActivity.class);
-        intent.putExtra("isTimeline", false);
-        startActivity(intent);
-//        startActivity(new Intent(DeveloperActivity.this, EventActivity.class));
+        startActivity(new Intent(DeveloperActivity.this, EventActivity.class));
     }
 
     @Override

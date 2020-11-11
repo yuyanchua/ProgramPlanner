@@ -132,9 +132,10 @@ public class TaskAssignActivity extends AppCompatActivity {
         for(int i = 0; i < taskList.size(); i ++){
             final TextView taskView = new TextView(this);
             Task temp = taskList.get(i);
-            String taskName = temp.task;
+//            String taskName = temp.task;
+            String taskInfo = temp.toString();
 
-            taskView.setText(taskName);
+            taskView.setText(taskInfo);
             taskView.setTextSize(25);
             taskView.setPadding(5, 5, 5, 5);
             taskView.setClickable(true);
@@ -150,7 +151,7 @@ public class TaskAssignActivity extends AppCompatActivity {
 //                        taskLayout.getChildAt(index).setVisibility(View.GONE);
                     }else if(isEdit){
 //                        toManage(false);
-                        System.out.println("TaskId: " + taskList.get(index).toString());
+//                        System.out.println("TaskId: " + taskList.get(index).toString());
                         editTask(taskList.get(index).taskId);
                     }
                 }

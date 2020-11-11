@@ -32,7 +32,7 @@ public class AddTaskActivity extends AppCompatActivity {
     boolean isRemove = false, isEdit = false;
     int taskId;
     String taskIdStr;
-    Task newTask, lastTask;
+    Task newTask;
     Intent lastIntent;
 
     Button btAddPart, btAddTask, btRemove, btBack;
@@ -60,7 +60,7 @@ public class AddTaskActivity extends AppCompatActivity {
         try{
             String taskId = lastIntent.getStringExtra("taskId");
             if(!taskId.isEmpty()){
-                System.out.println("Task id : " + taskId);
+//                System.out.println("Task id : " + taskId);
                 isEdit = true;
                 this.taskId = Integer.parseInt(taskId);
                 taskIdStr = taskId;
@@ -128,7 +128,7 @@ public class AddTaskActivity extends AppCompatActivity {
     public void setupSpinner(List<String> list){
         this.memberList = list;
         spinMember = findViewById(R.id.spinnerTeamMember);
-        System.out.println(memberList.toString());
+//        System.out.println(memberList.toString());
         ArrayAdapter memberAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, memberList);
         memberAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         spinMember.setAdapter(memberAdapter);
@@ -238,6 +238,9 @@ public class AddTaskActivity extends AppCompatActivity {
         if(taskName.isEmpty()){
             errView.setText("Please enter a value for task name");
             errView.setVisibility(View.VISIBLE);
+        }else if (addMemberList.size() == 0){
+            errView.setText("Please add at least one member");
+            errView.setVisibility(View.VISIBLE);
         }else {
             newTask = new Task(taskName, addMemberList);
             if(!isEdit){
@@ -296,7 +299,7 @@ public class AddTaskActivity extends AppCompatActivity {
     private void toRemoveParticipants(){
         //set remove
 
-        if(isRemove == false) {
+        if(!isRemove) {
             isRemove = true;
             btAddPart.setVisibility(View.INVISIBLE);
             btAddTask.setVisibility(View.INVISIBLE);
