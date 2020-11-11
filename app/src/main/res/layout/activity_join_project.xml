@@ -20,11 +20,11 @@
         android:id="@+id/enterProjectTip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="40dp"
         android:text="Enter Project Name:"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.517"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textBoxInvitationCode" />
 
@@ -46,7 +46,7 @@
         android:id="@+id/invitationCodeTip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="40dp"
         android:text="Enter Invitation Code:"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -72,14 +72,14 @@
         android:id="@+id/errorMessageTip"
         android:layout_width="240dp"
         android:layout_height="50dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="16dp"
         android:gravity="center"
         android:text="@string/error_message"
         android:textColor="@color/design_default_color_error"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerRole" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonInvite" />
 
     <Button
         android:id="@+id/buttonJoin"
@@ -96,10 +96,11 @@
         android:id="@+id/buttonCancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="16dp"
         android:text="Cancel"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/errorMessageTip" />
 
@@ -133,4 +134,27 @@
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textBoxProjectName" />
+
+    <Button
+        android:id="@+id/buttonInvite"
+        android:layout_width="188dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="40dp"
+        android:text="View Invitation"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerRole" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/notification"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginBottom="32dp"
+        app:cardBackgroundColor="@color/design_default_color_error"
+        app:cardCornerRadius="50dp"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonInvite"
+        app:layout_constraintEnd_toEndOf="@+id/buttonInvite" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
