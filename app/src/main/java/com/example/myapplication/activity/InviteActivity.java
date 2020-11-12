@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import com.example.myapplication.R;
 import com.example.myapplication.element.Session;
@@ -22,7 +23,7 @@ public class InviteActivity extends AppCompatActivity {
     EditText userEdit;
     ManageProjectInvite manage;
     Spinner roleSpin;
-
+    boolean isManager;
 //    FirebaseDatabase firebase;
 //    DatabaseReference db_ref;
 
@@ -43,6 +44,10 @@ public class InviteActivity extends AppCompatActivity {
 //        setupCode();
         manage = new ManageProjectInvite(this, Session.getInstance().getProjectId());
         manage.getInviteCode();
+
+        Intent intent = getIntent();
+        isManager = intent.getExtras().getBoolean("isManager");
+
 
         setupSpinner();
         setupButton();
@@ -99,6 +104,13 @@ public class InviteActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        CardView notCard = findViewById(R.id.notification);
+
+        if(!isManager){
+            btView.setVisibility(View.GONE);
+            notCard.setVisibility(View.GONE);
+        }
     }
 
     private void inviteUser(){

@@ -20,6 +20,7 @@ import com.example.myapplication.engine.ManageDeveloper;
 public class DeveloperActivity extends AppCompatActivity {
 
     boolean isConfirm;
+    boolean isManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,7 +32,7 @@ public class DeveloperActivity extends AppCompatActivity {
         setContentView(R.layout.activity_developer_main);
 
         Intent intent = getIntent();
-        boolean isManager = intent.getExtras().getBoolean("isManager");
+        isManager = intent.getExtras().getBoolean("isManager");
 
         TextView titleView = findViewById(R.id.mainTitle);
         if(isManager) {
@@ -142,7 +143,7 @@ public class DeveloperActivity extends AppCompatActivity {
 
     private void toInvite(){
         Intent intent =  new Intent(DeveloperActivity.this, InviteActivity.class);
-        intent.putExtra("isManager", true);
+        intent.putExtra("isManager", isManager);
         startActivity(intent);
     }
 
