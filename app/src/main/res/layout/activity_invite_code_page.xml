@@ -45,58 +45,38 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="75dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="48dp"
         android:layout_marginEnd="79dp"
-        android:text="Your invite code for customer is:"
+        android:text="Your invite code"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.511"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/InviteCodeTitle" />
 
     <TextView
         android:id="@+id/inviteCodeCustomer"
-        android:layout_width="205dp"
+        android:layout_width="160dp"
         android:layout_height="40dp"
-        android:layout_marginStart="103dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="103dp"
         android:gravity="center"
         android:text="Invite Code"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textForClient"
         app:layout_constraintTop_toBottomOf="@+id/inviteCodeForCustomerTip" />
 
     <TextView
-        android:id="@+id/inviteCodeDeveloperTip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="76dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="76dp"
-        android:text="Your invite code for developer is:"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inviteCodeCustomer" />
-
-    <TextView
         android:id="@+id/inviteCodeDeveloper"
-        android:layout_width="205dp"
+        android:layout_width="160dp"
         android:layout_height="40dp"
-        android:layout_marginStart="103dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="103dp"
         android:gravity="center"
         android:text="Invite Code"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inviteCodeDeveloperTip" />
+        app:layout_constraintStart_toEndOf="@+id/textForDeveloper"
+        app:layout_constraintTop_toBottomOf="@+id/inviteCodeCustomer" />
 
     <Button
         android:id="@+id/buttonDone"
@@ -134,12 +114,32 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/inviteUsernameTip" />
 
+    <TextView
+        android:id="@+id/selectRoleTip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="68dp"
+        android:layout_marginTop="24dp"
+        android:text="As:"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textUsername" />
+
+    <Spinner
+        android:id="@+id/spinnerRole"
+        android:layout_width="151dp"
+        android:layout_height="43dp"
+        android:layout_marginStart="112dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textUsername" />
+
     <Button
         android:id="@+id/buttonInvite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="40dp"
         android:text="Invite"
         app:layout_constraintStart_toEndOf="@+id/textUsername"
         app:layout_constraintTop_toBottomOf="@+id/inviteUsernameTip" />
@@ -153,6 +153,29 @@
         android:text="@string/error_message"
         android:textColor="@color/design_default_color_error"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.538"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textUsername" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerRole" />
+
+    <TextView
+        android:id="@+id/textForClient"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="92dp"
+        android:layout_marginTop="24dp"
+        android:text="For client:"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inviteCodeForCustomerTip" />
+
+    <TextView
+        android:id="@+id/textForDeveloper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="24dp"
+        android:text="For Developer:"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inviteCodeCustomer" />
 </androidx.constraintlayout.widget.ConstraintLayout>
