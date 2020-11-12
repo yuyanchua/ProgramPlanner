@@ -1,11 +1,15 @@
 package com.example.myapplication.activity;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
@@ -21,6 +25,7 @@ public class ViewApplicationActivity extends AppCompatActivity {
     List<Application> applicationList;
     List<Integer> appViewIdList;
     Session session;
+    ManageApplication manageApp;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -34,7 +39,7 @@ public class ViewApplicationActivity extends AppCompatActivity {
         appViewIdList = new ArrayList<>();
         session = Session.getInstance();
 
-        ManageApplication manageApp = new ManageApplication(this, session.getProjectId());
+        manageApp = new ManageApplication(this, session.getProjectId());
         manageApp.getApplicationList();
 
     }
@@ -71,6 +76,44 @@ public class ViewApplicationActivity extends AppCompatActivity {
     }
 
     private void viewApplication(int index){
+        Application application = applicationList.get(index);
+        String title = "Project Application";
+        showApplicationDialog(ViewApplicationActivity.this, application, title);
+    }
 
+    public void finishViewApplication(String message){
+        Toast.makeText(ViewApplicationActivity.this, message, Toast.LENGTH_SHORT).show();
+        recreate();
+    }
+
+
+    private void showApplicationDialog(Context context, final Application application, String title){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        String appDetails = application.toString();
+        builder.setMessage(appDetails)
+                .setTitle(title);
+
+        builder.setPositiveButton("Accept", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                manageApp.acceptApplication(application);
+            }
+        });
+
+        builder.setNegativeButton("Reject", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                manageApp.rejectApplication(application);
+            }
+        });
+
+        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        builder.show();
     }
 }

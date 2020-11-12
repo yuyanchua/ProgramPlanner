@@ -184,11 +184,11 @@ public class ProjectMainActivity extends AppCompatActivity {
 
         Intent intent;
 
-        if(userRole.equals("manager")) {
+        if(userRole.equalsIgnoreCase("manager")) {
             intent = new Intent(ProjectMainActivity.this, DeveloperActivity.class);
             intent.putExtra("isManager", true);
 
-        }else if(userRole.equals("developer")){
+        }else if(userRole.equalsIgnoreCase("developer")){
             intent = new Intent(ProjectMainActivity.this, DeveloperActivity.class);
             intent.putExtra("isManager", false);
         }else{

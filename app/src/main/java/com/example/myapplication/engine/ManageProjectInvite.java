@@ -126,6 +126,7 @@ public class ManageProjectInvite {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Invitation invite = new Invitation(projectId, name, roles);
+//                invite.setInviteId(Integer.toString(inviteId));
                 db_ref_users.child(user).child("Invitation").child(Integer.toString(inviteId)).setValue(invite);
                 activity.finishInvite();
             }
