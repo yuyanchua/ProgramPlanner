@@ -14,6 +14,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.element.Project;
 import com.example.myapplication.element.Roles;
 import com.example.myapplication.element.Session;
+import com.example.myapplication.engine.NotMyAccount;
 import com.example.myapplication.engine.ProjectMain;
 
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ public class ProjectMainActivity extends AppCompatActivity {
         session = Session.getInstance();
 
         TextView welcomeView = findViewById(R.id.WelcomeMessage);
+
         String welcome = session.getUserName();
         checkCrash();
         welcomeView.setText(welcome);
@@ -71,6 +73,14 @@ public class ProjectMainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 logout();
+            }
+        });
+
+        TextView NotAccount = findViewById(R.id.notYourAccountTip);
+        NotAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OpenDia();
             }
         });
 
@@ -181,6 +191,9 @@ public class ProjectMainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
+    public void OpenDia(){
+        NotMyAccount acc = new NotMyAccount();
+        acc.show(getSupportFragmentManager(), "NotMyAccount");
+    }
 
 }
