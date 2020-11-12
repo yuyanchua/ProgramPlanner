@@ -1,5 +1,6 @@
 package com.example.myapplication.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -92,7 +93,7 @@ public class InviteActivity extends AppCompatActivity {
     }
 
     private void viewApplication(){
-
+        startActivity(new Intent(InviteActivity.this, ViewApplicationActivity.class));
     }
 
 //    private void getCode(){

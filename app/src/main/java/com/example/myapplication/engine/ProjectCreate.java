@@ -10,7 +10,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class ProjectCreate {
@@ -23,6 +25,7 @@ public class ProjectCreate {
     String projectName;
     String username;
     Set<String> inviteCodeSet;
+    List<Project> projectList;
 
     public ProjectCreate(CreateProjectActivity activity){
         firebase = FirebaseDatabase.getInstance();
@@ -32,6 +35,7 @@ public class ProjectCreate {
         this.activity = activity;
         inviteCodeSet = new HashSet<>();
         getAllCodes();
+        retrieveProjectData();
         generateProjectId();
     }
 
@@ -80,25 +84,56 @@ public class ProjectCreate {
         this.username = username;
         this.projectName = projectName;
 
-//        System.out.println("In Create ");
-//        generateProjectId();
-        String clientCode = generateInviteCode(true);
-        String devCode = generateInviteCode(false);
-//        System.out.println("Client code: " + clientCode + " Developer Code: " + devCode);
-        project = new Project(projectId, projectName, clientCode, devCode);
-//        System.out.println("New project: " + project.toString());
-        addProjectToDatabase();
+        if(projectName.isEmpty()){
+            activity.setErrView("Please enter a project name");
+            return;
+        }
+
+        if(!isProjectExist(projectName)) {
+            String clientCode = generateInviteCode(true);
+            String devCode = generateInviteCode(false);
+            project = new Project(projectId, projectName, clientCode, devCode);
+            addProjectToDatabase();
+        }
+    }
+
+    private boolean isProjectExist(String projectName){
+        for(Project project : projectList){
+            if(project.projectName.equals(projectName)){
+                activity.setErrView("The project is already exist");
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void retrieveProjectData(){
+        db_ref_project.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                projectList = new ArrayList<>();
+                for(DataSnapshot snap : snapshot.getChildren()){
+                    String projectId = snap.getKey();
+                    String projectName = snap.child("projectName").getValue().toString();
+                    projectList.add(new Project(Long.parseLong(projectId), projectName));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     public void generateProjectId(){
         db_ref_project.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                System.out.println("Generating code");
                 for(DataSnapshot snap : snapshot.getChildren()){
                     projectId = Integer.parseInt(snap.getKey()) + 1;
                 }
-//                System.out.println("Generated ");
             }
 
             @Override
@@ -128,7 +163,7 @@ public class ProjectCreate {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 db_ref_roles.child(Long.toString(projectId)).child("ProjectName").setValue(projectName);
-                db_ref_roles.child(Long.toString(projectId)).child(username).child("Roles").setValue("developer");
+                db_ref_roles.child(Long.toString(projectId)).child(username).child("Roles").setValue("manager");
 //                System.out.println("Projectname in role : " + projectName);
 //                System.out.println("Username in role: " + username);
             }

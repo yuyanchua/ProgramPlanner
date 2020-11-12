@@ -19,7 +19,15 @@ public class DeveloperActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_developer_main);
 
-        setup();
+        Intent intent = getIntent();
+        boolean isManager = intent.getExtras().getBoolean("isManager");
+
+        TextView titleView = findViewById(R.id.mainTitle);
+        if(isManager) {
+            String title = "Manager Main Page";
+            titleView.setText(title);
+        }
+        setup(isManager);
 
         TextView projectNameView = findViewById(R.id.ProjectNameTitle);
         projectNameView.setText(Session.getInstance().getProjectName());
@@ -27,7 +35,7 @@ public class DeveloperActivity extends AppCompatActivity {
 
     }
 
-    private void setup(){
+    private void setup(boolean isManager){
         Button btTask = findViewById(R.id.buttonTaskAssignment);
         btTask.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +101,6 @@ public class DeveloperActivity extends AppCompatActivity {
         });
 
         Button btDelete = findViewById(R.id.buttonDelete);
-
         btDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,6 +115,12 @@ public class DeveloperActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
+        if(!isManager){
+            btManageRole.setVisibility(View.GONE);
+            btDelete.setVisibility(View.GONE);
+
+        }
 
     }
 
@@ -139,10 +152,6 @@ public class DeveloperActivity extends AppCompatActivity {
 
     private void toViewFeedback(){
         startActivity(new Intent(DeveloperActivity.this, ViewFeedbackActivity.class));
-    }
-
-    private void toEvent(){
-        startActivity(new Intent(DeveloperActivity.this, EventActivity.class));
     }
 
     private void toManageRole(){

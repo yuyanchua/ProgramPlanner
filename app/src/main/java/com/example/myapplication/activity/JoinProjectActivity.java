@@ -128,7 +128,7 @@ public class JoinProjectActivity extends AppCompatActivity {
     }
 
     private void toViewInvite(){
-        startActivity(new Intent(JoinProjectActivity.this, ViewInviteActivity.class));
+        startActivity(new Intent(JoinProjectActivity.this, ViewInvitationActivity.class));
     }
 
     public void setProjectValue(Project project){

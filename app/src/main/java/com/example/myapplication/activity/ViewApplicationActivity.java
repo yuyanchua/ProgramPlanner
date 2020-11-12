@@ -8,23 +8,20 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
 
-public class ViewInviteActivity extends AppCompatActivity {
-
-    LinearLayout inviteLayout;
+public class ViewApplicationActivity extends AppCompatActivity {
+    LinearLayout applicationLayout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_invitation);
+        setContentView(R.layout.activity_view_application);
 
-        inviteLayout = findViewById(R.id.inviteLayout);
-
+        applicationLayout = findViewById(R.id.applicationLayout);
         setupLayout();
+
     }
 
     private void setupLayout(){
 
     }
-
-
 }
