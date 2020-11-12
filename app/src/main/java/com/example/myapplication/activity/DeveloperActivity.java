@@ -84,6 +84,23 @@ public class DeveloperActivity extends AppCompatActivity {
             }
         });
 
+        Button btManageRole = findViewById(R.id.buttonManageRole);
+        btManageRole.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toManageRole();
+            }
+        });
+
+        Button btDelete = findViewById(R.id.buttonDelete);
+
+        btDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteProject();
+            }
+        });
+
         Button btBack = findViewById(R.id.buttonBack);
         btBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,6 +143,14 @@ public class DeveloperActivity extends AppCompatActivity {
 
     private void toEvent(){
         startActivity(new Intent(DeveloperActivity.this, EventActivity.class));
+    }
+
+    private void toManageRole(){
+        startActivity(new Intent(DeveloperActivity.this, RoleViewActivity.class));
+    }
+
+    private void deleteProject(){
+
     }
 
     @Override

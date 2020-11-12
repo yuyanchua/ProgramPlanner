@@ -34,6 +34,7 @@
         <activity android:name=".activity.TimelineActivity" />
         <activity android:name=".activity.TaskAssignActivity" />
         <activity android:name=".activity.AddTaskActivity" />
+        <activity android:name=".activity.RoleViewActivity"/>
         <activity android:name=".activity.EventActivity" />
         <activity android:name=".activity.LogViewActivity" />
         <activity android:name=".activity.GraphActivity" />
