@@ -134,6 +134,6 @@ public class UserTest {
         User testUser0 = new User("testName", "testPass");
         User testUser1 = new User("testName1", "testPass1");
         assertFalse("IsEquals did not return false for 2 non-equal users.",
-                testUser0.isEquals(testUser1));
+                testUser0.isEqual(testUser1));
     }
 }

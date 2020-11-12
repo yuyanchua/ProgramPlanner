@@ -2,7 +2,7 @@ package com.MyApplicationTest.element;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
-import com.example.myapplication.element.ManageCreateProject;
+//import com.example.myapplication.element.ManageCreateProject;
 
 /**
  * Tests the ManageCreateProject class.

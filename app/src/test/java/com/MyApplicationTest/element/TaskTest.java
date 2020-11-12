@@ -90,9 +90,11 @@ public class TaskTest {
      */
     @Test
     public void testToString() {
-        Task testTask = new Task("1", "TestName", new ArrayList<String>());
+        ArrayList<String> testList = new ArrayList<String>();
+        testList.add("test 1");
+        Task testTask = new Task("1", "TestName", testList);
         assertTrue("ToString did not return a string in the expected format.",
-                "1: TestName\n()".equals(testTask.toString()));
+                "1: TestName\n(test 1, )".equals(testTask.toString()));
 
     }
 }

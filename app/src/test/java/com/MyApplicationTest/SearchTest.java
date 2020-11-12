@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import com.example.myapplication.engine.SearchProject;
 
-public class SearchTest {
+/*public class SearchTest {
 
     @Test
     void testSearch_existedProject(){
@@ -38,4 +38,4 @@ public class SearchTest {
     }
 
 
-}
+}*/

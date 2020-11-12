@@ -1,23 +1,23 @@
 package com.MyApplicationTest.engine;
 
-import androidx.annotation.NonNull;
+//mport androidx.annotation.NonNull;
 import org.junit.Test;
-import org.mockito.InjectMocks;
+//import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.junit.Before;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import static org.junit.Assert.*;
+//import org.mockito.MockitoAnnotations;
+//import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import com.example.myapplication.element.User;
 import com.example.myapplication.activity.SignUpActivity;
 import com.example.myapplication.engine.SignUp;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+//import com.google.firebase.database.DataSnapshot;
+//import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+//import com.google.firebase.database.ValueEventListener;
 
 
 /**
@@ -52,22 +52,25 @@ public class SignUpTest {
     }
 
     /**
-     * Test constructor with null user password.
+     * Test constructor with hashPassword returning null.
      * Should call signup and set the activity's ErrView
      * this should verify that activity and user are set by constructor,
      * as well as covering a branch of signup.
      */
     @Test
     public void testConstructorAndErrSet() {
-        User testUser = new User("testName", null);
+        User testUser = new User("testName", "CheckPass");
         //This static mocking technique found at
         //https://tech.cognifide.com/blog/2020/mocking-static-methods-made-possible-in-mockito-3.4.0/
         try (MockedStatic<FirebaseDatabase> mockFirebase = Mockito.mockStatic(FirebaseDatabase.class)) {
             mockFirebase.when(FirebaseDatabase::getInstance).thenReturn(databaseMock);
-            SignUp testSignUp = new SignUp(signUpMock, testUser);
-            System.out.println("***One java.lang.NullPointerException should be thrown from testConstructorAndErrSet***");
-            //Verify that setErrView was called due to null password
-            verify(signUpMock, times(1)).setErrView("Encountered unexpected error");
+            try(MockedStatic<User> mockUser = Mockito.mockStatic(User.class)) {
+                mockUser.when(() -> User.hashPassword(anyString())).thenReturn(null);
+                SignUp testSignUp = new SignUp(signUpMock, testUser);
+
+                //Verify that setErrView was called due to null password
+                verify(signUpMock, times(1)).setErrView("Encountered unexpected error");
+            }
         }
     }
 
@@ -88,42 +91,34 @@ public class SignUpTest {
 
     /**
      * Test validatePassword.
-     * Will be called
-     *
+     * Will be called once with null password on constructor,
+     * to make sure it fails
      */
-
-    /**
-     * Test the listener onDataChange
-     * will create a SignUp, then modify the user.
-     * Verify that activity.finishSignUp is called
-     *
     @Test
-    public void testOnDataChangeNotExist() {
-        User testUser = new User("testName", "testPass");
+    public void testValidatePasswordFalse() {
+        User testUser = new User("testName", null);
         try (MockedStatic<FirebaseDatabase> mockFirebase = Mockito.mockStatic(FirebaseDatabase.class)) {
             mockFirebase.when(FirebaseDatabase::getInstance).thenReturn(databaseMock);
-            doAnswer( i -> new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    System.out.println("Here");
-                    if(snapshot.child(testUser.username).exists()){
-                        signUpMock.setErrView("Username is already exist in database");
-                    }else{
-
-                        referenceMock.child(testUser.username).setValue(testUser);
-                        Toast.makeText(signUpMock.getApplicationContext(), "SignUp successfully", Toast.LENGTH_SHORT).show();
-                        signUpMock.finishSignUp();
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    System.out.println("Here");
-                }
-            }).when(referenceMock).addListenerForSingleValueEvent(any());
-
             SignUp testSignUp = new SignUp(signUpMock, testUser);
-            testUser.username = "newName";
+            //validate that setErrView was called with "Password Length must be at least 6 characters"
+            verify(signUpMock, times(1)).setErrView("Password Length must at least 6 characters");
         }
-    }*/
+    }
+
+    /*
+     * The listeners cannot easily be unit tested
+     * due to how tightly they are connected to the database
+     * we will instead try to test that these are working though
+     * integration tests
+     */
+    //@Test
+    //public void testOnDataChangeNotExist() {
+    //    User testUser = new User("testName", "testPass");
+    //    try (MockedStatic<FirebaseDatabase> mockFirebase = Mockito.mockStatic(FirebaseDatabase.class)) {
+    //        mockFirebase.when(FirebaseDatabase::getInstance).thenReturn(databaseMock);
+    //        doCallRealMethod().when(referenceMock).addListenerForSingleValueEvent(any());
+    //        SignUp testSignUp = new SignUp(signUpMock, testUser);
+            //testUser.username = "newName";
+    //    }
+    //}
 }
