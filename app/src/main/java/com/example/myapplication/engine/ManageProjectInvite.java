@@ -3,6 +3,8 @@ package com.example.myapplication.engine;
 import androidx.annotation.NonNull;
 
 import com.example.myapplication.activity.InviteActivity;
+import com.example.myapplication.element.Application;
+import com.example.myapplication.element.Invitation;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -12,16 +14,17 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ManageInvite {
+public class ManageProjectInvite {
     FirebaseDatabase firebase;
     DatabaseReference db_ref_project, db_ref_roles, db_ref_users;
     InviteActivity activity;
     List<String> userList;
     List<String> projectMemberList;
     String projectId;
+    int inviteId;
 
 
-    public ManageInvite(InviteActivity activity, String projectId){
+    public ManageProjectInvite(InviteActivity activity, String projectId){
         firebase = FirebaseDatabase.getInstance();
         db_ref_project = firebase.getReference("Project").child(projectId);
         db_ref_roles = firebase.getReference("Roles").child(projectId);
@@ -47,9 +50,10 @@ public class ManageInvite {
 //            activity.setErrText("The user entered is already in project");
 //        }
 
-        if(isUserExist(username) && !isMember(username))
+        if(isUserExist(username) && !isMember(username)) {
+            generateInviteId(username);
             sendInvite(username, projectName, projectRoles);
-
+        }
     }
 
     public boolean isUserExist(String username){
@@ -65,11 +69,10 @@ public class ManageInvite {
     public boolean isMember(String username){
         for(String member : projectMemberList){
             if(member.equals(username)){
+                activity.setErrText("The user entered is already in project");
                 return true;
             }
         }
-
-        activity.setErrText("The user entered is already in project");
         return false;
     }
 
@@ -122,7 +125,9 @@ public class ManageInvite {
         db_ref_users.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
+                Invitation invite = new Invitation(projectId, name, roles);
+                db_ref_users.child(user).child("Invitation").child(Integer.toString(inviteId)).setValue(invite);
+                activity.finishInvite();
             }
 
             @Override
@@ -140,6 +145,24 @@ public class ManageInvite {
                 String devCode = snapshot.child("devCode").getValue().toString();
 
                 activity.setupCode(clientCode, devCode);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void generateInviteId(String username){
+        final String user = username;
+        db_ref_users.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                snapshot = snapshot.child(user).child("Invitation");
+                for(DataSnapshot snap : snapshot.getChildren()){
+                    inviteId = Integer.parseInt(snap.getKey()) + 1;
+                }
             }
 
             @Override

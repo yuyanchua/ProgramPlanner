@@ -178,12 +178,6 @@ public class ProjectMainActivity extends AppCompatActivity {
 
         String userRole = role.roles;
 
-//        if(userRole.equals("developer"))
-//            startActivity(new Intent(ProjectMainActivity.this, DeveloperActivity.class));
-//        else{
-//            startActivity(new Intent(ProjectMainActivity.this, CustomerActivity.class));
-//        }
-
         Intent intent;
 
         if(userRole.equals("manager")) {

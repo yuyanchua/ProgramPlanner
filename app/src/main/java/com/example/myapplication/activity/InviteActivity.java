@@ -3,20 +3,25 @@ package com.example.myapplication.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
 import com.example.myapplication.element.Session;
-import com.example.myapplication.engine.ManageInvite;
+import com.example.myapplication.engine.ManageProjectInvite;
 
 public class InviteActivity extends AppCompatActivity {
     TextView customerView, developerView, errView;
-    ManageInvite manage;
+    EditText userEdit;
+    ManageProjectInvite manage;
+    Spinner roleSpin;
 
 //    FirebaseDatabase firebase;
 //    DatabaseReference db_ref;
@@ -32,11 +37,21 @@ public class InviteActivity extends AppCompatActivity {
 //        db_ref = firebase.getReference("Project").child(Session.getInstance().getProjectId());
 
 //        setupCode();
-        manage = new ManageInvite(this, Session.getInstance().getProjectId());
+        manage = new ManageProjectInvite(this, Session.getInstance().getProjectId());
         manage.getInviteCode();
 
+        setupSpinner();
         setupButton();
 
+    }
+
+    private void setupSpinner(){
+        roleSpin = findViewById(R.id.spinnerRole);
+        String [] roles = {"Client", "Developer"};
+        ArrayAdapter<String> roleAdapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, roles);
+        roleAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+
+        roleSpin.setAdapter(roleAdapter);
     }
 
     public void setupCode(String clientCode, String devCode){
@@ -83,12 +98,20 @@ public class InviteActivity extends AppCompatActivity {
     }
 
     private void inviteUser(){
-        EditText userEdit = findViewById(R.id.textUsername);
+        userEdit = findViewById(R.id.textUsername);
         String username = userEdit.getText().toString();
 
         String projectName = Session.getInstance().getProjectName();
+        String projectRole = roleSpin.getSelectedItem().toString();
+        manage.inviteUser(username, projectName, projectRole);
 
-        manage.inviteUser(username, projectName, "unknown");
+    }
+
+
+    public void finishInvite(){
+        System.out.println("Sent Invitation");
+        userEdit.getText().clear();
+        Toast.makeText(getApplicationContext(), "Invitation Sent", Toast.LENGTH_SHORT).show();
 
     }
 
