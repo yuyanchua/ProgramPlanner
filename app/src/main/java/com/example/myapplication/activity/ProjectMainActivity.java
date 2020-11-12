@@ -31,6 +31,10 @@ public class ProjectMainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_project_view);
@@ -177,11 +181,20 @@ public class ProjectMainActivity extends AppCompatActivity {
         session.setCurrProject(project);
 
         String userRole = role.roles;
-        if(userRole.equals("developer"))
-            startActivity(new Intent(ProjectMainActivity.this, DeveloperActivity.class));
-        else{
-            startActivity(new Intent(ProjectMainActivity.this, CustomerActivity.class));
+
+        Intent intent;
+
+        if(userRole.equals("manager")) {
+            intent = new Intent(ProjectMainActivity.this, DeveloperActivity.class);
+            intent.putExtra("isManager", true);
+
+        }else if(userRole.equals("developer")){
+            intent = new Intent(ProjectMainActivity.this, DeveloperActivity.class);
+            intent.putExtra("isManager", false);
+        }else{
+            intent = new Intent(ProjectMainActivity.this, CustomerActivity.class);
         }
+        startActivity(intent);
 
     }
 

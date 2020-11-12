@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.example.myapplication.R;
@@ -14,6 +15,10 @@ public class FullScreenImageActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_full_screen_image);
 
@@ -28,5 +33,11 @@ public class FullScreenImageActivity extends AppCompatActivity {
                         .into(fullScreen);
             }
         }
+        fullScreen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 }

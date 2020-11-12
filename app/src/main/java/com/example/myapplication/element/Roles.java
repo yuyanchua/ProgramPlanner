@@ -10,4 +10,9 @@ public class Roles {
         this.projectName = projectName;
         this.roles = roles;
     }
+
+    public Roles(String projectName, String roles){
+        this.projectName = projectName;
+        this.roles = roles;
+    }
 }

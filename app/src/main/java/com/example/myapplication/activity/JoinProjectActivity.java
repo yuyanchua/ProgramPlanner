@@ -3,9 +3,12 @@ package com.example.myapplication.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,10 +25,17 @@ public class JoinProjectActivity extends AppCompatActivity {
 //    DatabaseReference db_ref, db_ref_roles;
     Session session;
     JoinProject joinProject;
+    Button btJoin, btApply, btView, btCancel;
+    Spinner roleSpin;
+
 //    boolean isExist, isValid, isDeveloper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_project);
 
@@ -38,11 +48,42 @@ public class JoinProjectActivity extends AppCompatActivity {
         session = Session.getInstance();
         joinProject = new JoinProject(this);
 
-        Button btJoin = findViewById(R.id.buttonJoin);
+        setupSpinner();
+        setupButton();
+    }
+
+    private void setupSpinner(){
+        roleSpin = findViewById(R.id.spinnerRole);
+        String [] roles = {"Client", "Developer"};
+        ArrayAdapter roleAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, roles);
+
+        roleAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        roleSpin.setAdapter(roleAdapter);
+
+    }
+
+    private void setupButton(){
+        btJoin = findViewById(R.id.buttonJoin);
         btJoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 joinProject();
+            }
+        });
+
+        btApply = findViewById(R.id.buttonApply);
+        btApply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                applyProject();
+            }
+        });
+
+        btView = findViewById(R.id.buttonInvite);
+        btView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toViewInvite();
             }
         });
 
@@ -60,112 +101,39 @@ public class JoinProjectActivity extends AppCompatActivity {
 
     private void joinProject(){
         EditText inviteEdit = findViewById(R.id.textBoxInvitationCode);
-        EditText projectEdit = findViewById(R.id.textBoxProjectName);
+//        EditText projectEdit = findViewById(R.id.textBoxProjectName);
 
         String inviteCode = inviteEdit.getText().toString();
-        String projectName = projectEdit.getText().toString();
+//        String projectName = projectEdit.getText().toString();
 
-        if(inviteCode.isEmpty() || projectName.isEmpty()){
-            String errMsg = "Either Project Name or the Invite Code is Empty";
+        if(inviteCode.isEmpty()){
+            String errMsg = "Please enter an invite Code";
             setErrText(errMsg);
 //            errView.setText("Either Project Name or the Invite Code is Empty");
 //            errView.setVisibility(View.VISIBLE);
         }else{
-            joinProject.joinProject(projectName, inviteCode, session.getUserName());
+            joinProject.joinProject(inviteCode, session.getUserName());
         }
+    }
 
-//        int inviteInt = Integer.parseInt(inviteCode);
-//        if(inviteInt % 2 == 1){
-//            toClient();
-//        }else{
-//            toDeveloper();
-//        }
-//        joinProjectInDatabase(projectName, inviteCode);
+    private void applyProject(){
+        EditText projectEdit = findViewById(R.id.textBoxProjectName);
+        String projectName = projectEdit.getText().toString();
+
+        String projectRoles = roleSpin.getSelectedItem().toString();
+
+        if(projectName.isEmpty()){
+            String errMsg = "Please enter an project name";
+            setErrText(errMsg);
+        }else{
+            joinProject.applyProject(projectName, projectRoles, session.getUserName());
+        }
 
     }
 
-//    private void joinProjectInDatabase(final String projectName, final String inviteCode){
-//        //TODO: check if the project exist
-//        db_ref.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                isValid = false;
-//                for(DataSnapshot snap: dataSnapshot.getChildren()){
-//                    try {
-//                        String name = snap.child("projectName").getValue().toString();
-//                        if (!projectName.equals(name)) {
-//                            continue;
-//                        }
-//                        long projectId = Long.parseLong(snap.getKey().toString());
-////                        Project.projectId = projectId;
-//
-//                        //TODO: check whether is redundant
-//                        session.getCurrProject().projectId = projectId;
-//
-//                        String clientCode = snap.child("clientCode").getValue().toString();
-//                        String devCode = snap.child("devCode").getValue().toString();
-//                        if (inviteCode.equals(clientCode)) {
-//                            setProjectValue(projectId, name, clientCode, devCode);
-//                            isValid = true;
-//                            isDeveloper = false;
-////                            toClient();
-//                        }
-//                        if (inviteCode.equals(devCode)) {
-//                            setProjectValue(projectId, name, clientCode, devCode);
-//                            isValid = true;
-//                            isDeveloper = true;
-////                            toDeveloper();
-//                        }
-//                    }catch(Exception exception){
-//                        exception.printStackTrace();
-//                    }
-//                }
-//                if(!isValid) {
-//                    errView.setText("Either Project Does Not Exist or Invite Code Incorrect");
-//                    errView.setVisibility(View.VISIBLE);
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//
-//        db_ref_roles.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                String username = session.getUserName();
-//                if(isValid){
-////                    Project project = session.getCurrProject();
-//                    String projectIdStr = session.getProjectId();
-//                    boolean isExist = dataSnapshot.child(projectIdStr).child(username).exists();
-//                    if(!isExist){
-//                        if(isDeveloper){
-//                            db_ref_roles.child(projectIdStr).child("ProjectName").setValue(projectName);
-//                            db_ref_roles.child(projectIdStr).child(username).child("Roles").setValue("developer");
-//                            toDeveloper();
-//                        }else{
-//                            db_ref_roles.child(projectIdStr).child("ProjectName").setValue(projectName);
-//                            db_ref_roles.child(projectIdStr).child(username).child("Roles").setValue("client");
-//                            toClient();
-//                        }
-//                    }
-//                }
-//                if(isExist){
-//                    errView.setText("The User already join the project");
-//                    errView.setVisibility(View.VISIBLE);
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//
-//        //If not, return error message
-//    }
+    private void toViewInvite(){
+        startActivity(new Intent(JoinProjectActivity.this, ViewInvitationActivity.class));
+    }
 
     public void setProjectValue(Project project){
         session.setCurrProject(project);
@@ -178,19 +146,15 @@ public class JoinProjectActivity extends AppCompatActivity {
             toClient();
     }
 
+    public void finishApply() {
+        Toast.makeText(getApplicationContext(), "Apply Successfully!", Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
     public void setErrText(String errMsg){
         errView.setText(errMsg);
         errView.setVisibility(View.VISIBLE);
     }
-
-//    private void setProjectValue(long projectId, String projectName, String clientCode, String devCode){
-////        Project.projectId = projectId;
-////        Project.projectName = projectName;
-////        Project.clientCode = clientCode;
-////        Project.devCode = devCode;
-//        Project temp = new Project(projectId, projectName, clientCode, devCode);
-//        session.setCurrProject(temp);
-//    }
 
     private void toDeveloper(){
         startActivity(new Intent(JoinProjectActivity.this, DeveloperActivity.class));
