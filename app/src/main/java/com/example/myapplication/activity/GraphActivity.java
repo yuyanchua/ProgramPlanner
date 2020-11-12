@@ -59,6 +59,10 @@ public class GraphActivity extends AppCompatActivity implements ImageAdapter.OnI
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph_view);
 
