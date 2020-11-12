@@ -77,8 +77,10 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageHolder>
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
             //menu.setHeaderTitle("Select Action");
-            MenuItem delete = menu.add(menu.NONE, 1, 1, "Delete");
+            MenuItem save = menu.add(menu.NONE, 1, 1, "Save");
+            MenuItem delete = menu.add(menu.NONE, 2, 2, "Delete");
 
+            save.setOnMenuItemClickListener(this);
             delete.setOnMenuItemClickListener(this);
         }
 
@@ -89,6 +91,9 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageHolder>
                 if(position != RecyclerView.NO_POSITION){
                     switch(item.getItemId()){
                         case 1:
+                            Listener.OnSaveClick(position);
+                            return true;
+                        case 2:
                             Listener.OnDeleteClick(position);
                             return true;
                     }
@@ -100,6 +105,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageHolder>
     public interface OnItemClickListen{
         void onItemClick(int position);
         void OnDeleteClick(int position);
+        void OnSaveClick(int position);
     }
 
     public void setOnItemClickListener(OnItemClickListen listener){
