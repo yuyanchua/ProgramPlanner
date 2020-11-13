@@ -7,11 +7,10 @@
 
     <ScrollView
         android:id="@+id/scrollView3"
-        android:layout_width="370dp"
-        android:layout_height="370dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
+        android:layout_width="384dp"
+        android:layout_height="296dp"
         android:layout_marginTop="26dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textManageTip">
 
@@ -48,13 +47,12 @@
         app:layout_constraintTop_toBottomOf="@+id/scrollView3" />
 
     <Button
-        android:id="@+id/buttonChangeManager"
+        android:id="@+id/buttonConfirm"
         android:layout_width="150dp"
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
         android:layout_marginTop="19dp"
-        android:text="Change Manager"
+        android:text="Confirm"
         android:textAllCaps="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewTipMessage" />
@@ -68,7 +66,7 @@
         android:layout_marginTop="19dp"
         android:text="Kick Member"
         android:textAllCaps="false"
-        app:layout_constraintStart_toEndOf="@+id/buttonChangeManager"
+        app:layout_constraintStart_toEndOf="@+id/buttonConfirm"
         app:layout_constraintTop_toBottomOf="@+id/textViewTipMessage" />
 
     <Button
@@ -81,7 +79,7 @@
         android:text="Change Role"
         android:textAllCaps="false"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonChangeManager" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonConfirm" />
 
     <Button
         android:id="@+id/buttonBack"

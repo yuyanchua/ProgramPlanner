@@ -126,6 +126,7 @@ public class ManageProjectInvite {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Invitation invite = new Invitation(projectId, name, roles);
+//                invite.setInviteId(Integer.toString(inviteId));
                 db_ref_users.child(user).child("Invitation").child(Integer.toString(inviteId)).setValue(invite);
                 activity.finishInvite();
             }
@@ -143,8 +144,9 @@ public class ManageProjectInvite {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String clientCode = snapshot.child("clientCode").getValue().toString();
                 String devCode = snapshot.child("devCode").getValue().toString();
-
-                activity.setupCode(clientCode, devCode);
+                boolean gotApplication = snapshot.child("Application").exists();
+                System.out.println("Got Application : " + gotApplication);
+                activity.setupCode(clientCode, devCode, gotApplication);
             }
 
             @Override

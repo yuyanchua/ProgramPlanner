@@ -1,11 +1,15 @@
 package com.example.myapplication.activity;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
@@ -22,6 +26,7 @@ public class ViewInvitationActivity extends AppCompatActivity {
     List<Invitation> inviteList;
     List<Integer> inviteViewIdList;
     Session session;
+    ManageInvitation manageInvite;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,11 +41,9 @@ public class ViewInvitationActivity extends AppCompatActivity {
         inviteViewIdList = new ArrayList<>();
         session = Session.getInstance();
 
-        ManageInvitation manageInvite = new ManageInvitation(this, session.getUserName());
+        manageInvite = new ManageInvitation(this, session.getUserName());
         manageInvite.getInvitationList();
 
-        //Initialise helper class
-//        setupLayout();
     }
 
     public void setupLayout(List<Invitation> inviteList){
@@ -76,7 +79,47 @@ public class ViewInvitationActivity extends AppCompatActivity {
 
     private void viewInvite(int index){
         //Appear dialog box
+        Invitation invitation = inviteList.get(index);
+
+        showInviteDialog(ViewInvitationActivity.this, invitation);
+
     }
 
+    public void finishViewInvite(String message){
+        Toast.makeText(ViewInvitationActivity.this, message, Toast.LENGTH_SHORT).show();
+        recreate();
+    }
+
+
+    private void showInviteDialog(Context context, final Invitation invitation){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        String inviteDetails = invitation.toString();
+        builder.setMessage(inviteDetails)
+                .setTitle("Project Invitation");
+        builder.setPositiveButton("Accept", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                manageInvite.acceptInvite(invitation);
+            }
+        });
+
+        builder.setNegativeButton("Decline", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                manageInvite.declineInvite(invitation);
+            }
+        });
+
+        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        builder.show();
+
+    }
 
 }

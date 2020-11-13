@@ -15,7 +15,7 @@ import java.util.List;
 
 public class ManageApplication {
     FirebaseDatabase firebase;
-    DatabaseReference db_ref;
+    DatabaseReference db_ref_project, db_ref_roles;
 
     ViewApplicationActivity activity;
     String projectId;
@@ -23,14 +23,29 @@ public class ManageApplication {
 
     public ManageApplication(ViewApplicationActivity activity, String projectId){
         firebase = FirebaseDatabase.getInstance();
-        db_ref = firebase.getReference("Project");
-
+        db_ref_project = firebase.getReference("Project");
+        db_ref_roles = firebase.getReference("Roles");
         this.projectId = projectId;
         this.activity = activity;
     }
 
+    public void acceptApplication(Application application){
+        String appId  = application.appId;
+        String username = application.username;
+        String roles = application.roles;
+
+        updateRoles(username, roles);
+        deleteApplication(appId);
+        activity.finishViewApplication("Application Accepted");
+    }
+
+    public void rejectApplication(Application application){
+        deleteApplication(application.appId);
+        activity.finishViewApplication("Application Declined");
+    }
+
     public List<Application> getApplicationList(){
-        db_ref.addValueEventListener(new ValueEventListener() {
+        db_ref_project.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 applicationList = new ArrayList<>();
@@ -40,7 +55,7 @@ public class ManageApplication {
                     String username = snap.child("username").getValue().toString();
                     String roles = snap.child("roles").getValue().toString();
 
-                    Application tempApp = new Application(username, roles);
+                    Application tempApp = new Application(applicationId, username, roles);
                     applicationList.add(tempApp);
                 }
 
@@ -56,4 +71,34 @@ public class ManageApplication {
 
         return applicationList;
     }
+
+    private void updateRoles(final String username, final String projectRole){
+        db_ref_roles.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                db_ref_roles.child(projectId).child(username).child("Roles").setValue(projectRole);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void deleteApplication(final String appId){
+        db_ref_project.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                db_ref_project.child(projectId).child("Application").child(appId).removeValue();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+
 }

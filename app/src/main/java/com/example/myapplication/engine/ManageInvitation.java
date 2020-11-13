@@ -15,7 +15,7 @@ import java.util.List;
 
 public class ManageInvitation {
     FirebaseDatabase firebase;
-    DatabaseReference db_ref;
+    DatabaseReference db_ref_user, db_ref_roles;
 
     ViewInvitationActivity activity;
     String username;
@@ -23,14 +23,33 @@ public class ManageInvitation {
 
     public ManageInvitation(ViewInvitationActivity activity, String username){
         firebase = FirebaseDatabase.getInstance();
-        db_ref = firebase.getReference("Users");
+        db_ref_user = firebase.getReference("Users");
+        db_ref_roles = firebase.getReference("Roles");
         this.username = username;
         this.activity = activity;
 
     }
 
+    public void acceptInvite(Invitation invitation){
+//        System.out.println("Accept Invite : " + invitation.getInviteId());
+        String inviteId = invitation.inviteId;
+        String projectId = invitation.projectId;
+        String projectRole = invitation.projectRole;
+
+        updateRole(projectId, projectRole);
+        deleteInvite(inviteId);
+        activity.finishViewInvite("Accepted Invitation");
+
+    }
+
+    public void declineInvite(Invitation invitation){
+        deleteInvite(invitation.inviteId);
+        activity.finishViewInvite("Declined Invitation");
+    }
+
+
     public List<Invitation> getInvitationList(){
-        db_ref.addValueEventListener(new ValueEventListener() {
+        db_ref_user.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 invitationList = new ArrayList<>();
@@ -41,7 +60,8 @@ public class ManageInvitation {
                     String projectName = snap.child("projectName").getValue().toString();
                     String projectRole = snap.child("projectRole").getValue().toString();
 
-                    Invitation tempInvite = new Invitation(projectId, projectName, projectRole);
+                    Invitation tempInvite = new Invitation(inviteId, projectId, projectName, projectRole);
+
                     invitationList.add(tempInvite);
                 }
 
@@ -56,4 +76,35 @@ public class ManageInvitation {
 
         return invitationList;
     }
+
+    private void deleteInvite(final String inviteId){
+        db_ref_user.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                db_ref_user.child(username).child("Invitation").child(inviteId).removeValue();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void updateRole(final String projectId, final String projectRole){
+        db_ref_roles.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                db_ref_roles.child(projectId).child(username).child("Roles").setValue(projectRole);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+
 }

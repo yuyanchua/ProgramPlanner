@@ -17,21 +17,24 @@ import java.util.List;
 
 public class JoinProject {
     FirebaseDatabase firebase;
-    DatabaseReference db_ref_project, db_ref_roles;
+    DatabaseReference db_ref_project, db_ref_roles, db_ref_users;
 
     JoinProjectActivity activity;
-    boolean isExist, isValid, isDeveloper;
+    boolean isValid, isDeveloper;
     String projectName, inviteCode, username, projectId, roles;
     List<Project> projectList;
     List<Application> appList;
 
 
-    public JoinProject(JoinProjectActivity activity){
+    public JoinProject(JoinProjectActivity activity, String username){
         firebase = FirebaseDatabase.getInstance();
         db_ref_project = firebase.getReference("Project");
         db_ref_roles = firebase.getReference("Roles");
+        db_ref_users = firebase.getReference("Users");
         this.activity = activity;
+        this.username = username;
         retrieveDatabase();
+        checkInvitation();
     }
 
     public void joinProject(String inviteCode, String username){
@@ -79,6 +82,21 @@ public class JoinProject {
                         Project project = new Project(projectId, name, clientCode, devCode);
                         projectList.add(project);
                 }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void checkInvitation(){
+        db_ref_users.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolean gotInvitation = snapshot.child(username).child("Invitation").exists();
+                activity.setNotification(gotInvitation);
             }
 
             @Override

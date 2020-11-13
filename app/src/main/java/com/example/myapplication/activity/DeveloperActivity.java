@@ -1,18 +1,26 @@
 package com.example.myapplication.activity;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
 import com.example.myapplication.element.Session;
+import com.example.myapplication.engine.ManageDeveloper;
 
 public class DeveloperActivity extends AppCompatActivity {
+
+    boolean isConfirm;
+    boolean isManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -24,7 +32,7 @@ public class DeveloperActivity extends AppCompatActivity {
         setContentView(R.layout.activity_developer_main);
 
         Intent intent = getIntent();
-        boolean isManager = intent.getExtras().getBoolean("isManager");
+        isManager = intent.getExtras().getBoolean("isManager");
 
         TextView titleView = findViewById(R.id.mainTitle);
         if(isManager) {
@@ -108,6 +116,7 @@ public class DeveloperActivity extends AppCompatActivity {
         btDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                deleteConfirmation(DeveloperActivity.this, "message", "title");
                 deleteProject();
             }
         });
@@ -133,7 +142,9 @@ public class DeveloperActivity extends AppCompatActivity {
     }
 
     private void toInvite(){
-        startActivity(new Intent(DeveloperActivity.this, InviteActivity.class));
+        Intent intent =  new Intent(DeveloperActivity.this, InviteActivity.class);
+        intent.putExtra("isManager", isManager);
+        startActivity(intent);
     }
 
     private void toNotebook(){
@@ -163,7 +174,36 @@ public class DeveloperActivity extends AppCompatActivity {
     }
 
     private void deleteProject(){
+        String message = "Are you sure you want to delete the project?";
+        String title = "Delete Project";
 
+        boolean isConfirm = deleteConfirmation(DeveloperActivity.this, message, title);
+        if(isConfirm){
+            ManageDeveloper manage = new ManageDeveloper(this);
+            manage.removeData(Session.getInstance().getProjectId());
+        }
+    }
+
+    private boolean deleteConfirmation(Context context, String message, String title){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        System.out.println("Build alert dialog");
+        builder.setMessage(message)
+                .setTitle(title);
+        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                isConfirm = true;
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                isConfirm = false;
+            }
+        });
+
+        builder.show();
+        return isConfirm;
     }
 
     @Override
@@ -171,5 +211,10 @@ public class DeveloperActivity extends AppCompatActivity {
         Intent intent = new Intent(DeveloperActivity.this, ProjectMainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+    }
+
+    public void finishDelete(){
+        Toast.makeText(getApplicationContext(), "Project delete Sucessfully", Toast.LENGTH_SHORT).show();
+        onBackPressed();
     }
 }

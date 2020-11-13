@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import com.example.myapplication.R;
 import com.example.myapplication.element.Session;
@@ -19,10 +20,13 @@ import com.example.myapplication.engine.ManageProjectInvite;
 
 public class InviteActivity extends AppCompatActivity {
     TextView customerView, developerView, errView;
+    CardView notification;
+
     EditText userEdit;
     ManageProjectInvite manage;
-    Spinner roleSpin;
 
+    Spinner roleSpin;
+    boolean isManager;
 //    FirebaseDatabase firebase;
 //    DatabaseReference db_ref;
 
@@ -37,12 +41,19 @@ public class InviteActivity extends AppCompatActivity {
 
         errView = findViewById(R.id.errorMessageTip);
         errView.setVisibility(View.INVISIBLE);
+
+
+        notification = findViewById(R.id.notification);
 //        firebase = FirebaseDatabase.getInstance();
 //        db_ref = firebase.getReference("Project").child(Session.getInstance().getProjectId());
 
 //        setupCode();
         manage = new ManageProjectInvite(this, Session.getInstance().getProjectId());
         manage.getInviteCode();
+
+        Intent intent = getIntent();
+        isManager = intent.getExtras().getBoolean("isManager");
+
 
         setupSpinner();
         setupButton();
@@ -58,13 +69,19 @@ public class InviteActivity extends AppCompatActivity {
         roleSpin.setAdapter(roleAdapter);
     }
 
-    public void setupCode(String clientCode, String devCode){
+    public void setupCode(String clientCode, String devCode, boolean gotApplication){
         customerView = findViewById(R.id.inviteCodeCustomer);
         customerView.setText(clientCode);
 //        customerView.setText(Project.clientCode);
 
         developerView = findViewById(R.id.inviteCodeDeveloper);
         developerView.setText(devCode);
+
+        if(gotApplication)
+            notification.setVisibility(View.VISIBLE);
+        else
+            notification.setVisibility(View.INVISIBLE);
+
 //        developerView.setText(Project.devCode);
 
 //        getCode();
@@ -99,6 +116,12 @@ public class InviteActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+
+        if(!isManager){
+            btView.setVisibility(View.GONE);
+            notification.setVisibility(View.GONE);
+        }
     }
 
     private void inviteUser(){
