@@ -20,8 +20,11 @@ import com.example.myapplication.engine.ManageProjectInvite;
 
 public class InviteActivity extends AppCompatActivity {
     TextView customerView, developerView, errView;
+    CardView notification;
+
     EditText userEdit;
     ManageProjectInvite manage;
+
     Spinner roleSpin;
     boolean isManager;
 //    FirebaseDatabase firebase;
@@ -38,6 +41,9 @@ public class InviteActivity extends AppCompatActivity {
 
         errView = findViewById(R.id.errorMessageTip);
         errView.setVisibility(View.INVISIBLE);
+
+
+        notification = findViewById(R.id.notification);
 //        firebase = FirebaseDatabase.getInstance();
 //        db_ref = firebase.getReference("Project").child(Session.getInstance().getProjectId());
 
@@ -63,13 +69,19 @@ public class InviteActivity extends AppCompatActivity {
         roleSpin.setAdapter(roleAdapter);
     }
 
-    public void setupCode(String clientCode, String devCode){
+    public void setupCode(String clientCode, String devCode, boolean gotApplication){
         customerView = findViewById(R.id.inviteCodeCustomer);
         customerView.setText(clientCode);
 //        customerView.setText(Project.clientCode);
 
         developerView = findViewById(R.id.inviteCodeDeveloper);
         developerView.setText(devCode);
+
+        if(gotApplication)
+            notification.setVisibility(View.VISIBLE);
+        else
+            notification.setVisibility(View.INVISIBLE);
+
 //        developerView.setText(Project.devCode);
 
 //        getCode();
@@ -105,11 +117,10 @@ public class InviteActivity extends AppCompatActivity {
             }
         });
 
-        CardView notCard = findViewById(R.id.notification);
 
         if(!isManager){
             btView.setVisibility(View.GONE);
-            notCard.setVisibility(View.GONE);
+            notification.setVisibility(View.GONE);
         }
     }
 

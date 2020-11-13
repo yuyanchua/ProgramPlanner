@@ -144,8 +144,9 @@ public class ManageProjectInvite {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String clientCode = snapshot.child("clientCode").getValue().toString();
                 String devCode = snapshot.child("devCode").getValue().toString();
-
-                activity.setupCode(clientCode, devCode);
+                boolean gotApplication = snapshot.child("Application").exists();
+                System.out.println("Got Application : " + gotApplication);
+                activity.setupCode(clientCode, devCode, gotApplication);
             }
 
             @Override

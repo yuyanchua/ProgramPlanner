@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import com.example.myapplication.R;
 import com.example.myapplication.element.Project;
@@ -21,6 +22,7 @@ import com.example.myapplication.engine.JoinProject;
 public class JoinProjectActivity extends AppCompatActivity {
 
     TextView errView;
+    CardView notification;
 //    FirebaseDatabase firebase;
 //    DatabaseReference db_ref, db_ref_roles;
     Session session;
@@ -42,11 +44,13 @@ public class JoinProjectActivity extends AppCompatActivity {
         errView = findViewById(R.id.errorMessageTip);
         errView.setVisibility(View.INVISIBLE);
 
+        notification = findViewById(R.id.notification);
+
 //        firebase = FirebaseDatabase.getInstance();
 //        db_ref = firebase.getReference("Project");
 //        db_ref_roles = firebase.getReference("Roles");
         session = Session.getInstance();
-        joinProject = new JoinProject(this);
+        joinProject = new JoinProject(this, session.getUserName());
 
         setupSpinner();
         setupButton();
@@ -59,6 +63,14 @@ public class JoinProjectActivity extends AppCompatActivity {
 
         roleAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         roleSpin.setAdapter(roleAdapter);
+
+    }
+
+    public void setNotification(boolean gotInvitation){
+        if(gotInvitation)
+            notification.setVisibility(View.VISIBLE);
+        else
+            notification.setVisibility(View.INVISIBLE);
 
     }
 

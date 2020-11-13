@@ -81,7 +81,7 @@ public class ViewInvitationActivity extends AppCompatActivity {
         //Appear dialog box
         Invitation invitation = inviteList.get(index);
 
-        showInviteDialog(ViewInvitationActivity.this, invitation, "Project Invitation");
+        showInviteDialog(ViewInvitationActivity.this, invitation);
 
     }
 
@@ -91,12 +91,12 @@ public class ViewInvitationActivity extends AppCompatActivity {
     }
 
 
-    private void showInviteDialog(Context context, final Invitation invitation, String title){
+    private void showInviteDialog(Context context, final Invitation invitation){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
         String inviteDetails = invitation.toString();
         builder.setMessage(inviteDetails)
-                .setTitle(title);
+                .setTitle("Project Invitation");
         builder.setPositiveButton("Accept", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
