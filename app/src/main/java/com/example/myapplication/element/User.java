@@ -24,9 +24,16 @@ public class User {
     }
 
     public static String hashPassword(String password){
-        byte[] passwordBytes = password.getBytes();
-        MessageDigest md;
-        try{
+        try{//Try moved from below comment to ensure
+            //nullPointerExceptions from passing a null
+            //password are caught and prevent program crash
+            //If this interpretation of the behavior is unintended,
+            // feel free to delete this comment and change it back.
+            //Found while testing.
+            //  -Henry Koenig
+            byte[] passwordBytes = password.getBytes();
+            MessageDigest md;
+        //try{
             md = MessageDigest.getInstance("SHA-256");
             byte[] digest = md.digest(passwordBytes);
 

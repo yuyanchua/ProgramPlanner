@@ -106,4 +106,12 @@ public class Login {
 //            }
 //        });
 //     }
+
+    /**
+     * Setter for userList
+     * Created by Henry for testing purposes.
+     */
+    public void setUserList(List<User> userList){
+        this.userList = userList;
+    }
 }

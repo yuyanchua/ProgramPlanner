@@ -1,4 +1,4 @@
-package com.MyApplicationTest;
+package com.MyApplicationTest.element;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -18,6 +18,7 @@ public class EventTest {
      * One test for each field.
      */
 
+    //3 param constructor tests
     @Test
     public void testConstructorEventTitle() {
         Event testEvent = new Event("Test Title", "blank", false);
@@ -33,6 +34,31 @@ public class EventTest {
     @Test
     public void testConstructorIsNotify() {
         Event testEvent = new Event("blank", "blank", true);
+        assertTrue("Event constructor failed to initialize the 'isNotify' field.", testEvent.isNotify);
+    }
+
+    //4 param constructor tests
+    @Test
+    public void testConstructor4EventId() {
+        Event testEvent = new Event("13", "blank", "blank", false);
+        assertTrue("4 param constructor failed to initialize 'evendId' field.",
+                testEvent.eventId.equals("13"));
+    }
+    @Test
+    public void testConstructor4EventTitle() {
+        Event testEvent = new Event("blank", "Test Title", "blank", false);
+        assertTrue("Event constructor failed to initialize the 'eventTitle' field.", testEvent.eventTitle.equals("Test Title"));
+    }
+
+    @Test
+    public void testConstructor4EventDate() {
+        Event testEvent = new Event("blank", "blank", "testDate", false);
+        assertTrue("Event constructor failed to initialize the 'eventDate' field.", testEvent.eventDate.equals("testDate"));
+    }
+
+    @Test
+    public void testConstructor4IsNotify() {
+        Event testEvent = new Event("blank", "blank", "blank", true);
         assertTrue("Event constructor failed to initialize the 'isNotify' field.", testEvent.isNotify);
     }
 

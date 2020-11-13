@@ -1,4 +1,4 @@
-package com.MyApplicationTest;
+package com.MyApplicationTest.element;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -24,57 +24,63 @@ public class ProjectTest {
     public void testConstructorIProjectId() {
         Project testProject = new Project(5, "blank", "blank", "blank");
         Project testProject1 = new Project(4, "blank", "blank", "blank");
-        assertEquals("Project constructor failed to initialize the 'i_projectId' field.", 5, testProject.getProjectId());
+        assertEquals("Project constructor failed to initialize the 'i_projectId' field.", 5, testProject.projectId);
     }
 
-    @Test
-    public void testConstructorProjectId() {
-        Project testProject = new Project(1, "blank", "blank", "blank");
-        Project testProject1 = new Project(2, "blank", "blank", "blank");
-        assertEquals("Project constructor failed to overwrite the 'projectId' field.", 2, Project.projectId);
-    }
+   // @Test
+   //public void testConstructorProjectId() {
+   //     Project testProject = new Project(1, "blank", "blank", "blank");
+   //     Project testProject1 = new Project(2, "blank", "blank", "blank");
+   //     assertEquals("Project constructor failed to overwrite the 'projectId' field.", 2, Project.projectId);
+   // }
 
     @Test
     public void testConstructorIProjectName() {
         Project testProject = new Project(0, "create Name", "blank", "blank");
         Project testProject1 = new Project(0, "overwrite Name", "blank", "blank");
-        assertTrue("Project constructor failed to initialize the 'i_projectName' field.", testProject.getProjectName().equals("create Name"));
+        assertTrue("Project constructor failed to initialize the 'i_projectName' field.", testProject.projectName.equals("create Name"));
     }
 
-    @Test
+  /*  @Test
     public void testConstructorProjectName() {
         Project testProject = new Project(0, "create Name", "blank", "blank");
         Project testProject1 = new Project(0, "overwrite Name", "blank", "blank");
         assertTrue("Project constructor failed to overwrite the 'ProjectName' field.", Project.projectName.equals("overwrite Name"));
     }
+    */
 
     @Test
     public void testConstructorIClientCode() {
         Project testProject = new Project(0, "blank", "create Code", "blank");
         Project testProject1 = new Project(0, "blank", "overwrite Code", "blank");
-        assertTrue("Project constructor failed to initialize the 'i_clientCode' field.", testProject.getClientCode().equals("create Code"));
+        assertTrue("Project constructor failed to initialize the 'i_clientCode' field.", testProject.clientCode.equals("create Code"));
     }
 
-    @Test
+    /*@Test
     public void testConstructorClientCode() {
         Project testProject = new Project(0, "blank", "create Code", "blank");
         Project testProject1 = new Project(0, "blank", "overwrite Code", "blank");
         assertTrue("Project constructor failed to overwrite the 'ProjectName' field.", Project.clientCode.equals("overwrite Code"));
     }
 
+     */
+
     @Test
     public void testConstructorIDevCode() {
         Project testProject = new Project(0, "blank", "blank", "create Code");
         Project testProject1 = new Project(0, "blank", "blank", "overwrite Code");
-        assertTrue("Project constructor failed to initialize the 'i_clientCode' field.", testProject.getDevCode().equals("create Code"));
+        assertTrue("Project constructor failed to initialize the 'i_clientCode' field.", testProject.devCode.equals("create Code"));
     }
 
+    /*
     @Test
     public void testConstructorDevCode() {
         Project testProject = new Project(0, "blank", "blank", "create Code");
         Project testProject1 = new Project(0, "blank", "blank", "overwrite Code");
         assertTrue("Project constructor failed to overwrite the 'ProjectName' field.", Project.devCode.equals("overwrite Code"));
     }
+
+     */
     //</Constructor Tests>
 
     /*
@@ -136,8 +142,9 @@ public class ProjectTest {
      */
     @Test
     public void testToString() {
-        Project testProject = new Project(1, "blank", "blank", "blank");
+        Project testProject = new Project(1, "blank", "blank client", "blank code");
         Project testProject1 = new Project(2, "blank", "blank", "blank");
-        assertTrue("To string did not return the string followed by the object project id.", "Project Id: 1".equals(testProject.toString()));
+        assertTrue("To string did not return the properly formatted string.",
+                "Name: blank, Id: 1, Client: blank client, Dev: blank code".equals(testProject.toString()));
     }
 }

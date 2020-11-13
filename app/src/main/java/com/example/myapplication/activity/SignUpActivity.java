@@ -149,4 +149,8 @@ public class SignUpActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    //Getter added for testing purposes by Henry Koenig
+    public TextView getErrView() {
+        return errView;
+    }
 }
