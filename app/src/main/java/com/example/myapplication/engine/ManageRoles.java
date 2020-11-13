@@ -11,6 +11,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ManageRoles {
@@ -43,7 +44,7 @@ public class ManageRoles {
                         rolesList.add(temp);
                     }
                 }
-
+                Collections.sort(rolesList, new Roles());
                 activity.setupLayout(rolesList);
             }
 
@@ -92,7 +93,5 @@ public class ManageRoles {
         });
     }
 
-    public void changeManager(){
 
-    }
 }

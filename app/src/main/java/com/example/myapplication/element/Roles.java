@@ -1,11 +1,19 @@
 package com.example.myapplication.element;
 
-public class Roles {
+import androidx.viewpager2.widget.ViewPager2;
+
+import java.util.Comparator;
+
+public class Roles implements  Comparator<Roles>{
     public String projectId;
     public String projectName;
     public String roles;
     public String username;
 
+
+    public Roles(){
+
+    }
     public Roles(String projectId, String projectName, String roles){
         this.projectId = projectId;
         this.projectName = projectName;
@@ -17,9 +25,37 @@ public class Roles {
         this.roles = roles;
     }
 
+    @Override
+    public int compare(Roles roles1, Roles roles2){
+
+        int result = 1;
+        if(roles1.roles.equals("manager"))
+            result = -1;
+        else if(roles2.roles.equals("manager"))
+            result = 1;
+        else if(roles1.roles.equals(roles2.roles))
+            result = roles1.username.compareToIgnoreCase(roles2.username);
+        else if(roles1.roles.equals("developer") && roles2.roles.equals("client"))
+            result = -1;
+        else if(roles1.roles.equals("client") && roles2.roles.equals("developer"))
+            result = 1;
+        return result;
+    }
+
+    @Override
     public String toString(){
         return String.format("%s : %s", username, roles);
 
     }
 
 }
+
+class RoleCompare implements Comparator<Roles>{
+    @Override
+    public int compare(Roles o1, Roles o2) {
+
+        return 0;
+    }
+}
+
+
