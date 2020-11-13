@@ -36,10 +36,6 @@ public class ProjectMain {
 
                 for(DataSnapshot snap: snapshot.getChildren()){
                     boolean isExist = snap.child(username).exists();
-//                    System.out.println(isExist);
-//                    System.out.println("Key: " + snap.getKey());
-//
-//                    System.out.println(snap.getValue().toString());
 
                     if(isExist){
                         String projectName = snap.child("ProjectName").getValue().toString();

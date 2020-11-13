@@ -164,8 +164,6 @@ public class ProjectCreate {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 db_ref_roles.child(Long.toString(projectId)).child("ProjectName").setValue(projectName);
                 db_ref_roles.child(Long.toString(projectId)).child(username).child("Roles").setValue("manager");
-//                System.out.println("Projectname in role : " + projectName);
-//                System.out.println("Username in role: " + username);
             }
 
             @Override

@@ -50,12 +50,6 @@ public class Roles implements  Comparator<Roles>{
 
 }
 
-class RoleCompare implements Comparator<Roles>{
-    @Override
-    public int compare(Roles o1, Roles o2) {
 
-        return 0;
-    }
-}
 
 

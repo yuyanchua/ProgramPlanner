@@ -20,4 +20,5 @@ public class Application {
         String output = String.format("Username: %s\nRole: %s", username, roles);
         return output;
     }
+
 }

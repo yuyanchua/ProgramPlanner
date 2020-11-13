@@ -19,16 +19,6 @@ public class Event{
         this.isNotify = isNotify;
     }
 
-    /*
-    //Removed by Henry Koenig after notified that this method was not needed.
-    public boolean equals(Event event){
-        boolean isEqual = false;
-        if(this.eventDate.equals(event.eventDate)){
-            isEqual = true;
-        }
-        return false;
-    }
-    */
     public String toString() {
         return String.format("Event Title: %s, Event Date: %s\n", eventTitle, eventDate);
     }

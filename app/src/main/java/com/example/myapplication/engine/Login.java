@@ -78,35 +78,6 @@ public class Login {
     }
 
 
-//     private void verifyDatabase(){
-//        db_ref.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                try{
-//                    boolean isExist = snapshot.child(user.username).exists();
-//                    String dbHashPass = snapshot.child(user.username).child("password").getValue().toString();
-//
-//                    boolean isMatch = hashPass.equals(dbHashPass);
-//
-//                    if(!isExist || !isMatch){
-//                        activity.setErrText("Either Username and Password is Incorrect");
-//                    }else{
-//                        activity.finishLogin(user.username);
-//                    }
-//
-//                }catch (NullPointerException exception){
-////                    exception.printStackTrace();
-//                    activity.setErrText("Please enter a username");
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-//     }
-
     /**
      * Setter for userList
      * Created by Henry for testing purposes.
