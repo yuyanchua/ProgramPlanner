@@ -190,6 +190,7 @@ public class RoleViewActivity extends AppCompatActivity {
     }
 
     public void reset(){
+        Toast.makeText(this, "Member kicked Successfully", Toast.LENGTH_SHORT).show();
         kickList.clear();
         toKick();
         recreate();

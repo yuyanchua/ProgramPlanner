@@ -33,49 +33,34 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textViewTipMessage"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="55dp"
-        android:layout_marginLeft="55dp"
-        android:layout_marginTop="17dp"
-        android:gravity="center"
-        android:text="Tip Message Goes Here"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView3" />
-
     <Button
         android:id="@+id/buttonConfirm"
         android:layout_width="150dp"
         android:layout_height="50dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="19dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="36dp"
         android:text="Confirm"
         android:textAllCaps="false"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewTipMessage" />
+        app:layout_constraintTop_toBottomOf="@+id/scrollView3" />
 
     <Button
         android:id="@+id/buttonKick"
         android:layout_width="150dp"
         android:layout_height="50dp"
-        android:layout_marginStart="70dp"
-        android:layout_marginLeft="70dp"
-        android:layout_marginTop="19dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="36dp"
         android:text="Kick Member"
         android:textAllCaps="false"
         app:layout_constraintStart_toEndOf="@+id/buttonConfirm"
-        app:layout_constraintTop_toBottomOf="@+id/textViewTipMessage" />
+        app:layout_constraintTop_toBottomOf="@+id/scrollView3" />
 
     <Button
         android:id="@+id/buttonChangeRole"
         android:layout_width="150dp"
         android:layout_height="50dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="31dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="28dp"
         android:text="Change Role"
         android:textAllCaps="false"
         app:layout_constraintStart_toStartOf="parent"
@@ -85,14 +70,10 @@
         android:id="@+id/buttonBack"
         android:layout_width="150dp"
         android:layout_height="50dp"
-        android:layout_marginStart="70dp"
-        android:layout_marginLeft="70dp"
-        android:layout_marginTop="31dp"
-        android:layout_marginEnd="21dp"
-        android:layout_marginRight="21dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="28dp"
         android:text="Back"
         android:textAllCaps="false"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/buttonChangeRole"
         app:layout_constraintTop_toBottomOf="@+id/buttonKick" />
 
