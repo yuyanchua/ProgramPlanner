@@ -1,7 +1,8 @@
 package com.MyApplicationTest.element;
 
 import org.junit.Test;
-import com.example.myapplication.element.Invitiation;
+import com.example.myapplication.element.Invitation;
+import static org.junit.Assert.*;
 
 /**
  * Tests the invitation class.
@@ -15,6 +16,9 @@ public class InvitationTest {
      */
     @Test
     public void testConstructor() {
-        Invitation testInvitation = new Invitiation();
+        Invitation testInvitation = new Invitation("12", "testName", "testRole");
+        assertTrue("Constructor didn't initialize fields as required.",
+                testInvitation.projectId.equals("12") && testInvitation.projectName.equals("testName")
+                && testInvitation.projectRole.equals("testRole"));
     }
 }

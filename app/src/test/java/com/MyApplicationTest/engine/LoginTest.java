@@ -122,4 +122,23 @@ public class LoginTest {
      * Tested by going trough the "login function
      * as verifyUser is private
      */
+    @Test
+    public void testVerifyUserOnList() {
+        try(MockedStatic<FirebaseDatabase> firebaseMock = Mockito.mockStatic(FirebaseDatabase.class)) {
+            firebaseMock.when(FirebaseDatabase::getInstance).thenReturn(databaseMock);
+            Login testLogin = new Login(loginMock);
+            User testUser = new User("TestName", "testPass");
+            ArrayList<User> testList = new ArrayList<User>();
+            testList.add(new User("FalseName", "FalsePass"));
+            testList.add(new User("FakeName", "FakePass"));
+            testList.add(new User("FalseName", "FalsePass"));
+            testList.add(new User("FakeName", "FakePass"));
+            testList.add(new User("FalseName", "FalsePass"));
+            testList.add(new User("FakeName", "FakePass"));
+            testList.add(testUser);
+            testLogin.setUserList(testList);
+            testLogin.login(testUser);
+            Mockito.verify(loginMock, times(1)).finishLogin(testUser.username);
+        }
+    }
 }
