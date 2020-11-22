@@ -115,7 +115,7 @@ public class InviteActivity extends AppCompatActivity {
         developerView = findViewById(R.id.inviteCodeDeveloper);
         developerView.setText(devCode);
 
-        if(gotApplication)
+        if(gotApplication && isManager)
             notification.setVisibility(View.VISIBLE);
         else
             notification.setVisibility(View.INVISIBLE);
