@@ -102,7 +102,15 @@ public class NotebookActivity extends AppCompatActivity {
     public void setupNoteList(List<Notebook> notebookList){
         this.bookList = notebookList;
         LinearLayout noteLayout = findViewById(R.id.noteList);
-        System.out.println("BookList: "  +      bookList);
+        if(notebookList.isEmpty()){
+            String info = "There is no note for the project";
+            TextView infoView = new TextView(this);
+            infoView.setText(info);
+            infoView.setTextSize(20);
+            infoView.setPadding(5, 5, 5, 5);
+            infoView.setClickable(false);
+            noteLayout.addView(infoView);
+        }
         for(int i = 0; i < bookList.size(); i ++){
             TextView noteView = new TextView(this);
             Notebook temp = bookList.get(i);

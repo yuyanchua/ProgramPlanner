@@ -63,6 +63,17 @@ public class ViewFeedbackActivity extends AppCompatActivity {
 
     public void setupFeedbackList(List<Feedback> feedbackList){
         LinearLayout feedLayout = findViewById(R.id.feedbackList);
+
+        if(feedbackList.isEmpty()){
+            String info = "There is no feedback for the project";
+            TextView infoView = new TextView(this);
+            infoView.setText(info);
+            infoView.setTextSize(20);
+            infoView.setPadding(5, 5, 5, 5);
+            infoView.setClickable(false);
+            feedLayout.addView(infoView);
+        }
+
         for(int i = 0; i < feedbackList.size(); i ++){
             TextView feedView = new TextView(this);
             Feedback temp = feedbackList.get(i);

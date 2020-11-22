@@ -51,6 +51,17 @@ public class ViewInvitationActivity extends AppCompatActivity {
         this.inviteList = inviteList;
         inviteLayout = findViewById(R.id.inviteLayout);
 
+
+        if(inviteList.isEmpty()){
+            String info = "There is no invitation received";
+            TextView infoView = new TextView(this);
+            infoView.setText(info);
+            infoView.setTextSize(20);
+            infoView.setPadding(5, 5, 5, 5);
+            infoView.setClickable(false);
+            inviteLayout.addView(infoView);
+        }
+
         for(int i = 0; i < inviteList.size(); i ++){
             final TextView inviteView = new TextView(this);
             Invitation temp = inviteList.get(i);
@@ -74,6 +85,7 @@ public class ViewInvitationActivity extends AppCompatActivity {
 
             inviteLayout.addView(inviteView);
         }
+
 
     }
 

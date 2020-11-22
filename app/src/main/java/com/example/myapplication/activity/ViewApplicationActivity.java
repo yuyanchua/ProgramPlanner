@@ -45,9 +45,18 @@ public class ViewApplicationActivity extends AppCompatActivity {
     }
 
     public void setupLayout(List<Application> applicationList){
-        System.out.println(applicationList.toString());
         this.applicationList = applicationList;
         applicationLayout = findViewById(R.id.applicationLayout);
+
+        if(applicationList.isEmpty()){
+            String info = "There is no application for the project";
+            TextView infoView = new TextView(this);
+            infoView.setText(info);
+            infoView.setTextSize(20);
+            infoView.setPadding(5, 5, 5, 5);
+            infoView.setClickable(false);
+            applicationLayout.addView(infoView);
+        }
 
         for(int i = 0; i < applicationList.size(); i ++){
             final TextView appView = new TextView(this);

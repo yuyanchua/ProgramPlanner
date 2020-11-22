@@ -176,6 +176,17 @@ public class TaskAssignActivity extends AppCompatActivity {
     private void setupTaskView(){
 //        this.taskList = list;
         taskLayout = findViewById(R.id.TaskList);
+
+        if(taskList.isEmpty()){
+            String info = "There is no task for the project";
+            TextView infoView = new TextView(this);
+            infoView.setText(info);
+            infoView.setTextSize(20);
+            infoView.setPadding(5, 5, 5, 5);
+            infoView.setClickable(false);
+            taskLayout.addView(infoView);
+        }
+
         for(int i = 0; i < taskList.size(); i ++){
             final TextView taskView = new TextView(this);
             Task temp = taskList.get(i);
@@ -269,48 +280,11 @@ public class TaskAssignActivity extends AppCompatActivity {
     }
 
 
-//    private void deleteTaskFromDatabase(final String taskId, int index){
-//        db_ref.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//
-//                db_ref.child(taskId).removeValue();
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//
-//        taskList.remove(index);
-////        taskIdList.remove(index);
-//    }
-
     public void reset(){
         deleteList.clear();
         toDelete();
     }
 
-//    private void toConfirm(){
-//        db_ref.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                for(String taskId : deleteList){
-//                    db_ref.child(taskId).removeValue();
-//                }
-//
-//                deleteList.clear();
-//                toDelete();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
 
     private void resetTaskLayout(){
         int count = taskLayout.getChildCount();

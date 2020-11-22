@@ -184,6 +184,17 @@ public class TimelineActivity extends AppCompatActivity {
     public void setupEventList(List<Event> list){
         this.eventList = list;
         eventLayout = findViewById(R.id.EventLayout);
+
+        if(list.isEmpty()){
+            String info = "There is no event for the project";
+            TextView infoView = new TextView(this);
+            infoView.setText(info);
+            infoView.setTextSize(20);
+            infoView.setPadding(5, 5, 5, 5);
+            infoView.setClickable(false);
+            eventLayout.addView(infoView);
+        }
+
         for(int i = 0; i < eventList.size(); i ++){
             final TextView eventView = new TextView(this);
             Event temp = eventList.get(i);

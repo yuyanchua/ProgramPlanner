@@ -108,6 +108,16 @@ public class LogViewActivity extends AppCompatActivity {
         this.logList = logList;
         logLayout = findViewById(R.id.logList);
 
+        if(logList.isEmpty()){
+            String info = "There is no log for the project";
+            TextView infoView = new TextView(this);
+            infoView.setText(info);
+            infoView.setTextSize(20);
+            infoView.setPadding(5, 5, 5, 5);
+            infoView.setClickable(false);
+            logLayout.addView(infoView);
+        }
+
         for(int i = 0; i < logList.size(); i ++){
             TextView logView = new TextView(this);
             Log temp = logList.get(i);
