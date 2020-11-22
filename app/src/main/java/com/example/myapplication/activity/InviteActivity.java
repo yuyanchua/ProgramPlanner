@@ -17,6 +17,7 @@ import androidx.cardview.widget.CardView;
 import com.example.myapplication.R;
 import com.example.myapplication.element.Session;
 import com.example.myapplication.engine.ManageProjectInvite;
+import com.example.myapplication.engine.Validation;
 
 public class InviteActivity extends AppCompatActivity {
     TextView customerView, developerView, errView;
@@ -24,6 +25,7 @@ public class InviteActivity extends AppCompatActivity {
 
     EditText userEdit;
     ManageProjectInvite manage;
+    Validation validation;
 
     Spinner roleSpin;
     boolean isManager;
@@ -41,6 +43,11 @@ public class InviteActivity extends AppCompatActivity {
 
         errView = findViewById(R.id.errorMessageTip);
         errView.setVisibility(View.INVISIBLE);
+
+        String username = Session.getInstance().getUserName();
+        String projectId = Session.getInstance().getProjectId();
+
+        validation = new Validation(username, projectId);
 
 
         notification = findViewById(R.id.notification);
@@ -60,9 +67,40 @@ public class InviteActivity extends AppCompatActivity {
 
     }
 
+    private boolean validate(){
+        boolean isValid = true;
+        String message = null;
+        if(validation.isExist()){
+            String roles = validation.getRoles();
+            if(roles.equals("client")){
+                message = "Your role has been altered";
+                isValid = false;
+            }
+        }else{
+            message = "You have been kicked out of the project!";
+            isValid = false;
+        }
+
+        if(!isValid){
+            backToProjectPage(message);
+        }
+
+        return isValid;
+    }
+
+    private void backToProjectPage(String message){
+        if(message == null){
+            message = "Encountered unexpected error";
+        }
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(InviteActivity.this, ProjectMainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
+
     private void setupSpinner(){
         roleSpin = findViewById(R.id.spinnerRole);
-        String [] roles = {"Client", "Developer"};
+        String [] roles = {"client", "developer"};
         ArrayAdapter<String> roleAdapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, roles);
         roleAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
 
@@ -97,7 +135,8 @@ public class InviteActivity extends AppCompatActivity {
         btInvite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                inviteUser();
+                if(validate())
+                    inviteUser();
             }
         });
 
@@ -105,7 +144,8 @@ public class InviteActivity extends AppCompatActivity {
         btView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewApplication();
+                if(validate())
+                    viewApplication();
             }
         });
 
@@ -113,6 +153,7 @@ public class InviteActivity extends AppCompatActivity {
         btDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                validate();
                 finish();
             }
         });

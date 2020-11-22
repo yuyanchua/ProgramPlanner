@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.element.Event;
 import com.example.myapplication.element.Session;
 import com.example.myapplication.engine.ManageTimeline;
+import com.example.myapplication.engine.Validation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,10 +29,11 @@ public class TimelineActivity extends AppCompatActivity {
     List<Event> eventList;
     List<String> deleteList;
     ManageTimeline manage;
+    Validation validation;
 
     LinearLayout  eventLayout;
     Button btAdd, btDelete, btConfirm, btEdit, btBack;
-    boolean isDelete = false, isEdit = false;
+    boolean isDelete = false, isEdit = false, isDeveloper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,7 +45,12 @@ public class TimelineActivity extends AppCompatActivity {
         setContentView(R.layout.activity_timeline_view);
 
         session = Session.getInstance();
-        manage = new ManageTimeline(this, session.getProjectId());
+        String projectId = session.getProjectId();
+        String username = session.getUserName();
+
+        validation = new Validation(username, projectId);
+
+        manage = new ManageTimeline(this, projectId);
 //        firebase = FirebaseDatabase.getInstance();
 //        db_ref = firebase.getReference("Project").child(session.getProjectId()).child("Event");
 
@@ -53,8 +61,39 @@ public class TimelineActivity extends AppCompatActivity {
         manage.getEventList();
 
         Intent intent = getIntent();
-        boolean isDeveloper = intent.getExtras().getBoolean("isDeveloper");
+        isDeveloper = intent.getExtras().getBoolean("isDeveloper");
         setup(isDeveloper);
+    }
+
+    private boolean validate(){
+        boolean isValid = true;
+        String message = null;
+        if(validation.isExist()){
+            String roles = validation.getRoles();
+            if((roles.equals("client") && isDeveloper) || !roles.equals("client") && !isDeveloper){
+                message = "Your role has been altered";
+                isValid = false;
+            }
+        }else{
+            message = "You have been kicked out of the project!";
+            isValid = false;
+        }
+
+        if(!isValid){
+            backToProjectPage(message);
+        }
+
+        return isValid;
+    }
+
+    private void backToProjectPage(String message){
+        if(message == null){
+            message = "Encountered unexpected error";
+        }
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(TimelineActivity.this, ProjectMainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     private void setup(boolean isDeveloper){
@@ -63,7 +102,8 @@ public class TimelineActivity extends AppCompatActivity {
         btEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toEdit();
+                if(validate())
+                    toEdit();
             }
         });
 
@@ -71,7 +111,8 @@ public class TimelineActivity extends AppCompatActivity {
         btAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toAdd();
+                if(validate())
+                    toAdd();
 //                System.out.println("Select add");
 //                startActivity(new Intent(TimelineActivity.this, EventActivity.class));
             }
@@ -81,7 +122,8 @@ public class TimelineActivity extends AppCompatActivity {
         btDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toDelete();
+                if(validate())
+                    toDelete();
             }
         });
 
@@ -91,7 +133,8 @@ public class TimelineActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 //                confirm();
-                manage.confirmRemove(deleteList);
+                if(validate())
+                    manage.confirmRemove(deleteList);
             }
         });
 
@@ -99,6 +142,7 @@ public class TimelineActivity extends AppCompatActivity {
         btBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                validate();
                 finish();
             }
         });

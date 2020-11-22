@@ -58,7 +58,7 @@ public class JoinProjectActivity extends AppCompatActivity {
 
     private void setupSpinner(){
         roleSpin = findViewById(R.id.spinnerRole);
-        String [] roles = {"Client", "Developer"};
+        String [] roles = {"client", "Developer"};
         ArrayAdapter roleAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, roles);
 
         roleAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);

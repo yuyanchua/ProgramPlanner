@@ -16,11 +16,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.element.Session;
 import com.example.myapplication.engine.ManageDeveloper;
+import com.example.myapplication.engine.Validation;
 
 public class DeveloperActivity extends AppCompatActivity {
 
     boolean isConfirm;
     boolean isManager;
+    boolean isExist;
+    Validation validation;
+    String username, projectId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,90 +48,64 @@ public class DeveloperActivity extends AppCompatActivity {
         TextView projectNameView = findViewById(R.id.ProjectNameTitle);
         projectNameView.setText(Session.getInstance().getProjectName());
 
+        username = Session.getInstance().getUserName();
+        projectId = Session.getInstance().getProjectId();
+        validation = new Validation(username, projectId);
 
     }
 
     private void setup(boolean isManager){
         Button btTask = findViewById(R.id.buttonTaskAssignment);
-        btTask.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btTask.setOnClickListener(v -> {
+            if(validate())
                 toTaskAssignment();
-            }
         });
 
+
         Button btInvite = findViewById(R.id.buttonInvite);
-        btInvite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btInvite.setOnClickListener(v -> {
+            if(validate())
                 toInvite();
-            }
         });
 
         Button btNote = findViewById(R.id.buttonNoteBook);
-        btNote.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btNote.setOnClickListener(v -> {
+            if(validate())
                 toNotebook();
-            }
         });
 
         Button btGraph = findViewById(R.id.buttonGraph);
-        btGraph.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btGraph.setOnClickListener(v -> {
+            if(validate())
                 toGraph();
-            }
         });
 
         Button btLog = findViewById(R.id.buttonLog);
-        btLog.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btLog.setOnClickListener(v -> {
+            if(validate())
                 toLog();
-            }
         });
 
         Button btTimeline = findViewById(R.id.buttonTimeLine);
-        btTimeline.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btTimeline.setOnClickListener(v -> {
+            if(validate())
                 toTimeline();
-            }
         });
 
         Button btViewFeedback = findViewById(R.id.buttonViewFeedBack);
-        btViewFeedback.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btViewFeedback.setOnClickListener(v -> {
+            if(validate())
                 toViewFeedback();
-            }
         });
 
         Button btManageRole = findViewById(R.id.buttonManageRole);
-        btManageRole.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toManageRole();
-            }
-        });
+        btManageRole.setOnClickListener(v -> toManageRole());
 
         Button btDelete = findViewById(R.id.buttonDelete);
-        btDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                deleteConfirmation(DeveloperActivity.this, "message", "title");
-                deleteProject();
-            }
-        });
+        btDelete.setOnClickListener(v -> deleteProject());
 
         Button btBack = findViewById(R.id.buttonBack);
-        btBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        btBack.setOnClickListener(v -> onBackPressed());
 
         if(!isManager){
             btManageRole.setVisibility(View.GONE);
@@ -135,6 +113,37 @@ public class DeveloperActivity extends AppCompatActivity {
 
         }
 
+    }
+
+    private boolean validate(){
+        boolean isValid = true;
+        String message = null;
+        if(validation.isExist()){
+            String roles = validation.getRoles();
+            if(roles.equals("client")){
+                System.out.println("Not developer");
+                message = "Your role has been altered";
+                isValid = false;
+            }
+        }else{
+            message = "You have been kicked out from the project!";
+            isValid = false;
+        }
+
+        if(!isValid){
+            System.out.println("Return false");
+            backToProjectPage(message);
+        }
+
+        return isValid;
+    }
+
+    private void backToProjectPage(String message){
+        if(message == null){
+            message = "Encountered unexpected error";
+        }
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+        onBackPressed();
     }
 
     private void toTaskAssignment(){
@@ -152,6 +161,7 @@ public class DeveloperActivity extends AppCompatActivity {
     }
 
     private void toGraph(){
+
         startActivity(new Intent(DeveloperActivity.this, GraphActivity.class));
     }
 

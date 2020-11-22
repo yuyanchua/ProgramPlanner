@@ -60,26 +60,6 @@ public class ViewFeedbackActivity extends AppCompatActivity {
 
     }
 
-//    private void getFeedbackList(){
-//        db_ref.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                for(DataSnapshot snap : dataSnapshot.getChildren()){
-//                    String feedbackId = snap.getKey();
-//                    String username = snap.child("username").getValue().toString();
-//                    String comment = snap.child("comment").getValue().toString();
-//                    Feedback tempFeed = new Feedback(username, comment);
-//                    feedbackList.add(tempFeed);
-//                }
-//                setupFeedbackList();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
 
     public void setupFeedbackList(List<Feedback> feedbackList){
         LinearLayout feedLayout = findViewById(R.id.feedbackList);

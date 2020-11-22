@@ -18,6 +18,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.element.Session;
 import com.example.myapplication.element.Task;
 import com.example.myapplication.engine.ManageTask;
+import com.example.myapplication.engine.Validation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,11 +35,9 @@ public class AddTaskActivity extends AppCompatActivity {
     String taskIdStr;
     Task newTask;
     Intent lastIntent;
+    Validation validation;
 
     Button btAddPart, btAddTask, btRemove, btBack;
-//    FirebaseDatabase firebase;
-//    DatabaseReference db_ref, db_ref_roles;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,10 +52,9 @@ public class AddTaskActivity extends AppCompatActivity {
         errView.setVisibility(View.INVISIBLE);
 
         String projectIdStr = Session.getInstance().getProjectId();
+        String username = Session.getInstance().getUserName();
 
-//        firebase = FirebaseDatabase.getInstance();
-//        db_ref = firebase.getReference("Project").child(projectIdStr).child("Task");
-//        db_ref_roles = firebase.getReference("Roles").child(projectIdStr);
+        validation = new Validation(username, projectIdStr);
 
         manageTask = new ManageTask(this, projectIdStr);
         lastIntent = getIntent();
@@ -87,39 +85,6 @@ public class AddTaskActivity extends AppCompatActivity {
         setupButton();
     }
 
-//    private void getTaskValue(){
-//        db_ref.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//
-//                String title = dataSnapshot.child(taskIdStr).child("task").getValue().toString();
-//                List<String> memberList = new ArrayList<>();
-//
-//                DataSnapshot memberSnap = dataSnapshot.child(taskIdStr).child("memberList");
-//                for(DataSnapshot snap : memberSnap.getChildren()){
-//                    String key = snap.getKey();
-//                    System.out.println(snap.getValue().toString());
-//                    String member = snap.getValue().toString();
-//                    memberList.add(member);
-//                }
-//
-//                lastTask = new Task(title, memberList);
-////                setTask();
-//                EditText titleEdit = findViewById(R.id.textBoxTaskName);
-//                titleEdit.setText(lastTask.task);
-//
-//                for(String member : memberList) {
-//                    toAddParticipants(member);
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
-
     public void setTask(Task task, List<String> memberList){
         EditText titleEdit = findViewById(R.id.textBoxTaskName);
         titleEdit.setText(task.task);
@@ -138,40 +103,44 @@ public class AddTaskActivity extends AppCompatActivity {
         spinMember.setAdapter(memberAdapter);
     }
 
-//    private void getMemberList(){
-//        db_ref_roles.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                for(DataSnapshot snap: dataSnapshot.getChildren()){
-//                    String member = snap.getKey();
-//                    boolean isMember = snap.child("Roles").exists();
-//                    System.out.println(member + ": " + isMember);
-//                    if(isMember){
-//                        String role = snap.child("Roles").getValue().toString();
-//                        if(role.equals("developer")){
-//                            System.out.println(member + " is developer");
-//                            memberList.add(member);
-//                        }
-//                    }
-//
-//                }
-//                setupSpinner();
-//            }
-//
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
+    private boolean validate(){
+        boolean isValid = true;
+        String message = null;
+        if(validation.isExist()){
+            String roles = validation.getRoles();
+            if(roles.equals("client")){
+                message = "Your role has been altered";
+                isValid = false;
+            }
+        }else{
+            message = "You have been kicked out of the project!";
+            isValid = false;
+        }
+
+        if(!isValid){
+            backToProjectPage(message);
+        }
+
+        return isValid;
+    }
+
+    private void backToProjectPage(String message){
+        if(message == null){
+            message = "Encountered unexpected error";
+        }
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(AddTaskActivity.this, ProjectMainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
 
     private void setupButton(){
         btAddPart = findViewById(R.id.buttonAddParticipants);
         btAddPart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toAddParticipants();
+                if(validate())
+                    toAddParticipants();
             }
         });
 
@@ -181,7 +150,8 @@ public class AddTaskActivity extends AppCompatActivity {
         btAddTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toAddTask();
+                if(validate())
+                    toAddTask();
             }
         });
 
@@ -189,7 +159,8 @@ public class AddTaskActivity extends AppCompatActivity {
         btRemove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toRemoveParticipants();
+                if(validate())
+                    toRemoveParticipants();
             }
         });
 
@@ -197,7 +168,7 @@ public class AddTaskActivity extends AppCompatActivity {
         btBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                finish();
+                validate();
                 backToLastPage();
             }
         });
@@ -329,6 +300,5 @@ public class AddTaskActivity extends AppCompatActivity {
             addMemberList.add(tempMemberName);
         }
     }
-
 
 }

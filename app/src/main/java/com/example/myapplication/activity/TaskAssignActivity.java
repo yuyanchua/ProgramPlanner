@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.element.Session;
 import com.example.myapplication.element.Task;
 import com.example.myapplication.engine.ManageTaskView;
+import com.example.myapplication.engine.Validation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +29,7 @@ public class TaskAssignActivity extends AppCompatActivity {
     List<Task> taskList;
     List<String> deleteList;
     ManageTaskView manageTaskView;
+    Validation validation;
 
     LinearLayout taskLayout;
     boolean canDelete = false, isEdit = false;
@@ -44,7 +47,11 @@ public class TaskAssignActivity extends AppCompatActivity {
 //        firebase = FirebaseDatabase.getInstance();
 //        db_ref = firebase.getReference("Project").child(Session.getInstance().getProjectId()).child("Task");
 
-        manageTaskView = new ManageTaskView(this, Session.getInstance().getProjectId());
+        String projectId = Session.getInstance().getProjectId();
+        String username = Session.getInstance().getUserName();
+
+        manageTaskView = new ManageTaskView(this, projectId);
+        validation = new Validation(username, projectId);
 
         taskList = new ArrayList<>();
         deleteList = new ArrayList<>();
@@ -63,7 +70,8 @@ public class TaskAssignActivity extends AppCompatActivity {
         btEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toEdit();
+                if(validate())
+                    toEdit();
             }
         });
 
@@ -71,7 +79,8 @@ public class TaskAssignActivity extends AppCompatActivity {
         btAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toAdd();
+                if(validate())
+                    toAdd();
             }
         });
 
@@ -79,6 +88,7 @@ public class TaskAssignActivity extends AppCompatActivity {
         btDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(validate())
                 toDelete();
             }
         });
@@ -88,8 +98,8 @@ public class TaskAssignActivity extends AppCompatActivity {
         btConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                toConfirm();
-                manageTaskView.confirmRemove(deleteList);
+                if(validate())
+                   manageTaskView.confirmRemove(deleteList);
             }
         });
 
@@ -97,9 +107,41 @@ public class TaskAssignActivity extends AppCompatActivity {
         btBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                validate();
                 finish();
             }
         });
+    }
+
+    private boolean validate(){
+        boolean isValid = true;
+        String message = null;
+        if(validation.isExist()){
+            String roles = validation.getRoles();
+            if(roles.equals("client")){
+                message = "Your role has been altered";
+                isValid = false;
+            }
+        }else{
+            message = "You have been kicked out of the project!";
+            isValid = false;
+        }
+
+        if(!isValid){
+            backToProjectPage(message);
+        }
+
+        return isValid;
+    }
+
+    private void backToProjectPage(String message){
+        if(message == null){
+            message = "Encountered unexpected error";
+        }
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(TaskAssignActivity.this, ProjectMainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
 //    private void getTaskList(){

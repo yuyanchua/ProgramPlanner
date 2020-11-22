@@ -1,5 +1,6 @@
 package com.example.myapplication.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +19,7 @@ import com.example.myapplication.element.Project;
 import com.example.myapplication.element.Session;
 import com.example.myapplication.element.User;
 import com.example.myapplication.engine.ManageLog;
+import com.example.myapplication.engine.Validation;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,6 +39,7 @@ public class LogViewActivity extends AppCompatActivity {
     List<Log> logList;
     Calendar calendar;
     ManageLog manageLog;
+    Validation validation;
     SimpleDateFormat fmtDate;
     LinearLayout logLayout;
     Log newLog;
@@ -53,9 +56,13 @@ public class LogViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_log_view);
 
         session = Session.getInstance();
+        String username = session.getUserName();
+        String projectId = session.getProjectId();
+
+        validation = new Validation(username, projectId);
 //        firebase = FirebaseDatabase.getInstance();
 //        db_ref = firebase.getReference("Project").child(session.getProjectId()).child("Log");
-        manageLog = new ManageLog(this, session.getProjectId());
+        manageLog = new ManageLog(this, projectId);
         calendar = Calendar.getInstance();
         fmtDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -66,29 +73,36 @@ public class LogViewActivity extends AppCompatActivity {
         setupButton();
     }
 
+    private boolean validate(){
+        boolean isValid = true;
+        String message = null;
+        if(validation.isExist()){
+            String roles = validation.getRoles();
+            if(roles.equals("client")){
+                message = "Your role has been altered";
+                isValid = false;
+            }
+        }else{
+            message = "You have been kicked out of the project!";
+            isValid = false;
+        }
 
+        if(!isValid){
+            backToProjectPage(message);
+        }
 
-//    private void getLogList(){
-//        db_ref.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                for(DataSnapshot snap: dataSnapshot.getChildren()){
-//                    String date = snap.child("date").getValue().toString();
-//                    String content = snap.child("content").getValue().toString();
-//                    String username = snap.child("username").getValue().toString();
-//
-//                    Log tempLog = new Log(date, content, username);
-//                    logList.add(tempLog);
-//                }
-//                setupLogList();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
+        return isValid;
+    }
+
+    private void backToProjectPage(String message){
+        if(message == null){
+            message = "Encountered unexpected error";
+        }
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(LogViewActivity.this, ProjectMainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
 
     public void setupLogList(List<Log> logList){
         this.logList = logList;
@@ -112,9 +126,11 @@ public class LogViewActivity extends AppCompatActivity {
         btSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                logList.clear();
-                logLayout.removeAllViews();
-                submit();
+                if(validate()) {
+                    logList.clear();
+                    logLayout.removeAllViews();
+                    submit();
+                }
             }
         });
 
@@ -122,6 +138,7 @@ public class LogViewActivity extends AppCompatActivity {
         btBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                validate();
                 finish();
             }
         });

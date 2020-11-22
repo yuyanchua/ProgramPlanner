@@ -18,6 +18,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.element.Event;
 import com.example.myapplication.element.Session;
 import com.example.myapplication.engine.ManageEvent;
+import com.example.myapplication.engine.Validation;
 
 import java.util.Calendar;
 
@@ -31,11 +32,12 @@ public class EventActivity extends AppCompatActivity {
 
     ManageEvent manage;
     Event newEvent;
+    Validation validation;
     boolean isEdit = false;
     int eventId;
     Intent lastIntent;
-//    FirebaseDatabase firebase;
-//    DatabaseReference db_ref;
+
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,9 +48,10 @@ public class EventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_view);
 
-//        firebase = FirebaseDatabase.getInstance();
         String projectIdStr = Session.getInstance().getProjectId();
-//        db_ref = firebase.getReference("Project").child(projectIdStr).child("Event");
+        String username = Session.getInstance().getUserName();
+
+        validation = new Validation(username, projectIdStr);
 
         errView = findViewById(R.id.errorMessageTip);
         errView.setVisibility(View.INVISIBLE);
@@ -80,54 +83,27 @@ public class EventActivity extends AppCompatActivity {
                 year = calendar.get(Calendar.YEAR);
 
                 datePicker = new DatePickerDialog(EventActivity.this,
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                                dateView.setText((month+ 1) + "-" + dayOfMonth + "-" + year);
-                            }
+                        (view, year, month, dayOfMonth) -> {
+                            String date = (month+ 1) + "-" + dayOfMonth + "-" + year;
+                            dateView.setText(date);
                         }, year, month, day);
                 datePicker.show();
             }
         });
 
         Button btAdd = findViewById(R.id.buttonAddEvent);
-        btAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btAdd.setOnClickListener(v -> {
+            if(validate())
                 addEvent();
-            }
         });
 
         Button btBack = findViewById(R.id.buttonBack);
-        btBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
+        btBack.setOnClickListener(v -> {
+            validate();
+            finish();
         });
     }
 
-//    private void getEventValue(){
-//        db_ref.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//
-//                String eventDate = dataSnapshot.child(Integer.toString(eventId)).child("eventDate").getValue().toString();
-//                String eventTitle = dataSnapshot.child(Integer.toString(eventId)).child("eventTitle").getValue().toString();
-//                boolean isNotify = Boolean.getBoolean(dataSnapshot.child(Integer.toString(eventId)).child("isNotify").getValue().toString());
-//
-//                lastEvent = new Event(eventTitle, eventDate, isNotify);
-////                lastEvent.isNotify = isNotify;
-//                lastEvent.eventId = Integer.toString(eventId);
-//                setEvent();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
 
     public void setEvent(Event event){
         this.eventId = Integer.parseInt(event.eventId);
@@ -177,6 +153,37 @@ public class EventActivity extends AppCompatActivity {
             errView.setText("Either title or date is invalid");
             errView.setVisibility(View.VISIBLE);
         }
+    }
+
+    private boolean validate(){
+        boolean isValid = true;
+        String message = null;
+        if(validation.isExist()){
+            String roles = validation.getRoles();
+            if(roles.equals("client")){
+                message = "Your role has been altered";
+                isValid = false;
+            }
+        }else{
+            message = "You have been kicked out of the project!";
+            isValid = false;
+        }
+
+        if(!isValid){
+            backToProjectPage(message);
+        }
+
+        return isValid;
+    }
+
+    private void backToProjectPage(String message){
+        if(message == null){
+            message = "Encountered unexpected error";
+        }
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(EventActivity.this, ProjectMainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
 //    private void addEventToDatabase(){

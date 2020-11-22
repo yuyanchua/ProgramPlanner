@@ -25,6 +25,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.element.Image;
 import com.example.myapplication.element.Session;
 import com.example.myapplication.engine.ManageGraph;
+import com.example.myapplication.engine.Validation;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -51,6 +52,7 @@ public class GraphActivity extends AppCompatActivity implements ImageAdapter.OnI
     private ProgressBar pro_Cir;
     private List<String> Del_list;
     private ManageGraph manage;
+    private Validation validation;
 
     private final static int  REQUEST_CODE = 11;
 
@@ -72,6 +74,8 @@ public class GraphActivity extends AppCompatActivity implements ImageAdapter.OnI
         Del_list = new ArrayList<>();
 
         String projectId = Session.getInstance().getProjectId();
+        String username = Session.getInstance().getUserName();
+        validation = new Validation(username, projectId);
 
         IAdapter = new ImageAdapter(GraphActivity.this, Limages);
         RecView.setAdapter(IAdapter);
@@ -142,7 +146,8 @@ public class GraphActivity extends AppCompatActivity implements ImageAdapter.OnI
         btUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(GraphActivity.this, ImageChooser.class));
+                if(validate())
+                    startActivity(new Intent(GraphActivity.this, ImageChooser.class));
             }
         });
 
@@ -150,10 +155,42 @@ public class GraphActivity extends AppCompatActivity implements ImageAdapter.OnI
         btBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                validate();
                 finish();
             }
         });
 
+    }
+
+    private boolean validate(){
+        boolean isValid = true;
+        String message = null;
+        if(validation.isExist()){
+            String roles = validation.getRoles();
+            if(roles.equals("client")){
+                message = "Your role has been altered";
+                isValid = false;
+            }
+        }else{
+            message = "You have been kicked out of the project!";
+            isValid = false;
+        }
+
+        if(!isValid){
+            backToProjectPage(message);
+        }
+
+        return isValid;
+    }
+
+    private void backToProjectPage(String message){
+        if(message == null){
+            message = "Encountered unexpected error";
+        }
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(GraphActivity.this, ProjectMainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     @Override

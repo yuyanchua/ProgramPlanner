@@ -5,16 +5,19 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
 import com.example.myapplication.element.Session;
+import com.example.myapplication.engine.Validation;
 
 public class CustomerActivity extends AppCompatActivity {
 
     Session session = Session.getInstance();
+    Validation validation;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -29,11 +32,16 @@ public class CustomerActivity extends AppCompatActivity {
 //        titleView.setText(Project.projectName);
         titleView.setText(session.getCurrProject().projectName);
 
+        String username = session.getUserName();
+
+        validation = new Validation(username, session.getProjectId());
+
         Button btFeedback = findViewById(R.id.buttonLeaveFeedBack);
         btFeedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toFeedback();
+                if(validate())
+                    toFeedback();
             }
         });
 
@@ -41,7 +49,8 @@ public class CustomerActivity extends AppCompatActivity {
         btTimeline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toTimeline();
+                if(validate())
+                      toTimeline();
             }
         });
 
@@ -54,6 +63,36 @@ public class CustomerActivity extends AppCompatActivity {
         });
 
     }
+    private boolean validate(){
+        boolean isValid = true;
+        String message = null;
+
+        if(validation.isExist()){
+            String roles = validation.getRoles();
+            if(!roles.equals("client")){
+                message = "Your role has been altered";
+                isValid = false;
+            }
+        }else{
+            message = "You have been kicked out from the project!";
+            isValid = false;
+        }
+
+        if(!isValid){
+            backToProjectPage(message);
+        }
+
+        return isValid;
+    }
+
+    private void backToProjectPage(String message){
+        if(message == null){
+            message = "Encountered unexpected error";
+        }
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+        onBackPressed();
+    }
+
 
     private void toFeedback(){
         startActivity(new Intent(CustomerActivity.this, FeedbackActivity.class));

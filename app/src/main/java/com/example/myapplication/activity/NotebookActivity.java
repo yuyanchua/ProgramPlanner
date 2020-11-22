@@ -1,5 +1,6 @@
 package com.example.myapplication.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +19,7 @@ import com.example.myapplication.element.Project;
 import com.example.myapplication.element.Session;
 import com.example.myapplication.element.User;
 import com.example.myapplication.engine.ManageNote;
+import com.example.myapplication.engine.Validation;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,6 +35,7 @@ public class NotebookActivity extends AppCompatActivity {
     Session session = Session.getInstance();
     List<Notebook> bookList;
     Notebook newNotebook;
+    Validation validation;
     ManageNote manage;
     int noteId;
 
@@ -48,6 +51,12 @@ public class NotebookActivity extends AppCompatActivity {
 //        firebase = FirebaseDatabase.getInstance();
 //        db_ref = firebase.getReference("Project").child(session.getProjectId()).child("Notebook");
 
+        String username = Session.getInstance().getUserName();
+        String projectId = Session.getInstance().getProjectId();
+
+        validation = new Validation(username, projectId);
+
+
         bookList = new ArrayList<>();
         manage = new ManageNote(this, session.getProjectId());
         manage.getNoteList();
@@ -56,6 +65,38 @@ public class NotebookActivity extends AppCompatActivity {
 //        setupNoteList();
         setupButton();
 
+    }
+
+    private boolean validate(){
+        boolean isValid = true;
+        String message = null;
+        if(validation.isExist()){
+            String roles = validation.getRoles();
+            if(roles.equals("client")){
+                message = "Your role has been altered";
+                System.out.println(message);
+                isValid = false;
+            }
+        }else{
+            message = "You have been kicked out of the project!";
+            isValid = false;
+        }
+
+        if(!isValid){
+            backToProjectPage(message);
+        }
+
+        return isValid;
+    }
+
+    private void backToProjectPage(String message){
+        if(message == null){
+            message = "Encountered unexpected error";
+        }
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(NotebookActivity.this, ProjectMainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     public void setupNoteList(List<Notebook> notebookList){
@@ -103,7 +144,8 @@ public class NotebookActivity extends AppCompatActivity {
         btSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toSubmit();
+                if(validate())
+                    toSubmit();
             }
         });
 
@@ -111,6 +153,7 @@ public class NotebookActivity extends AppCompatActivity {
         btBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                validate();
                 finish();
             }
         });
