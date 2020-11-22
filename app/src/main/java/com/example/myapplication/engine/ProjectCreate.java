@@ -89,6 +89,12 @@ public class ProjectCreate {
             return;
         }
 
+        if(projectName.charAt(0) == ' ' || projectName.charAt(projectName.length()-1) == ' '){
+            activity.setErrView("The first character or last character of " +
+                    "the project name should not be space");
+            return;
+        }
+
         if(!isProjectExist(projectName)) {
             String clientCode = generateInviteCode(true);
             String devCode = generateInviteCode(false);

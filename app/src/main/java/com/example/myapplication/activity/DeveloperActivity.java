@@ -189,6 +189,7 @@ public class DeveloperActivity extends AppCompatActivity {
 
         boolean isConfirm = deleteConfirmation(DeveloperActivity.this, message, title);
         if(isConfirm){
+            System.out.println("Execute delete");
             ManageDeveloper manage = new ManageDeveloper(this);
             manage.removeData(Session.getInstance().getProjectId());
         }

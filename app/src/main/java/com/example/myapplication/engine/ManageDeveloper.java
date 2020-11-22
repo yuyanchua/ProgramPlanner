@@ -38,6 +38,7 @@ public class ManageDeveloper {
         removeRolesData();
         removeProjectInvite();
 
+        System.out.println("Check delete");
         activity.finishDelete();
 
     }

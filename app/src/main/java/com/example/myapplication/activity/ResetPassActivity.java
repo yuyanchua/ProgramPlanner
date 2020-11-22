@@ -3,6 +3,7 @@ package com.example.myapplication.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -36,11 +37,18 @@ public class ResetPassActivity extends AppCompatActivity {
 //        firebase = FirebaseDatabase.getInstance();
 //        db_ref = firebase.getReference("Users");
 
-        FloatingActionButton btReset = findViewById(R.id.buttonNextStep);
-        btReset.setOnClickListener(new View.OnClickListener() {
+        setupButton();
+    }
+
+    private void setupButton(){
+        Button btConfirm = findViewById(R.id.ConfirmButton);
+        btConfirm.setOnClickListener(v -> reset());
+
+        Button btCancel = findViewById(R.id.CancelButton);
+        btCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                reset();
+                finishReset();
             }
         });
     }
@@ -53,51 +61,21 @@ public class ResetPassActivity extends AppCompatActivity {
         String repeat = repeatEdit.getText().toString();
 
         if(!pass.equals(repeat)){
-            String errMsg = "Password Not Match";
-            errView.setText(errMsg);
-            errView.setVisibility(View.VISIBLE);
+            setErrView("Password do not match");
 
         }else{
 
             //Update password to database
             new ResetPass(this, username).resetPassword(pass);
-//            ResetPass reset = new ResetPass(this, username);
-//            reset.resetPassword(pass);
+
         }
     }
 
-//    private void updatePassword(final String password) {
-//        byte[] pass_bytes = password.getBytes();
-//        MessageDigest md = null;
-//        try{
-//            md = MessageDigest.getInstance("SHA-256");
-//        }catch(NoSuchAlgorithmException exception){
-//            exception.printStackTrace();
-//        }
-//
-//        md.update(pass_bytes);
-//        byte[] digest = md.digest();
-//        StringBuffer hex = new StringBuffer();
-//        for(int i = 0; i < digest.length; i ++){
-//            hex.append(Integer.toString((digest[i]&0xff) + 0x100, 16).substring(1));
-//        }
-//        final String pass_str = hex.toString();
-//
-//        db_ref.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                db_ref.child(username).child("password").setValue(pass_str);
-//                Intent intent = new Intent(ResetPassActivity.this, MainActivity.class);
-//                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                startActivity(intent);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
+    public void setErrView(String errMsg){
+        errView.setText(errMsg);
+        errView.setVisibility(View.VISIBLE);
+    }
+
 
     public void finishReset(){
         Intent intent = new Intent(ResetPassActivity.this, MainActivity.class);
@@ -105,5 +83,8 @@ public class ResetPassActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
+    @Override
+    public void onBackPressed() {
+        finishReset();
+    }
 }

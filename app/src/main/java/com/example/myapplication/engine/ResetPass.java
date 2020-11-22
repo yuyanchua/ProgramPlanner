@@ -27,8 +27,29 @@ public class ResetPass {
     }
 
     public void resetPassword(String password){
+
+        if(!validatePassword(password)){
+            return;
+        }
+
         String passHash = User.hashPassword(password);
         verifyHash(passHash);
+    }
+
+    private boolean validatePassword(String password){
+        boolean isValid = true;
+
+        if(password.isEmpty() || password == null){
+            activity.setErrView("Please enter a password");
+            isValid = false;
+        }
+
+        if(password.length() < 6){
+            activity.setErrView("Password Length must at least 6 characters");
+            isValid = false;
+        }
+
+        return isValid;
     }
 
     private void verifyHash(final String passHash){

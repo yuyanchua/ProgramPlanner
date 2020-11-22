@@ -99,7 +99,17 @@ public class ProjectMainActivity extends AppCompatActivity {
     public void setupProjectList(List<Roles> projectList){
         this.projectList = projectList;
         projectLayout = findViewById(R.id.projectList);
-        System.out.println("Project List: " + projectList.toString());
+        projectLayout.removeAllViews();
+        if(projectList.isEmpty()){
+            String info = "There is no project for the user";
+            TextView infoView = new TextView(this);
+            infoView.setText(info);
+            infoView.setTextSize(20);
+            infoView.setPadding(5, 5, 5, 5);
+            infoView.setClickable(false);
+            projectLayout.addView(infoView);
+        }
+
         for(int i = 0; i < projectList.size(); i ++){
             final TextView projectView = new TextView(this);
             Roles temp = projectList.get(i);
@@ -125,37 +135,6 @@ public class ProjectMainActivity extends AppCompatActivity {
         }
 
     }
-
-//    private void getProjectList(){
-//        db_ref.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                for(DataSnapshot snap: dataSnapshot.getChildren()){
-//
-//                    boolean isExist = snap.child(session.getUserName()).exists();
-////                    System.out.println("IsExist = " + isExist);
-////                    System.out.println("Key: " + snap.getKey());
-////
-////                    System.out.println(snap.getValue().toString());
-//                    if(isExist) {
-//                        String projectName = snap.child("ProjectName").getValue().toString();
-//                        String projectId = snap.getKey();
-//                        String role = snap.child(session.getUserName()).child("Roles").getValue().toString();
-//
-//                        Roles tempRoles = new Roles(projectId, projectName, role);
-//                        System.out.println(projectList);
-//                        projectList.add(tempRoles);
-//                    }
-//                }
-//                setupProjectList();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
 
 
 
@@ -197,6 +176,7 @@ public class ProjectMainActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
+
 
     private void logout(){
         Intent intent = new Intent(ProjectMainActivity.this, MainActivity.class);

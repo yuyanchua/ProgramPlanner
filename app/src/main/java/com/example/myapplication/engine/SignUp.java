@@ -44,7 +44,7 @@ public class SignUp {
         //Null check added by Henry to prevent NPEs
         //from being thrown and crashing on null
         //password passed in.
-        if(password == null || password.length() < 6) {
+        if(password == null || password.length() < 6 || password.isEmpty()) {
             activity.setErrView("Password Length must at least 6 characters");
             return false;
         }
