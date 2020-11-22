@@ -51,7 +51,7 @@ public class ViewInvitationActivity extends AppCompatActivity {
         this.inviteList = inviteList;
         inviteLayout = findViewById(R.id.inviteLayout);
 
-
+        inviteLayout.removeAllViews();
         if(inviteList.isEmpty()){
             String info = "There is no invitation received";
             TextView infoView = new TextView(this);
@@ -99,7 +99,7 @@ public class ViewInvitationActivity extends AppCompatActivity {
 
     public void finishViewInvite(String message){
         Toast.makeText(ViewInvitationActivity.this, message, Toast.LENGTH_SHORT).show();
-        recreate();
+//        recreate();
     }
 
 

@@ -47,6 +47,7 @@ public class ViewApplicationActivity extends AppCompatActivity {
     public void setupLayout(List<Application> applicationList){
         this.applicationList = applicationList;
         applicationLayout = findViewById(R.id.applicationLayout);
+        applicationLayout.removeAllViews();
 
         if(applicationList.isEmpty()){
             String info = "There is no application for the project";
@@ -92,7 +93,7 @@ public class ViewApplicationActivity extends AppCompatActivity {
 
     public void finishViewApplication(String message){
         Toast.makeText(ViewApplicationActivity.this, message, Toast.LENGTH_SHORT).show();
-        recreate();
+//        recreate();
     }
 
 

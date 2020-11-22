@@ -102,6 +102,8 @@ public class NotebookActivity extends AppCompatActivity {
     public void setupNoteList(List<Notebook> notebookList){
         this.bookList = notebookList;
         LinearLayout noteLayout = findViewById(R.id.noteList);
+        noteLayout.removeAllViews();
+
         if(notebookList.isEmpty()){
             String info = "There is no note for the project";
             TextView infoView = new TextView(this);
@@ -184,7 +186,7 @@ public class NotebookActivity extends AppCompatActivity {
 
     public void finishAdd(){
         Toast.makeText(getApplicationContext(), "New Note is Added", Toast.LENGTH_SHORT).show();
-        recreate();
+//        recreate();
     }
 
 //    private void addNoteToDatabase(){

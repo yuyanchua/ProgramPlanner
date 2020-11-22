@@ -184,6 +184,7 @@ public class TimelineActivity extends AppCompatActivity {
     public void setupEventList(List<Event> list){
         this.eventList = list;
         eventLayout = findViewById(R.id.EventLayout);
+        eventLayout.removeAllViews();
 
         if(list.isEmpty()){
             String info = "There is no event for the project";
@@ -319,7 +320,7 @@ public class TimelineActivity extends AppCompatActivity {
 //            recreate();
 //            eventLayout.removeAllViews();
         }
-        recreate();
+//        recreate();
     }
 
 

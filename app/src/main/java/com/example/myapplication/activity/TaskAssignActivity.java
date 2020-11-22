@@ -176,6 +176,7 @@ public class TaskAssignActivity extends AppCompatActivity {
     private void setupTaskView(){
 //        this.taskList = list;
         taskLayout = findViewById(R.id.TaskList);
+        taskLayout.removeAllViews();
 
         if(taskList.isEmpty()){
             String info = "There is no task for the project";
@@ -298,6 +299,6 @@ public class TaskAssignActivity extends AppCompatActivity {
                 taskList.add(tempTaskList.get(i));
             }
         }
-        recreate();
+//        recreate();
     }
 }

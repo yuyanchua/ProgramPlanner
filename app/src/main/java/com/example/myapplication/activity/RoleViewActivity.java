@@ -52,7 +52,7 @@ public class RoleViewActivity extends AppCompatActivity {
     public void setupLayout(final List<Roles> rolesList){
         this.rolesList = rolesList;
         roleLayout = findViewById(R.id.roleLayout);
-
+        roleLayout.removeAllViews();
         for(int i = 0; i < rolesList.size(); i ++){
             final TextView roleView = new TextView(this);
             Roles temp = rolesList.get(i);
@@ -193,13 +193,13 @@ public class RoleViewActivity extends AppCompatActivity {
         Toast.makeText(this, "Member kicked Successfully", Toast.LENGTH_SHORT).show();
         kickList.clear();
         toKick();
-        recreate();
+//        recreate();
     }
 
     public void finishChangeRole(){
         Toast.makeText(this, "Roles Changed Successfully", Toast.LENGTH_SHORT).show();
         toChange();
-        recreate();
+//        recreate();
     }
 
 
