@@ -98,7 +98,7 @@ public class AddTaskActivity extends AppCompatActivity {
         this.memberList = list;
         spinMember = findViewById(R.id.spinnerTeamMember);
 //        System.out.println(memberList.toString());
-        ArrayAdapter memberAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, memberList);
+        ArrayAdapter<String> memberAdapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, memberList);
         memberAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         spinMember.setAdapter(memberAdapter);
     }

@@ -27,7 +27,7 @@ public class JoinProjectActivity extends AppCompatActivity {
 //    DatabaseReference db_ref, db_ref_roles;
     Session session;
     JoinProject joinProject;
-    Button btJoin, btApply, btView, btCancel;
+    Button btJoin, btApply, btView;
     Spinner roleSpin;
 
 //    boolean isExist, isValid, isDeveloper;
@@ -58,7 +58,7 @@ public class JoinProjectActivity extends AppCompatActivity {
 
     private void setupSpinner(){
         roleSpin = findViewById(R.id.spinnerRole);
-        String [] roles = {"client", "Developer"};
+        String [] roles = {"client", "developer"};
         ArrayAdapter roleAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, roles);
 
         roleAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);

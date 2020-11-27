@@ -1,5 +1,7 @@
 package com.example.myapplication.activity;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -8,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
@@ -101,7 +104,8 @@ public class RoleViewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(isKick)
-                    manageRoles.kickMember(kickList);
+//                    manageRoles.kickMember(kickList);
+                    confirmKickDialog(RoleViewActivity.this, kickList);
                 else if(isChange)
                     manageRoles.changeRole(rolesList);
             }
@@ -202,6 +206,37 @@ public class RoleViewActivity extends AppCompatActivity {
 //        recreate();
     }
 
+    private void confirmKickDialog(Context context, List<String> kickMemberList){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        String kickInfo = "Are you sure you want to kick the following members? \n";
+
+        for(String member : kickMemberList){
+            kickInfo += String.format("\t%s\n", member);
+        }
+        builder.setMessage(kickInfo)
+                .setTitle("Kick Confirmation");
+        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                manageRoles.kickMember(kickMemberList);
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                cancelKick();
+            }
+        });
+        builder.show();
+    }
+
+    private void cancelKick(){
+        kickList.clear();
+        Toast.makeText(getApplicationContext(), "Cancel Kick Member", Toast.LENGTH_SHORT).show();
+        setupLayout(rolesList);
+    }
 
 
 
