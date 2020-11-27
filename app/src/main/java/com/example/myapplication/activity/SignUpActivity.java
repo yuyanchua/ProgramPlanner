@@ -23,8 +23,6 @@ public class SignUpActivity extends AppCompatActivity {
 
     TextView errView;
     Spinner questionSpin;
-//    FirebaseDatabase DB;
-//    DatabaseReference users;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,23 +35,16 @@ public class SignUpActivity extends AppCompatActivity {
 
         errView = findViewById(R.id.errorMessage);
         errView.setVisibility(View.INVISIBLE);
-//        DB = FirebaseDatabase.getInstance();
-//        users = DB.getReference("Users");
 
         questionSpin = findViewById(R.id.spinnerSecurityQuestion);
 
-        ArrayAdapter questionAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, Question.QUESTION);
+        ArrayAdapter<String> questionAdapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, Question.QUESTION);
         questionAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         questionSpin.setAdapter(questionAdapter);
 
 
         FloatingActionButton btSignUp = findViewById(R.id.buttonNextStep);
-        btSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signup();
-            }
-        });
+        btSignUp.setOnClickListener(v -> signup());
     }
 
     private String getEditValue(int id){

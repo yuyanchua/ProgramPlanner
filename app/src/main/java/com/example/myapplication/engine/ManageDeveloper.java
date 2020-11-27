@@ -3,15 +3,12 @@ package com.example.myapplication.engine;
 import androidx.annotation.NonNull;
 
 import com.example.myapplication.activity.DeveloperActivity;
-import com.example.myapplication.element.Project;
-import com.example.myapplication.element.Roles;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.List;
 
 public class ManageDeveloper {
     FirebaseDatabase firebase;
@@ -20,8 +17,6 @@ public class ManageDeveloper {
     DeveloperActivity activity;
     String projectId;
 
-    List<Project> projectList;
-    List<Roles> rolesList;
 
     public ManageDeveloper(DeveloperActivity activity){
         firebase = FirebaseDatabase.getInstance();

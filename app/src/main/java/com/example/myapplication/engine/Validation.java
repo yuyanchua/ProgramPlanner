@@ -38,7 +38,7 @@ public class Validation {
         return this.isExist;
     }
 
-    private boolean checkDatabase(String username, String projectId){
+    private void checkDatabase(String username, String projectId){
         db_ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -59,6 +59,5 @@ public class Validation {
         });
 
         System.out.println("Return " + isExist);
-        return isExist;
     }
 }

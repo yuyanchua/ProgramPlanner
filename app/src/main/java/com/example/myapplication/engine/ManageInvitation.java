@@ -31,7 +31,6 @@ public class ManageInvitation {
     }
 
     public void acceptInvite(Invitation invitation){
-//        System.out.println("Accept Invite : " + invitation.getInviteId());
         String inviteId = invitation.inviteId;
         String projectId = invitation.projectId;
         String projectRole = invitation.projectRole;
@@ -48,7 +47,7 @@ public class ManageInvitation {
     }
 
 
-    public List<Invitation> getInvitationList(){
+    public void getInvitationList(){
         db_ref_user.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -74,7 +73,6 @@ public class ManageInvitation {
             }
         });
 
-        return invitationList;
     }
 
     private void deleteInvite(final String inviteId){

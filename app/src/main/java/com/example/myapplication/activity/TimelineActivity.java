@@ -23,8 +23,6 @@ import java.util.List;
 
 public class TimelineActivity extends AppCompatActivity {
 
-//    FirebaseDatabase firebase;
-//    DatabaseReference db_ref;
     Session session;
     List<Event> eventList;
     List<String> deleteList;
@@ -51,13 +49,10 @@ public class TimelineActivity extends AppCompatActivity {
         validation = new Validation(username, projectId);
 
         manage = new ManageTimeline(this, projectId);
-//        firebase = FirebaseDatabase.getInstance();
-//        db_ref = firebase.getReference("Project").child(session.getProjectId()).child("Event");
 
         eventList = new ArrayList<>();
         deleteList = new ArrayList<>();
 
-//        getEventList();
         manage.getEventList();
 
         Intent intent = getIntent();
@@ -99,52 +94,34 @@ public class TimelineActivity extends AppCompatActivity {
     private void setup(boolean isDeveloper){
         btEdit = findViewById(R.id.buttonEdit);
 
-        btEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(validate())
-                    toEdit();
-            }
+        btEdit.setOnClickListener(v -> {
+            if(validate())
+                toEdit();
         });
 
         btAdd = findViewById(R.id.buttonAdd);
-        btAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(validate())
-                    toAdd();
-//                System.out.println("Select add");
-//                startActivity(new Intent(TimelineActivity.this, EventActivity.class));
-            }
+        btAdd.setOnClickListener(v -> {
+            if(validate())
+                toAdd();
         });
 
         btDelete = findViewById(R.id.buttonDelete);
-        btDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(validate())
-                    toDelete();
-            }
+        btDelete.setOnClickListener(v -> {
+            if(validate())
+                toDelete();
         });
 
         btConfirm = findViewById(R.id.buttonConfirm);
         btConfirm.setVisibility(View.INVISIBLE);
-        btConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                confirm();
-                if(validate())
-                    manage.confirmRemove(deleteList);
-            }
+        btConfirm.setOnClickListener(v -> {
+            if(validate())
+                manage.confirmRemove(deleteList);
         });
 
         btBack = findViewById(R.id.buttonBack);
-        btBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                validate();
-                finish();
-            }
+        btBack.setOnClickListener(v -> {
+            validate();
+            finish();
         });
 
         if(!isDeveloper){
@@ -204,16 +181,13 @@ public class TimelineActivity extends AppCompatActivity {
             eventView.setText(event);
             eventView.setTextSize(25);
             eventView.setPadding(5, 5, 5, 5);
-            eventView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int index =((ViewGroup) eventView.getParent()).indexOfChild(eventView);
-                    if(isDelete){
-                        deleteList.add(eventList.get(index).eventId);
-                        eventView.setVisibility(View.GONE);
-                    }else if (isEdit){
-                        editEvent(eventList.get(index).eventId);
-                    }
+            eventView.setOnClickListener(v -> {
+                int index =((ViewGroup) eventView.getParent()).indexOfChild(eventView);
+                if(isDelete){
+                    deleteList.add(eventList.get(index).eventId);
+                    eventView.setVisibility(View.GONE);
+                }else if (isEdit){
+                    editEvent(eventList.get(index).eventId);
                 }
             });
             eventLayout.addView(eventView);
@@ -221,24 +195,23 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     private void toEdit(){
+        String editMsg;
         if(!isEdit){
             isEdit = true;
             btAdd.setVisibility(View.INVISIBLE);
-//            btEdit.setVisibility(View.INVISIBLE);
             btConfirm.setVisibility(View.INVISIBLE);
             btBack.setVisibility(View.INVISIBLE);
             btDelete.setVisibility(View.INVISIBLE);
-            btEdit.setText("Cancel Edit");
-//            btDelete.setText("Cancel delete");
+            editMsg = "Cancel Edit";
         }else{
             isEdit = false;
-//            resetEventLayout();
             btAdd.setVisibility(View.VISIBLE);
             btBack.setVisibility(View.VISIBLE);
             btDelete.setVisibility(View.VISIBLE);
-//            btDelete.setText("Delete");
-            btEdit.setText("Edit");
+            editMsg = "Edit";
         }
+
+        btEdit.setText(editMsg);
     }
 
     private void editEvent(String eventId){
@@ -263,47 +236,21 @@ public class TimelineActivity extends AppCompatActivity {
             btConfirm.setVisibility(View.VISIBLE);
             btBack.setVisibility(View.INVISIBLE);
             btDelete.setVisibility(View.INVISIBLE);
-//            btDelete.setText("Cancel delete");
         }else{
             isDelete = false;
             resetEventLayout();
             btAdd.setVisibility(View.VISIBLE);
             btEdit.setVisibility(View.VISIBLE);
-//            btConfirm.setVisibility(View.VISIBLE);
             btBack.setVisibility(View.VISIBLE);
-            btDelete.setText("Delete");
+            String delMsg = "Delete";
+            btDelete.setText(delMsg);
         }
     }
-
-//    public void confirm(){
-//        manage.confirmRemove(deleteList);
-//        deleteList.clear();
-//        toDelete();
-//    }
 
     public void reset(){
         deleteList.clear();
         toDelete();
     }
-
-//    private void toConfirm(){
-//        db_ref.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                for(String eventId : deleteList){
-//                    db_ref.child(eventId).removeValue();
-//                }
-//
-//                deleteList.clear();
-//                toDelete();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
 
     private void resetEventLayout(){
         int count = eventLayout.getChildCount();
@@ -317,10 +264,7 @@ public class TimelineActivity extends AppCompatActivity {
             if(visible != View.GONE){
                 eventList.add(tempEventList.get(i));
             }
-//            recreate();
-//            eventLayout.removeAllViews();
         }
-//        recreate();
     }
 
 

@@ -147,51 +147,11 @@ public class JoinProject {
 
 
     public void joinProjectInDatabase(){
-//        db_ref_project.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                isValid = false;
-//                for(DataSnapshot snap : snapshot.getChildren()){
-//                    try{
-//                        String name = snap.child("projectName").getValue().toString();
-//                        if(!projectName.equals(name)){
-//                            continue;
-//                        }
-//                        long projectId = Long.parseLong(snap.getKey());
-//
-//                        String clientCode = snap.child("clientCode").getValue().toString();
-//                        String devCode = snap.child("devCode").getValue().toString();
-//                        Project project = new Project(projectId, name, clientCode, devCode);
-//                        if(inviteCode.equals(clientCode)) {
-//                            activity.setProjectValue(project);
-//                            setProjectValue(project);
-//                            isValid = true;
-//                            isDeveloper = false;
-//                        }else if (inviteCode.equals(devCode)){
-//                            activity.setProjectValue(project);
-//                            setProjectValue(project);
-//                            isValid = true;
-//                            isDeveloper = true;
-//                        }
-//                    }catch(Exception exception){
-//                        exception.printStackTrace();
-//                    }
-//                }
-//                if(!isValid){
-//                    activity.setErrText("Either Project Does Not Exist or Invitation Code is Not Match");
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
 
         db_ref_roles.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                boolean isExist = false;
+                boolean isExist;
                 if(isValid){
                     isExist = snapshot.child(projectId).child(username).exists();
                     if(!isExist){
@@ -208,9 +168,6 @@ public class JoinProject {
                         activity.setErrText("The user already join the project");
                     }
                 }
-//                if (isExist) {
-//                    activity.setErrText("The User already join the project");
-//                }
             }
 
             @Override

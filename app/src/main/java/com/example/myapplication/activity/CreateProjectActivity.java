@@ -12,21 +12,15 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
-import com.example.myapplication.element.Project;
 import com.example.myapplication.element.Session;
 import com.example.myapplication.engine.ProjectCreate;
 
 public class CreateProjectActivity extends AppCompatActivity {
     TextView errView;
-//    FirebaseDatabase firebase;
-//    DatabaseReference db_ref, db_ref_roles;
     Session session;
     ProjectCreate projectCreate;
 
-    Project newProject;
     String projectName;
-    long projectId;
-//    Set<String> allCodes;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,23 +39,10 @@ public class CreateProjectActivity extends AppCompatActivity {
 
 
         Button btConfirm = findViewById(R.id.buttonConfirm);
-//        Button btConfirm = null;
-        btConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createProject();
-            }
-        });
+        btConfirm.setOnClickListener(v -> createProject());
 
         Button btCancel = findViewById(R.id.buttonCancel);
-        btCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                finish();
-                backToMain();
-            }
-
-        });
+        btCancel.setOnClickListener(v -> backToMain());
     }
 
     private void createProject(){

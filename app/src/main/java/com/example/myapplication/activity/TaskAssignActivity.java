@@ -24,8 +24,6 @@ import java.util.List;
 
 public class TaskAssignActivity extends AppCompatActivity {
 
-//    FirebaseDatabase firebase;
-//    DatabaseReference db_ref;
     List<Task> taskList;
     List<String> deleteList;
     ManageTaskView manageTaskView;
@@ -44,9 +42,6 @@ public class TaskAssignActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_assignment_view);
 
-//        firebase = FirebaseDatabase.getInstance();
-//        db_ref = firebase.getReference("Project").child(Session.getInstance().getProjectId()).child("Task");
-
         String projectId = Session.getInstance().getProjectId();
         String username = Session.getInstance().getUserName();
 
@@ -58,58 +53,40 @@ public class TaskAssignActivity extends AppCompatActivity {
 
         manageTaskView.getTaskList();
 
-//        getTaskList();
-//        setupTaskView();
         setupButton();
 
     }
 
     private void setupButton(){
-//        Button btEdit = findViewById(R.id.buttonEdit);
         btEdit = findViewById(R.id.buttonEdit);
-        btEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(validate())
-                    toEdit();
-            }
+        btEdit.setOnClickListener(v -> {
+            if(validate())
+                toEdit();
         });
 
         btAdd = findViewById(R.id.buttonAdd);
-        btAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(validate())
-                    toAdd();
-            }
+        btAdd.setOnClickListener(v -> {
+            if(validate())
+                toAdd();
         });
 
         btDelete = findViewById(R.id.buttonDelete);
-        btDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(validate())
-                toDelete();
-            }
+        btDelete.setOnClickListener(v -> {
+            if(validate())
+            toDelete();
         });
 
         btConfirm = findViewById(R.id.buttonConfirm);
         btConfirm.setVisibility(View.INVISIBLE);
-        btConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(validate())
-                   manageTaskView.confirmRemove(deleteList);
-            }
+        btConfirm.setOnClickListener(v -> {
+            if(validate())
+               manageTaskView.confirmRemove(deleteList);
         });
 
         btBack = findViewById(R.id.buttonBack);
-        btBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                validate();
-                finish();
-            }
+        btBack.setOnClickListener(v -> {
+            validate();
+            finish();
         });
     }
 
@@ -198,21 +175,14 @@ public class TaskAssignActivity extends AppCompatActivity {
             taskView.setTextSize(25);
             taskView.setPadding(5, 5, 5, 5);
             taskView.setClickable(true);
-            taskView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int index = ((ViewGroup) taskView.getParent()).indexOfChild(taskView);
+            taskView.setOnClickListener(v -> {
+                int index = ((ViewGroup) taskView.getParent()).indexOfChild(taskView);
 
-                    if(canDelete){
-                        deleteList.add(taskList.get(index).taskId);
-                        taskView.setVisibility(View.GONE);
-//                        deleteTask(index);
-//                        taskLayout.getChildAt(index).setVisibility(View.GONE);
-                    }else if(isEdit){
-//                        toManage(false);
-//                        System.out.println("TaskId: " + taskList.get(index).toString());
-                        editTask(taskList.get(index).taskId);
-                    }
+                if(canDelete){
+                    deleteList.add(taskList.get(index).taskId);
+                    taskView.setVisibility(View.GONE);
+                }else if(isEdit){
+                    editTask(taskList.get(index).taskId);
                 }
             });
             taskLayout.addView(taskView);
@@ -220,6 +190,7 @@ public class TaskAssignActivity extends AppCompatActivity {
     }
 
     private void toEdit(){
+        String editMsg;
         if(!isEdit){
             isEdit = true;
             btAdd.setVisibility(View.INVISIBLE);
@@ -227,7 +198,7 @@ public class TaskAssignActivity extends AppCompatActivity {
             btConfirm.setVisibility(View.INVISIBLE);
             btDelete.setVisibility(View.INVISIBLE);
             btBack.setVisibility(View.INVISIBLE);
-            btEdit.setText("Cancel Edit");
+            editMsg = "Cancel Edit";
         }else{
             isEdit = false;
 //            resetTaskLayout();
@@ -235,9 +206,10 @@ public class TaskAssignActivity extends AppCompatActivity {
             btEdit.setVisibility(View.VISIBLE);
             btBack.setVisibility(View.VISIBLE);
             btDelete.setVisibility(View.VISIBLE);
-            btEdit.setText("Edit");
-//            recreate();
+            editMsg = "Edit";
         }
+
+        btEdit.setText(editMsg);
     }
 
     private void editTask(String taskId){

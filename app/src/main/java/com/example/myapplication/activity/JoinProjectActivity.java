@@ -46,9 +46,6 @@ public class JoinProjectActivity extends AppCompatActivity {
 
         notification = findViewById(R.id.notification);
 
-//        firebase = FirebaseDatabase.getInstance();
-//        db_ref = firebase.getReference("Project");
-//        db_ref_roles = firebase.getReference("Roles");
         session = Session.getInstance();
         joinProject = new JoinProject(this, session.getUserName());
 
@@ -59,7 +56,7 @@ public class JoinProjectActivity extends AppCompatActivity {
     private void setupSpinner(){
         roleSpin = findViewById(R.id.spinnerRole);
         String [] roles = {"client", "developer"};
-        ArrayAdapter roleAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, roles);
+        ArrayAdapter<String> roleAdapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, roles);
 
         roleAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         roleSpin.setAdapter(roleAdapter);
@@ -76,38 +73,20 @@ public class JoinProjectActivity extends AppCompatActivity {
 
     private void setupButton(){
         btJoin = findViewById(R.id.buttonJoin);
-        btJoin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                joinProject();
-            }
-        });
+        btJoin.setOnClickListener(v -> joinProject());
 
         btApply = findViewById(R.id.buttonApply);
-        btApply.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                applyProject();
-            }
-        });
+        btApply.setOnClickListener(v -> applyProject());
 
         btView = findViewById(R.id.buttonInvite);
-        btView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toViewInvite();
-            }
-        });
+        btView.setOnClickListener(v -> toViewInvite());
 
         Button btCancel = findViewById(R.id.buttonCancel);
-        btCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btCancel.setOnClickListener(v -> {
 //                finish();
-                Intent intent = new Intent(JoinProjectActivity.this, ProjectMainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
+            Intent intent = new Intent(JoinProjectActivity.this, ProjectMainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         });
     }
 

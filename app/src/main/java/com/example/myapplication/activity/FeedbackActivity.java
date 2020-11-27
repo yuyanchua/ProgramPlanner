@@ -2,12 +2,10 @@ package com.example.myapplication.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,23 +14,14 @@ import com.example.myapplication.element.Feedback;
 import com.example.myapplication.element.Session;
 import com.example.myapplication.engine.ManageFeedback;
 import com.example.myapplication.engine.Validation;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 public class FeedbackActivity extends AppCompatActivity {
-//
-//    FirebaseDatabase firebase;
-//    DatabaseReference db_ref;
+
     Session session;
     Feedback newFeedback;
     Validation validation;
 
-    int feedbackId;
     String projectIdStr;
-//TODO: Add error for blank feedback?
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,25 +37,16 @@ public class FeedbackActivity extends AppCompatActivity {
         String username = session.getUserName();
         validation = new Validation(username, projectIdStr);
 
-//        firebase = FirebaseDatabase.getInstance();
-//        db_ref = firebase.getReference("Project").child(projectIdStr).child("feedback");
-
         Button btConfirm = findViewById(R.id.button);
-        btConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(validate())
-                    submitFeedback();
-            }
+        btConfirm.setOnClickListener(v -> {
+            if(validate())
+                submitFeedback();
         });
 
         Button btBack = findViewById(R.id.button2);
-        btBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                validate();
-                finish();
-            }
+        btBack.setOnClickListener(v -> {
+            validate();
+            finish();
         });
     }
 

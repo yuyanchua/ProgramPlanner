@@ -2,7 +2,6 @@ package com.example.myapplication.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -22,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class LogViewActivity extends AppCompatActivity {
 
@@ -35,9 +35,6 @@ public class LogViewActivity extends AppCompatActivity {
     SimpleDateFormat fmtDate;
     LinearLayout logLayout;
     Log newLog;
-
-    int logId;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         if (getSupportActionBar() != null) {
@@ -54,7 +51,7 @@ public class LogViewActivity extends AppCompatActivity {
         validation = new Validation(username, projectId);
         manageLog = new ManageLog(this, projectId);
         calendar = Calendar.getInstance();
-        fmtDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        fmtDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 
         logList = new ArrayList<>();
         manageLog.getLogList();
@@ -122,24 +119,18 @@ public class LogViewActivity extends AppCompatActivity {
 
     private void setupButton(){
         Button btSubmit = findViewById(R.id.buttonSubmit);
-        btSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(validate()) {
-                    logList.clear();
-                    logLayout.removeAllViews();
-                    submit();
-                }
+        btSubmit.setOnClickListener(v -> {
+            if(validate()) {
+                logList.clear();
+                logLayout.removeAllViews();
+                submit();
             }
         });
 
         Button btBack = findViewById(R.id.buttonBack);
-        btBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                validate();
-                finish();
-            }
+        btBack.setOnClickListener(v -> {
+            validate();
+            finish();
         });
     }
 

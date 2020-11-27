@@ -13,15 +13,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.element.Session;
 import com.example.myapplication.engine.ResetPass;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
 public class ResetPassActivity extends AppCompatActivity {
 
     private TextView errView;
     private String username;
-//    private FirebaseDatabase firebase;
-//    private DatabaseReference db_ref;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         if (getSupportActionBar() != null) {
@@ -34,8 +31,6 @@ public class ResetPassActivity extends AppCompatActivity {
         errView = findViewById(R.id.errorMessage);
         errView.setVisibility(View.INVISIBLE);
         username = Session.getInstance().getUserName();
-//        firebase = FirebaseDatabase.getInstance();
-//        db_ref = firebase.getReference("Users");
 
         setupButton();
     }
@@ -45,12 +40,7 @@ public class ResetPassActivity extends AppCompatActivity {
         btConfirm.setOnClickListener(v -> reset());
 
         Button btCancel = findViewById(R.id.CancelButton);
-        btCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finishReset();
-            }
-        });
+        btCancel.setOnClickListener(v -> finishReset());
     }
 
     private void reset(){

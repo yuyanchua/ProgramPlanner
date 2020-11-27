@@ -29,7 +29,7 @@ public class ManageRoles {
         this.projectId = projectId;
     }
 
-    public List<Roles> getRolesList(){
+    public void getRolesList(){
         db_ref_roles.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -54,7 +54,6 @@ public class ManageRoles {
             }
         });
 
-        return rolesList;
     }
 
     public void kickMember(final List<String> kickList){

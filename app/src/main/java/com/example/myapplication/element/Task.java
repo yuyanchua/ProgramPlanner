@@ -31,10 +31,9 @@ public class Task {
     public String toString(){
 //        String output = String.format("Task: %s\n, TaskId: %s,\n", task, taskId);
 
-        String memberStr = "";
+        StringBuilder memberStr = new StringBuilder();
         for(String member : memberList)
-            memberStr += member + ", ";
-        String output = String.format("%s: %s\n(%s)", taskId, task, memberStr);
-        return output;
+            memberStr.append(member).append(", ");
+        return String.format("%s: %s\n(%s)", taskId, task, memberStr.toString());
     }
 }

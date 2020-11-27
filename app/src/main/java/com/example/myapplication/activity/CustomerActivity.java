@@ -2,7 +2,6 @@ package com.example.myapplication.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,30 +36,19 @@ public class CustomerActivity extends AppCompatActivity {
         validation = new Validation(username, session.getProjectId());
 
         Button btFeedback = findViewById(R.id.buttonLeaveFeedBack);
-        btFeedback.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(validate())
-                    toFeedback();
-            }
+        btFeedback.setOnClickListener(v -> {
+            if(validate())
+                toFeedback();
         });
 
         Button btTimeline = findViewById(R.id.buttonTimeline);
-        btTimeline.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(validate())
-                      toTimeline();
-            }
+        btTimeline.setOnClickListener(v -> {
+            if(validate())
+                  toTimeline();
         });
 
         Button btBack = findViewById(R.id.buttonBack);
-        btBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        btBack.setOnClickListener(v -> onBackPressed());
 
     }
     private boolean validate(){
@@ -69,7 +57,7 @@ public class CustomerActivity extends AppCompatActivity {
 
         if(validation.isExist()){
             String roles = validation.getRoles();
-            if(!roles.equals("client")){
+            if(!roles.equalsIgnoreCase("client")){
                 message = "Your role has been altered";
                 isValid = false;
             }

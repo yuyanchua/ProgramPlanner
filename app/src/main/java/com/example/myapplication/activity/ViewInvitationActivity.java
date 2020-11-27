@@ -1,7 +1,6 @@
 package com.example.myapplication.activity;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -75,12 +74,9 @@ public class ViewInvitationActivity extends AppCompatActivity {
             inviteView.setTextSize(20);
             inviteView.setPadding(5, 5, 5, 5);
             inviteView.setClickable(true);
-            inviteView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int index = inviteLayout.indexOfChild(inviteView);
-                    viewInvite(index);
-                }
+            inviteView.setOnClickListener(v -> {
+                int index = inviteLayout.indexOfChild(inviteView);
+                viewInvite(index);
             });
 
             inviteLayout.addView(inviteView);
@@ -109,25 +105,12 @@ public class ViewInvitationActivity extends AppCompatActivity {
         String inviteDetails = invitation.toString();
         builder.setMessage(inviteDetails)
                 .setTitle("Project Invitation");
-        builder.setPositiveButton("Accept", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                manageInvite.acceptInvite(invitation);
-            }
-        });
+        builder.setPositiveButton("Accept", (dialog, which) -> manageInvite.acceptInvite(invitation));
 
-        builder.setNegativeButton("Decline", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                manageInvite.declineInvite(invitation);
-            }
-        });
+        builder.setNegativeButton("Decline", (dialog, which) -> manageInvite.declineInvite(invitation));
 
-        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+        builder.setNeutralButton("Cancel", (dialog, which) -> {
 
-            }
         });
 
         builder.show();

@@ -18,8 +18,6 @@ public class Login {
     DatabaseReference db_ref;
 
     LoginActivity activity;
-//    User user;
-//    String hashPass;
     List<User> userList;
 
 
@@ -27,9 +25,6 @@ public class Login {
         firebase = FirebaseDatabase.getInstance();
         db_ref = firebase.getReference("Users");
         this.activity = activity;
-//        this.user = user;
-
-//        login();
         userList = new ArrayList<>();
         retrieveDatabase();
     }
@@ -55,8 +50,7 @@ public class Login {
                     String username = snap.getKey();
                     String passHash = snap.child("password").getValue().toString();
                     User temp = new User(username, passHash);
-//                    System.out.println(temp.toString());
-//                    System.out.println(temp);
+
                     userList.add(temp);
                 }
 

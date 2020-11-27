@@ -3,7 +3,6 @@ package com.example.myapplication.engine;
 import androidx.annotation.NonNull;
 
 import com.example.myapplication.activity.InviteActivity;
-import com.example.myapplication.element.Application;
 import com.example.myapplication.element.Invitation;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -40,15 +39,6 @@ public class ManageProjectInvite {
 
         if(username.isEmpty())
             activity.setErrText("Please enter a username");
-
-//        if(!isUserExist(username)){
-//            //return error
-//            activity.setErrText("The user entered does not exists");
-//            return;
-//        }
-//        if(isMember(username)){
-//            activity.setErrText("The user entered is already in project");
-//        }
 
         if(isUserExist(username) && !isMember(username)) {
             generateInviteId(username);

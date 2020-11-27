@@ -2,29 +2,20 @@ package com.example.myapplication.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
 import com.example.myapplication.element.Notebook;
-import com.example.myapplication.element.Project;
 import com.example.myapplication.element.Session;
-import com.example.myapplication.element.User;
 import com.example.myapplication.engine.ManageNote;
 import com.example.myapplication.engine.Validation;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,9 +36,6 @@ public class NotebookActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notebook_view);
-
-//        firebase = FirebaseDatabase.getInstance();
-//        db_ref = firebase.getReference("Project").child(session.getProjectId()).child("Notebook");
 
         String username = Session.getInstance().getUserName();
         String projectId = Session.getInstance().getProjectId();
@@ -128,21 +116,15 @@ public class NotebookActivity extends AppCompatActivity {
 
     private void setupButton(){
         Button btSubmit = findViewById(R.id.buttonSubmit);
-        btSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(validate())
-                    toSubmit();
-            }
+        btSubmit.setOnClickListener(v -> {
+            if(validate())
+                toSubmit();
         });
 
         Button btBack = findViewById(R.id.buttonBack);
-        btBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                validate();
-                finish();
-            }
+        btBack.setOnClickListener(v -> {
+            validate();
+            finish();
         });
     }
 

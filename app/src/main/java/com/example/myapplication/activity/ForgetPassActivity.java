@@ -16,8 +16,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 public class ForgetPassActivity extends AppCompatActivity {
 
     private TextView errView;
-//    private FirebaseDatabase firebase;
-//    private DatabaseReference db_ref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -31,20 +29,9 @@ public class ForgetPassActivity extends AppCompatActivity {
         errView = findViewById(R.id.errorMessage);
         errView.setVisibility(View.INVISIBLE);
 
-//        firebase = FirebaseDatabase.getInstance();
-//        db_ref = firebase.getReference("Users");
 
         FloatingActionButton btNext = findViewById(R.id.buttonNextStep);
-        btNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                verifyUsername();
-//                EditText userEdit = findViewById(R.id.accountName);
-//                String username = userEdit.getText().toString();
-//                new ForgetPass(ForgetPassActivity.this, username);
-//                checkDb(username);
-            }
-        });
+        btNext.setOnClickListener(v -> verifyUsername());
     }
 
     private void verifyUsername(){

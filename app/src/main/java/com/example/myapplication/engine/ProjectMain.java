@@ -28,7 +28,7 @@ public class ProjectMain {
         this.activity = activity;
     }
 
-    public List<Roles> getProjectList(){
+    public void getProjectList(){
         db_ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -56,6 +56,5 @@ public class ProjectMain {
             }
         });
 
-        return projectList;
     }
 }

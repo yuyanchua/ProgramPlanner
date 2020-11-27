@@ -1,7 +1,6 @@
 package com.example.myapplication.activity;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -70,24 +69,21 @@ public class RoleViewActivity extends AppCompatActivity {
             roleView.setPadding(5, 5, 5, 5);
             if(!temp.roles.equalsIgnoreCase("manager")) {
                 roleView.setClickable(true);
-                roleView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int index = roleLayout.indexOfChild(roleView);
-                        if(isKick){
-                            kickList.add(rolesList.get(index).username);
-                            roleView.setVisibility(View.GONE);
+                roleView.setOnClickListener(v -> {
+                    int index = roleLayout.indexOfChild(roleView);
+                    if(isKick){
+                        kickList.add(rolesList.get(index).username);
+                        roleView.setVisibility(View.GONE);
 
-                        }else if (isChange){
-                            Roles currRoles = rolesList.get(index);
-                            if(currRoles.roles.equalsIgnoreCase("developer")){
-                                currRoles.roles = "client";
-                            }else{
-                                currRoles.roles = "developer";
-                            }
-                            roleView.setText(currRoles.toString());
-                            rolesList.set(index, currRoles);
+                    }else if (isChange){
+                        Roles currRoles = rolesList.get(index);
+                        if(currRoles.roles.equalsIgnoreCase("developer")){
+                            currRoles.roles = "client";
+                        }else{
+                            currRoles.roles = "developer";
                         }
+                        roleView.setText(currRoles.toString());
+                        rolesList.set(index, currRoles);
                     }
                 });
             }
@@ -100,40 +96,21 @@ public class RoleViewActivity extends AppCompatActivity {
     private void setupButton(){
         btConfirm = findViewById(R.id.buttonConfirm);
         btConfirm.setVisibility(View.INVISIBLE);
-        btConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(isKick)
-//                    manageRoles.kickMember(kickList);
-                    confirmKickDialog(RoleViewActivity.this, kickList);
-                else if(isChange)
-                    manageRoles.changeRole(rolesList);
-            }
+        btConfirm.setOnClickListener(v -> {
+            if(isKick)
+                confirmKickDialog(RoleViewActivity.this, kickList);
+            else if(isChange)
+                manageRoles.changeRole(rolesList);
         });
 
         btKick = findViewById(R.id.buttonKick);
-        btKick.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                    toKick();
-            }
-        });
+        btKick.setOnClickListener(v -> toKick());
 
         btChangeRole = findViewById(R.id.buttonChangeRole);
-        btChangeRole.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toChange();
-            }
-        });
+        btChangeRole.setOnClickListener(v -> toChange());
 
         btBack = findViewById(R.id.buttonBack);
-        btBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        btBack.setOnClickListener(v -> finish());
     }
 
     private void toChange(){
@@ -209,26 +186,16 @@ public class RoleViewActivity extends AppCompatActivity {
     private void confirmKickDialog(Context context, List<String> kickMemberList){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-        String kickInfo = "Are you sure you want to kick the following members? \n";
+        StringBuilder kickInfo = new StringBuilder("Are you sure you want to kick the following members? \n");
 
         for(String member : kickMemberList){
-            kickInfo += String.format("\t%s\n", member);
+            kickInfo.append(String.format("\r%s\n", member));
         }
-        builder.setMessage(kickInfo)
+        builder.setMessage(kickInfo.toString())
                 .setTitle("Kick Confirmation");
-        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                manageRoles.kickMember(kickMemberList);
-            }
-        });
+        builder.setPositiveButton("Confirm", (dialog, which) -> manageRoles.kickMember(kickMemberList));
 
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                cancelKick();
-            }
-        });
+        builder.setNegativeButton("Cancel", (dialog, which) -> cancelKick());
         builder.show();
     }
 

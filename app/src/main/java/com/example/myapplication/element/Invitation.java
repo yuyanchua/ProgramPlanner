@@ -21,12 +21,11 @@ public class Invitation {
 
     @Override
     public String toString(){
-        String output = String.format("Project ID: %s\n" +
+
+        return String.format("Project ID: %s\n" +
                 "Project Name: %s\n" +
                 "Project Role: %s", this.projectId, this.projectName, this.projectRole
         );
-
-        return output;
     }
 
 

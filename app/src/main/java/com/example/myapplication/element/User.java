@@ -56,8 +56,6 @@ public class User {
     }
 
     public boolean isEqual(User user){
-        if(username.equals(user.username) && password.equals(user.password))
-            return true;
-        return false;
+        return username.equals(user.username) && password.equals(user.password);
     }
 }

@@ -51,10 +51,7 @@ public class InviteActivity extends AppCompatActivity {
 
 
         notification = findViewById(R.id.notification);
-//        firebase = FirebaseDatabase.getInstance();
-//        db_ref = firebase.getReference("Project").child(Session.getInstance().getProjectId());
 
-//        setupCode();
         manage = new ManageProjectInvite(this, Session.getInstance().getProjectId());
         manage.getInviteCode();
 
@@ -132,30 +129,21 @@ public class InviteActivity extends AppCompatActivity {
 
     private void setupButton(){
         Button btInvite = findViewById(R.id.buttonInvite);
-        btInvite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(validate())
-                    inviteUser();
-            }
+        btInvite.setOnClickListener(v -> {
+            if(validate())
+                inviteUser();
         });
 
         Button btView = findViewById(R.id.buttonApplication);
-        btView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(validate())
-                    viewApplication();
-            }
+        btView.setOnClickListener(v -> {
+            if(validate())
+                viewApplication();
         });
 
         Button btDone = findViewById(R.id.buttonDone);
-        btDone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                validate();
-                finish();
-            }
+        btDone.setOnClickListener(v -> {
+            validate();
+            finish();
         });
 
 
@@ -168,11 +156,14 @@ public class InviteActivity extends AppCompatActivity {
     private void inviteUser(){
         userEdit = findViewById(R.id.textUsername);
         String username = userEdit.getText().toString();
-
-        String projectName = Session.getInstance().getProjectName();
-        String projectRole = roleSpin.getSelectedItem().toString();
-        manage.inviteUser(username, projectName, projectRole);
-
+        System.out.println("Invite Username: " + username);
+        if(!username.isEmpty()) {
+            String projectName = Session.getInstance().getProjectName();
+            String projectRole = roleSpin.getSelectedItem().toString();
+            manage.inviteUser(username, projectName, projectRole);
+        }else{
+            setErrText("Please enter a username!");
+        }
     }
 
 
