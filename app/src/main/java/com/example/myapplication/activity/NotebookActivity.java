@@ -30,14 +30,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NotebookActivity extends AppCompatActivity {
-//    FirebaseDatabase firebase;
-//    DatabaseReference db_ref;
     Session session = Session.getInstance();
     List<Notebook> bookList;
     Notebook newNotebook;
     Validation validation;
     ManageNote manage;
-    int noteId;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -127,27 +125,6 @@ public class NotebookActivity extends AppCompatActivity {
 
     }
 
-//    private void getNoteList(){
-//        db_ref.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                for(DataSnapshot snap: dataSnapshot.getChildren()){
-//                    String username = snap.child("username").getValue().toString();
-//                    String content = snap.child("content").getValue().toString();
-////                    System.out.println("username: " + username);
-////                    System.out.println("Content: " + content);
-//                    Notebook tempBook = new Notebook(username, content);
-//                    bookList.add(tempBook);
-//                }
-//                setupNoteList();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
 
     private void setupButton(){
         Button btSubmit = findViewById(R.id.buttonSubmit);
@@ -172,13 +149,13 @@ public class NotebookActivity extends AppCompatActivity {
     private void toSubmit(){
         EditText noteEdit = findViewById(R.id.editTextNote);
         String note = noteEdit.getText().toString();
+        if(!note.isEmpty()){
+            String username = session.getUserName();
+            newNotebook = new Notebook(username, note);
 
-//        String username = User.username;
-        String username = session.getUserName();
-        newNotebook = new Notebook(username, note);
-//        getNoteId();
-//        addNoteToDatabase();
-        manage.addNote(newNotebook);
+            manage.addNote(newNotebook);
+
+        }
 
         noteEdit.getText().clear();
 
@@ -186,39 +163,7 @@ public class NotebookActivity extends AppCompatActivity {
 
     public void finishAdd(){
         Toast.makeText(getApplicationContext(), "New Note is Added", Toast.LENGTH_SHORT).show();
-//        recreate();
     }
 
-//    private void addNoteToDatabase(){
-//        db_ref.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                db_ref.child(Integer.toString(noteId)).setValue(newNotebook);
-//                Toast.makeText(getApplicationContext(), "New Note is Added", Toast.LENGTH_SHORT).show();
-//                recreate();
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
 
-//    private void getNoteId(){
-//        db_ref.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                for(DataSnapshot snap: dataSnapshot.getChildren()){
-//                    noteId = Integer.parseInt(snap.getKey()) + 1;
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
 }
