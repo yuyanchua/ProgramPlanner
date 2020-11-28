@@ -76,57 +76,12 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
-//        if(name.length() == 0 || pass.length() == 0 || repass.length() == 0
-//                || answer.length() == 0){
-//            errView.setText("Fields are empty");
-//            errView.setVisibility(View.VISIBLE);
-//            return;
-//        }
         //TODO: Password policy Verification?
 
         User user  = new User(name, pass, quesIndex, answer);
         new SignUp(this, user);
-//        signupApp.signup();
-//        signUpToDatabase(name, pass, quesIndex, answer);
     }
 
-//    private void signUpToDatabase(String name, String pass, int quesIndex, String answer){
-//        byte[] password = pass.getBytes();
-//        MessageDigest md = null;
-//        try {
-//            md = MessageDigest.getInstance("SHA-256");
-//        } catch (NoSuchAlgorithmException e) {
-//            e.printStackTrace();
-//        }
-//        md.update(password);
-//        byte[] digest = md.digest();
-//        StringBuffer hex = new StringBuffer();
-//        for(int i = 0; i < digest.length; i++){
-//            hex.append(Integer.toString((digest[i]&0xff) + 0x100, 16).substring(1));
-//        }
-//        String pass_in_string = hex.toString();
-//        user = new User(name, pass_in_string, quesIndex, answer);
-//        final String Name = name;
-//        users.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                if(dataSnapshot.child(Name).exists()){
-//                    errView.setText("Username is already in database");
-//                    errView.setVisibility(View.VISIBLE);
-//                }
-//                else {
-//                    users.child(Name).setValue(user);
-//                    Toast.makeText(getApplicationContext(), "Sign up successfully!", Toast.LENGTH_SHORT).show();
-//                }
-//                Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
-//                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                startActivity(intent);
-//            }
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//            }
-//        });
-//    }
 
     public void setErrView(String errMsg){
         errView.setText(errMsg);

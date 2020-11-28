@@ -90,6 +90,16 @@ public class TaskAssignActivity extends AppCompatActivity {
         });
     }
 
+    private void hideButton(boolean isHide){
+        if(isHide){
+            btEdit.setVisibility(View.INVISIBLE);
+            btDelete.setVisibility(View.INVISIBLE);
+        }else{
+            btEdit.setVisibility(View.VISIBLE);
+            btDelete.setVisibility(View.VISIBLE);
+        }
+    }
+
     private boolean validate(){
         boolean isValid = true;
         String message = null;
@@ -121,30 +131,6 @@ public class TaskAssignActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-//    private void getTaskList(){
-//        db_ref.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                for(DataSnapshot snap : dataSnapshot.getChildren()){
-//                    String taskId = snap.getKey();
-//                    String taskName = snap.child("task").getValue().toString();
-////                    String
-//                    Task tempTask = new Task(taskName);
-//                    tempTask.taskId = taskId;
-//
-//                    taskList.add(tempTask);
-//                }
-//                setupTaskView();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//
-//    }
-
     public void setupTaskView(List<Task> list){
         this.taskList = list;
         setupTaskView();
@@ -163,6 +149,9 @@ public class TaskAssignActivity extends AppCompatActivity {
             infoView.setPadding(5, 5, 5, 5);
             infoView.setClickable(false);
             taskLayout.addView(infoView);
+            hideButton(true);
+        }else{
+            hideButton(false);
         }
 
         for(int i = 0; i < taskList.size(); i ++){

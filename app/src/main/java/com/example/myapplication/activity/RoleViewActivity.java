@@ -51,10 +51,27 @@ public class RoleViewActivity extends AppCompatActivity {
         setupButton();
     }
 
+    private void hideButton(boolean isHide){
+        if(isHide){
+            btKick.setVisibility(View.INVISIBLE);
+            btChangeRole.setVisibility(View.INVISIBLE);
+        }else{
+            btKick.setVisibility(View.VISIBLE);
+            btChangeRole.setVisibility(View.VISIBLE);
+        }
+    }
+
     public void setupLayout(final List<Roles> rolesList){
         this.rolesList = rolesList;
         roleLayout = findViewById(R.id.roleLayout);
         roleLayout.removeAllViews();
+
+        if(rolesList.size() == 1){
+            hideButton(true);
+        }else{
+            hideButton(false);
+        }
+
         for(int i = 0; i < rolesList.size(); i ++){
             final TextView roleView = new TextView(this);
             Roles temp = rolesList.get(i);

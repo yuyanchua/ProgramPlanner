@@ -132,31 +132,6 @@ public class TimelineActivity extends AppCompatActivity {
         }
     }
 
-//    private void getEventList(){
-//        db_ref.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                for(DataSnapshot snap : dataSnapshot.getChildren()){
-//
-//                    String eventId = snap.getKey();
-//                    String date = snap.child("eventDate").getValue().toString();
-//                    String eventTitle = snap.child("eventTitle").getValue().toString();
-//                    boolean isNotify = Boolean.getBoolean(snap.child("isNotify").getValue().toString());
-//
-//                    Event tempEvent = new Event(eventTitle, date, isNotify);
-//                    System.out.println(tempEvent.toString());
-//                    tempEvent.eventId = eventId;
-//                    eventList.add(tempEvent);
-//                }
-//                setupEventList();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
 
     public void setupEventList(List<Event> list){
         this.eventList = list;
@@ -171,6 +146,9 @@ public class TimelineActivity extends AppCompatActivity {
             infoView.setPadding(5, 5, 5, 5);
             infoView.setClickable(false);
             eventLayout.addView(infoView);
+            hideButton(true);
+        }else{
+            hideButton(false);
         }
 
         for(int i = 0; i < eventList.size(); i ++){
@@ -212,6 +190,16 @@ public class TimelineActivity extends AppCompatActivity {
         }
 
         btEdit.setText(editMsg);
+    }
+
+    private void hideButton(boolean isHide){
+        if(isHide){
+            btEdit.setVisibility(View.INVISIBLE);
+            btDelete.setVisibility(View.INVISIBLE);
+        }else{
+            btEdit.setVisibility(View.VISIBLE);
+            btDelete.setVisibility(View.VISIBLE);
+        }
     }
 
     private void editEvent(String eventId){
