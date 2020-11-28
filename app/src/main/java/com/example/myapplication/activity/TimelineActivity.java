@@ -1,5 +1,6 @@
 package com.example.myapplication.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
@@ -19,6 +21,7 @@ import com.example.myapplication.engine.ManageTimeline;
 import com.example.myapplication.engine.Validation;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 
 public class TimelineActivity extends AppCompatActivity {
@@ -30,7 +33,7 @@ public class TimelineActivity extends AppCompatActivity {
     Validation validation;
 
     LinearLayout  eventLayout;
-    Button btAdd, btDelete, btConfirm, btEdit, btBack;
+    Button btAdd, btDelete, btCancel, btEdit, btBack;
     boolean isDelete = false, isEdit = false, isDeveloper;
 
     @Override
@@ -108,14 +111,18 @@ public class TimelineActivity extends AppCompatActivity {
         btDelete = findViewById(R.id.buttonDelete);
         btDelete.setOnClickListener(v -> {
             if(validate())
-                toDelete();
+                if(!isDelete)
+                    toDelete();
+                else
+                    confirmDeleteEvent(TimelineActivity.this, deleteList);
         });
 
-        btConfirm = findViewById(R.id.buttonConfirm);
-        btConfirm.setVisibility(View.INVISIBLE);
-        btConfirm.setOnClickListener(v -> {
+        btCancel = findViewById(R.id.buttonCancel);
+        btCancel.setVisibility(View.INVISIBLE);
+        btCancel.setOnClickListener(v -> {
             if(validate())
-                manage.confirmRemove(deleteList);
+//                manage.confirmRemove(deleteList);
+                toDelete();
         });
 
         btBack = findViewById(R.id.buttonBack);
@@ -128,7 +135,7 @@ public class TimelineActivity extends AppCompatActivity {
             btEdit.setVisibility(View.GONE);
             btAdd.setVisibility(View.GONE);
             btDelete.setVisibility(View.GONE);
-            btConfirm.setVisibility(View.GONE);
+            btCancel.setVisibility(View.GONE);
         }
     }
 
@@ -137,18 +144,19 @@ public class TimelineActivity extends AppCompatActivity {
         this.eventList = list;
         eventLayout = findViewById(R.id.EventLayout);
         eventLayout.removeAllViews();
-
-        if(list.isEmpty()){
-            String info = "There is no event for the project";
-            TextView infoView = new TextView(this);
-            infoView.setText(info);
-            infoView.setTextSize(20);
-            infoView.setPadding(5, 5, 5, 5);
-            infoView.setClickable(false);
-            eventLayout.addView(infoView);
-            hideButton(true);
-        }else{
-            hideButton(false);
+        if(!isDelete) {
+            if (list.isEmpty()) {
+                String info = "There is no event for the project";
+                TextView infoView = new TextView(this);
+                infoView.setText(info);
+                infoView.setTextSize(20);
+                infoView.setPadding(5, 5, 5, 5);
+                infoView.setClickable(false);
+                eventLayout.addView(infoView);
+                hideButton(true);
+            } else {
+                hideButton(false);
+            }
         }
 
         for(int i = 0; i < eventList.size(); i ++){
@@ -177,7 +185,7 @@ public class TimelineActivity extends AppCompatActivity {
         if(!isEdit){
             isEdit = true;
             btAdd.setVisibility(View.INVISIBLE);
-            btConfirm.setVisibility(View.INVISIBLE);
+            btCancel.setVisibility(View.INVISIBLE);
             btBack.setVisibility(View.INVISIBLE);
             btDelete.setVisibility(View.INVISIBLE);
             editMsg = "Cancel Edit";
@@ -217,22 +225,27 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     private void toDelete(){
+        String label;
         if(!isDelete){
             isDelete = true;
             btAdd.setVisibility(View.INVISIBLE);
             btEdit.setVisibility(View.INVISIBLE);
-            btConfirm.setVisibility(View.VISIBLE);
+            btCancel.setVisibility(View.VISIBLE);
             btBack.setVisibility(View.INVISIBLE);
-            btDelete.setVisibility(View.INVISIBLE);
+            label = "Confirm Delete";
+
+//            btDelete.setVisibility(View.INVISIBLE);
         }else{
             isDelete = false;
-            resetEventLayout();
+            cancelDelete();
+//            resetEventLayout();
             btAdd.setVisibility(View.VISIBLE);
             btEdit.setVisibility(View.VISIBLE);
             btBack.setVisibility(View.VISIBLE);
-            String delMsg = "Delete";
-            btDelete.setText(delMsg);
+            btCancel.setVisibility(View.INVISIBLE);
+            label = "Delete";
         }
+        btDelete.setText(label);
     }
 
     public void reset(){
@@ -253,6 +266,38 @@ public class TimelineActivity extends AppCompatActivity {
                 eventList.add(tempEventList.get(i));
             }
         }
+    }
+
+    private void cancelDelete(){
+        if(!deleteList.isEmpty())
+            Toast.makeText(getApplicationContext(), "Cancel Event Delete", Toast.LENGTH_SHORT).show();
+        deleteList.clear();
+        setupEventList(eventList);
+    }
+
+    private void confirmDeleteEvent(Context context, List<String> deleteList){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Delete Event Confirmation");
+        String deleteInfo;
+        if(!deleteList.isEmpty()){
+            StringBuilder temp = new StringBuilder("Are you sure you want to delete the event with the following event Id?\n");
+
+            for(String event: deleteList)
+                temp.append(String.format("%s, ", event));
+
+            deleteInfo = temp.toString();
+            builder.setPositiveButton("Confirm", (dialog, which) -> manage.confirmRemove(deleteList));
+            builder.setNegativeButton("Cancel", (dialog, which) -> cancelDelete());
+
+        }else{
+            deleteInfo = "There is no event chosen to delete" ;
+            builder.setNeutralButton("Cancel", (dialog, which) -> {
+
+            });
+        }
+
+        builder.setMessage(deleteInfo);
+        builder.show();
     }
 
 

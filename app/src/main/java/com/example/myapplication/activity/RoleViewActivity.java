@@ -1,6 +1,7 @@
 package com.example.myapplication.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -28,7 +29,7 @@ public class RoleViewActivity extends AppCompatActivity {
     List<Roles> rolesList;
     List<String> kickList;
 
-    Button btKick, btConfirm, btChangeRole, btBack;
+    Button btKick, btCancel, btChangeRole, btBack;
     boolean isKick = false, isChange = false;
 
     @Override
@@ -66,11 +67,8 @@ public class RoleViewActivity extends AppCompatActivity {
         roleLayout = findViewById(R.id.roleLayout);
         roleLayout.removeAllViews();
 
-        if(rolesList.size() == 1){
-            hideButton(true);
-        }else{
-            hideButton(false);
-        }
+        if(!isKick)
+            hideButton(rolesList.size() == 1);
 
         for(int i = 0; i < rolesList.size(); i ++){
             final TextView roleView = new TextView(this);
@@ -111,63 +109,76 @@ public class RoleViewActivity extends AppCompatActivity {
 
 
     private void setupButton(){
-        btConfirm = findViewById(R.id.buttonConfirm);
-        btConfirm.setVisibility(View.INVISIBLE);
-        btConfirm.setOnClickListener(v -> {
-            if(isKick)
-                confirmKickDialog(RoleViewActivity.this, kickList);
-            else if(isChange)
-                manageRoles.changeRole(rolesList);
+        btCancel = findViewById(R.id.buttonCancel);
+        btCancel.setVisibility(View.INVISIBLE);
+        btCancel.setOnClickListener(v -> {
+            if(isKick) {
+//                confirmKickDialog(RoleViewActivity.this, kickList);
+                toKick();
+            }else if(isChange)
+                toChange();
+//                manageRoles.changeRole(rolesList);
         });
 
         btKick = findViewById(R.id.buttonKick);
-        btKick.setOnClickListener(v -> toKick());
+//        btKick.setOnClickListener(v -> toKick());
+        btKick.setOnClickListener(v ->{
+            if(!isKick)
+                toKick();
+            else
+                confirmKickDialog(RoleViewActivity.this, kickList);
+        });
 
         btChangeRole = findViewById(R.id.buttonChangeRole);
-        btChangeRole.setOnClickListener(v -> toChange());
-
+//        btChangeRole.setOnClickListener(v -> toChange());
+        btChangeRole.setOnClickListener(v ->{
+            if(!isChange)
+                toChange();
+            else
+                manageRoles.changeRole(rolesList);
+        });
         btBack = findViewById(R.id.buttonBack);
         btBack.setOnClickListener(v -> finish());
     }
 
     private void toChange(){
         String change = "Change Role";
-        String confirm = "Cancel";
+        String confirm = "Confirm";
         if(!isChange){
             isChange = true;
             btChangeRole.setText(confirm);
             btKick.setVisibility(View.INVISIBLE);
             btBack.setVisibility(View.INVISIBLE);
-            btConfirm.setVisibility(View.VISIBLE);
+            btCancel.setVisibility(View.VISIBLE);
 
         }else{
             isChange = false;
-//            resetRoleLayout();
             btChangeRole.setText(change);
             btKick.setVisibility(View.VISIBLE);
             btBack.setVisibility(View.VISIBLE);
-            btConfirm.setVisibility(View.INVISIBLE);
+            btCancel.setVisibility(View.INVISIBLE);
 
         }
     }
 
     private void toKick(){
         String kick = "Kick Member";
-        String confirm = "Cancel";
+        String confirm = "Confirm";
         if(!isKick){
             isKick = true;
             btChangeRole.setVisibility(View.INVISIBLE);
             btBack.setVisibility(View.INVISIBLE);
-            btConfirm.setVisibility(View.VISIBLE);
+            btCancel.setVisibility(View.VISIBLE);
             btKick.setText(confirm);
 
         }else{
+            cancelKick();
             isKick = false;
             //reset layout
-            resetRoleLayout();
+//            resetRoleLayout();
             btChangeRole.setVisibility(View.VISIBLE);
             btBack.setVisibility(View.VISIBLE);
-            btConfirm.setVisibility(View.INVISIBLE);
+            btCancel.setVisibility(View.INVISIBLE);
             btKick.setText(kick);
         }
     }
@@ -201,24 +212,37 @@ public class RoleViewActivity extends AppCompatActivity {
     }
 
     private void confirmKickDialog(Context context, List<String> kickMemberList){
+
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Kick Confirmation");
+        String kickInfo;
+        if(!kickMemberList.isEmpty()) {
 
-        StringBuilder kickInfo = new StringBuilder("Are you sure you want to kick the following members? \n");
+            StringBuilder temp = new StringBuilder("Are you sure you want to kick the following members? \n");
 
-        for(String member : kickMemberList){
-            kickInfo.append(String.format("\r%s\n", member));
+            for (String member : kickMemberList)
+                temp.append(String.format("\t%s\n", member));
+
+            kickInfo = temp.toString();
+
+            builder.setPositiveButton("Confirm", (dialog, which) -> manageRoles.kickMember(kickMemberList));
+            builder.setNegativeButton("Cancel", (dialog, which) -> cancelKick());
+
+        }else{
+            kickInfo = "There is no member chosen to delete";
+            builder.setNeutralButton("Cancel", (dialog, which) -> {
+
+            });
         }
-        builder.setMessage(kickInfo.toString())
-                .setTitle("Kick Confirmation");
-        builder.setPositiveButton("Confirm", (dialog, which) -> manageRoles.kickMember(kickMemberList));
 
-        builder.setNegativeButton("Cancel", (dialog, which) -> cancelKick());
+        builder.setMessage(kickInfo);
         builder.show();
     }
 
     private void cancelKick(){
+        if(!kickList.isEmpty())
+            Toast.makeText(getApplicationContext(), "Cancel Kick Member", Toast.LENGTH_SHORT).show();
         kickList.clear();
-        Toast.makeText(getApplicationContext(), "Cancel Kick Member", Toast.LENGTH_SHORT).show();
         setupLayout(rolesList);
     }
 

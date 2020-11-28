@@ -34,12 +34,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/buttonConfirm"
+        android:id="@+id/buttonCancel"
         android:layout_width="150dp"
         android:layout_height="50dp"
         android:layout_marginStart="36dp"
         android:layout_marginTop="28dp"
-        android:text="Confirm"
+        android:text="Cancel"
         android:textAllCaps="false"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonChangeRole" />
@@ -74,6 +74,7 @@
         android:layout_height="50dp"
         android:layout_marginStart="40dp"
         android:layout_marginTop="28dp"
+        android:layout_marginEnd="40dp"
         android:text="Back"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
