@@ -13,19 +13,21 @@ import com.example.myapplication.R;
 import com.example.myapplication.element.Session;
 import com.example.myapplication.engine.Validation;
 
-public class CustomerActivity extends AppCompatActivity {
+public class CustomerActivity extends ProgramActivity {
 
     Session session = Session.getInstance();
     Validation validation;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_main);
+
+        setupUI(findViewById(R.id.customerMainActivity));
 
         TextView titleView = findViewById(R.id.ProjectNameTitle);
 //        titleView.setText(Project.projectName);

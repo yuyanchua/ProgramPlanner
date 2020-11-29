@@ -17,7 +17,7 @@ import com.example.myapplication.element.Session;
 import com.example.myapplication.engine.ManageDeveloper;
 import com.example.myapplication.engine.Validation;
 
-public class DeveloperActivity extends AppCompatActivity {
+public class DeveloperActivity extends ProgramActivity {
 
     boolean isConfirm;
     boolean isManager;
@@ -26,12 +26,14 @@ public class DeveloperActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
         
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_developer_main);
+
+        setupUI(findViewById(R.id.developerMainActivity));
 
         Intent intent = getIntent();
         isManager = intent.getExtras().getBoolean("isManager");

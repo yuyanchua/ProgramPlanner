@@ -23,7 +23,7 @@ import com.example.myapplication.engine.Validation;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddTaskActivity extends AppCompatActivity {
+public class AddTaskActivity extends ProgramActivity {
 
     TextView errView;
     Spinner spinMember;
@@ -41,12 +41,13 @@ public class AddTaskActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_task_assignment);
+        setupUI(findViewById(R.id.taskAssignManageActivity));
 
         errView = findViewById(R.id.errorMessageTip);
         errView.setVisibility(View.INVISIBLE);

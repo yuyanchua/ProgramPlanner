@@ -15,7 +15,7 @@ import com.example.myapplication.element.Session;
 import com.example.myapplication.engine.ManageFeedback;
 import com.example.myapplication.engine.Validation;
 
-public class FeedbackActivity extends AppCompatActivity {
+public class FeedbackActivity extends ProgramActivity {
 
     Session session;
     Feedback newFeedback;
@@ -25,12 +25,14 @@ public class FeedbackActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback_view);
+
+        setupUI(findViewById(R.id.feedbackViewActivity));
 
         session = Session.getInstance();
         projectIdStr = session.getProjectId();

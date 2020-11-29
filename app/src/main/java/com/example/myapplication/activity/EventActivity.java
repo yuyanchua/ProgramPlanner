@@ -21,7 +21,7 @@ import com.example.myapplication.engine.Validation;
 
 import java.util.Calendar;
 
-public class EventActivity extends AppCompatActivity {
+public class EventActivity extends ProgramActivity {
 
     TextView errView, dateView;
     EditText titleEdit;
@@ -40,12 +40,13 @@ public class EventActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
         
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_view);
+        setupUI(findViewById(R.id.eventViewActivity));
 
         String projectIdStr = Session.getInstance().getProjectId();
         String username = Session.getInstance().getUserName();

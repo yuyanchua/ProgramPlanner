@@ -20,7 +20,7 @@ import com.example.myapplication.engine.Validation;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NotebookActivity extends AppCompatActivity {
+public class NotebookActivity extends ProgramActivity {
     Session session = Session.getInstance();
     List<Notebook> bookList;
     Notebook newNotebook;
@@ -30,12 +30,13 @@ public class NotebookActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notebook_view);
+        setupUI(findViewById(R.id.notebookActivity));
 
         String username = Session.getInstance().getUserName();
         String projectId = Session.getInstance().getProjectId();

@@ -1,8 +1,11 @@
 package com.example.myapplication.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -15,7 +18,7 @@ import com.example.myapplication.element.User;
 import com.example.myapplication.engine.Login;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends ProgramActivity {
     private TextView errView;
     private EditText userEdit;
     private EditText passEdit;
@@ -25,23 +28,39 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
+        setupUI(findViewById(R.id.loginActivity));
 
         errView = findViewById(R.id.errormessage);
         errView.setVisibility(View.INVISIBLE);
 
         userEdit = findViewById(R.id.editTextAccountName);
+//        userEdit.setOnFocusChangeListener((v, hasFocus) -> {
+//            if(!hasFocus){
+//                hideKeyboard(v);;
+//            }
+//        });
         passEdit = findViewById(R.id.editTextPassword);
+//        passEdit.setOnFocusChangeListener((v, hasFocus) -> {
+//            if(!hasFocus){
+//                hideKeyboard(v);;
+//            }
+//        });
 
         login = new Login(this);
         setup();
 
     }
+
+//    private void hideKeyboard(View view){
+//        InputMethodManager inputMethodManager = (InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+//        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+//    }
 
     private void setup(){
         FloatingActionButton btLogin = findViewById(R.id.buttonLogIn);

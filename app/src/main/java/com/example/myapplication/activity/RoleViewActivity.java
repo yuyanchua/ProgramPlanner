@@ -21,7 +21,7 @@ import com.example.myapplication.engine.ManageRoles;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RoleViewActivity extends AppCompatActivity {
+public class RoleViewActivity extends ProgramActivity {
     LinearLayout roleLayout;
     ManageRoles manageRoles;
     Session session;
@@ -34,12 +34,13 @@ public class RoleViewActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_role);
+        setupUI(findViewById(R.id.roleManageActivity));
 
         roleLayout = findViewById(R.id.roleLayout);
         session = Session.getInstance();

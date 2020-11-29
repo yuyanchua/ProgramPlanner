@@ -20,7 +20,7 @@ import com.example.myapplication.engine.ProjectMain;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProjectMainActivity extends AppCompatActivity {
+public class ProjectMainActivity extends ProgramActivity {
 
 
     List<Roles> projectList;
@@ -30,9 +30,9 @@ public class ProjectMainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
 
         super.onCreate(savedInstanceState);
 

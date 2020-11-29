@@ -19,7 +19,7 @@ import com.example.myapplication.element.Project;
 import com.example.myapplication.element.Session;
 import com.example.myapplication.engine.JoinProject;
 
-public class JoinProjectActivity extends AppCompatActivity {
+public class JoinProjectActivity extends ProgramActivity {
 
     TextView errView;
     CardView notification;
@@ -34,12 +34,13 @@ public class JoinProjectActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_project);
+        setupUI(findViewById(R.id.projectJoinPage));
 
         errView = findViewById(R.id.errorMessageTip);
         errView.setVisibility(View.INVISIBLE);

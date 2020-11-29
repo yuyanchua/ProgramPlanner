@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.List;
 
-public class TimelineActivity extends AppCompatActivity {
+public class TimelineActivity extends ProgramActivity {
 
     Session session;
     List<Event> eventList;
@@ -38,12 +38,13 @@ public class TimelineActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline_view);
+        setupUI(findViewById(R.id.timelineActivity));
 
         session = Session.getInstance();
         String projectId = session.getProjectId();

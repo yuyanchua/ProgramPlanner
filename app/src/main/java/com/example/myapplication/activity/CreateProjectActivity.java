@@ -15,7 +15,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.element.Session;
 import com.example.myapplication.engine.ProjectCreate;
 
-public class CreateProjectActivity extends AppCompatActivity {
+public class CreateProjectActivity extends ProgramActivity{
     TextView errView;
     Session session;
     ProjectCreate projectCreate;
@@ -24,12 +24,14 @@ public class CreateProjectActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_project);
+
+        setupUI(findViewById(R.id.createProjectActivity));
 
         errView = findViewById(R.id.errorMessageTip);
         errView.setVisibility(View.INVISIBLE);

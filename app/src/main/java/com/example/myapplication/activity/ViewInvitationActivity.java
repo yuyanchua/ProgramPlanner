@@ -19,7 +19,7 @@ import com.example.myapplication.engine.ManageInvitation;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewInvitationActivity extends AppCompatActivity {
+public class ViewInvitationActivity extends ProgramActivity {
 
     LinearLayout inviteLayout;
     List<Invitation> inviteList;
@@ -29,12 +29,13 @@ public class ViewInvitationActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_invitation);
+        setupUI(findViewById(R.id.inviteViewActivity));
 
         inviteLayout = findViewById(R.id.inviteLayout);
         inviteViewIdList = new ArrayList<>();

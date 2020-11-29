@@ -24,7 +24,7 @@ import com.example.myapplication.engine.Validation;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TaskAssignActivity extends AppCompatActivity {
+public class TaskAssignActivity extends ProgramActivity {
 
     List<Task> taskList;
     List<String> deleteList;
@@ -37,12 +37,13 @@ public class TaskAssignActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_assignment_view);
+        setupUI(findViewById(R.id.taskViewActivity));
 
         String projectId = Session.getInstance().getProjectId();
         String username = Session.getInstance().getUserName();

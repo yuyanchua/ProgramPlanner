@@ -10,13 +10,13 @@ import android.widget.ImageView;
 import com.example.myapplication.R;
 import com.squareup.picasso.Picasso;
 
-public class FullScreenImageActivity extends AppCompatActivity {
+public class FullScreenImageActivity extends ProgramActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_full_screen_image);

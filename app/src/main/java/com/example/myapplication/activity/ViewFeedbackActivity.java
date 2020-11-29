@@ -15,17 +15,18 @@ import com.example.myapplication.engine.ManageFeedback;
 
 import java.util.List;
 
-public class ViewFeedbackActivity extends AppCompatActivity {
+public class ViewFeedbackActivity extends ProgramActivity{
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_developer_feedback_view);
+        setupUI(findViewById(R.id.developerFeedbackViewActivity));
 
         String projectIdStr = Session.getInstance().getProjectId();
         ManageFeedback manage = new ManageFeedback(this, projectIdStr);

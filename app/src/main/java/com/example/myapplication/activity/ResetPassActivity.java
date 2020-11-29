@@ -15,18 +15,19 @@ import com.example.myapplication.element.Session;
 import com.example.myapplication.engine.ResetPass;
 
 
-public class ResetPassActivity extends AppCompatActivity {
+public class ResetPassActivity extends ProgramActivity{
 
     private TextView errView;
     private String username;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_password);
+        setupUI(findViewById(R.id.passwordResetActivity));
 
         errView = findViewById(R.id.errorMessage);
         errView.setVisibility(View.INVISIBLE);

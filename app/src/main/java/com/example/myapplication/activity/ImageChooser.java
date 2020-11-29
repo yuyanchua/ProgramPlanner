@@ -31,7 +31,7 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 
-public class ImageChooser extends AppCompatActivity {
+public class ImageChooser extends ProgramActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
     private ProgressBar ProBar;
     private Uri ImageUri;
@@ -41,9 +41,9 @@ public class ImageChooser extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_chooser);

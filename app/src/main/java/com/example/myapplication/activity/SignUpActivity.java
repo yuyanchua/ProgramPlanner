@@ -19,19 +19,21 @@ import com.example.myapplication.element.User;
 import com.example.myapplication.engine.SignUp;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class SignUpActivity extends AppCompatActivity {
+public class SignUpActivity extends ProgramActivity{
 
     TextView errView;
     Spinner questionSpin;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
+        setupUI(findViewById(R.id.signUpActivity));
 
         errView = findViewById(R.id.errorMessage);
         errView.setVisibility(View.INVISIBLE);

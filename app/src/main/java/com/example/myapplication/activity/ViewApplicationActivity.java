@@ -19,7 +19,7 @@ import com.example.myapplication.engine.ManageApplication;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewApplicationActivity extends AppCompatActivity {
+public class ViewApplicationActivity extends ProgramActivity {
     LinearLayout applicationLayout;
     List<Application> applicationList;
     List<Integer> appViewIdList;
@@ -28,11 +28,12 @@ public class ViewApplicationActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_application);
+        setupUI(findViewById(R.id.applicationViewActivity));
 
         applicationLayout = findViewById(R.id.applicationLayout);
         appViewIdList = new ArrayList<>();

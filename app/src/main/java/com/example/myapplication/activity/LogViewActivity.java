@@ -23,7 +23,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class LogViewActivity extends AppCompatActivity {
+public class LogViewActivity extends ProgramActivity {
 
 //    FirebaseDatabase firebase;
 //    DatabaseReference db_ref;
@@ -37,12 +37,13 @@ public class LogViewActivity extends AppCompatActivity {
     Log newLog;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_view);
+        setupUI(findViewById(R.id.logActivity));
 
         session = Session.getInstance();
         String username = session.getUserName();

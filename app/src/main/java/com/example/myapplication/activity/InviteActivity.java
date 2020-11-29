@@ -19,7 +19,7 @@ import com.example.myapplication.element.Session;
 import com.example.myapplication.engine.ManageProjectInvite;
 import com.example.myapplication.engine.Validation;
 
-public class InviteActivity extends AppCompatActivity {
+public class InviteActivity extends ProgramActivity{
     TextView customerView, developerView, errView;
     CardView notification;
 
@@ -29,17 +29,16 @@ public class InviteActivity extends AppCompatActivity {
 
     Spinner roleSpin;
     boolean isManager;
-//    FirebaseDatabase firebase;
-//    DatabaseReference db_ref;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invite_code_page);
+        setupUI(findViewById(R.id.inviteViewActivity));
 
         errView = findViewById(R.id.errorMessageTip);
         errView.setVisibility(View.INVISIBLE);

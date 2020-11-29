@@ -13,7 +13,7 @@ import com.example.myapplication.element.Session;
 import com.example.myapplication.engine.ForgetPass;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class ForgetQuesActivity extends AppCompatActivity {
+public class ForgetQuesActivity extends ProgramActivity {
 
     private TextView errView;
     private TextView quesView;
@@ -22,12 +22,13 @@ public class ForgetQuesActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_pass_ques);
+        setupUI(findViewById(R.id.forgetPassQuestionActivity));
 
         errView = findViewById(R.id.errorMessage);
         errView.setVisibility(View.INVISIBLE);

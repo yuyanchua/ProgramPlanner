@@ -43,7 +43,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GraphActivity extends AppCompatActivity implements ImageAdapter.OnItemClickListen {
+public class GraphActivity extends ProgramActivity implements ImageAdapter.OnItemClickListen {
     private RecyclerView RecView;
     private ImageAdapter IAdapter;
     private DatabaseReference DB_Ref;
@@ -57,9 +57,9 @@ public class GraphActivity extends AppCompatActivity implements ImageAdapter.OnI
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph_view);
