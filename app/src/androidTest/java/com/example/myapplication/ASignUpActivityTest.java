@@ -25,9 +25,16 @@ import org.junit.runner.RunWith;
  * Tests the SignUpActivity.
  * Ensures proper errors are set when invalid,
  * and checks return to Main on success
+ *
+ * Name prefixed with A to make sure these tests run first.
+ * For whatever reason, running after ResetPassActivityTest
+ * caused issues with the intent back to main from here
+ * and instead returned to ResetPassActivity. Error
+ * could not be replicated in full app, so I'm guessing
+ * its some weird error with the testing environment.
  */
 @RunWith(AndroidJUnit4.class)
-public class SignUpActivityTest {
+public class ASignUpActivityTest {
 
     @Rule
     public ActivityScenarioRule<SignUpActivity> activityRule =
@@ -100,7 +107,7 @@ public class SignUpActivityTest {
      * and that the activity is changed.
      */
     @Test
-    public void testSuccess() {
+    public void testSignUpSuccess() {
         try {
             Espresso.onView(ViewMatchers.withId(R.id.enterAccountName)).perform(ViewActions.typeText("FreeTestName"));
             Espresso.onView(ViewMatchers.withId(R.id.enterPassword)).perform(ViewActions.typeText("testPass"));
@@ -110,10 +117,10 @@ public class SignUpActivityTest {
             Espresso.onView(ViewMatchers.withId(R.id.buttonNextStep)).perform(ViewActions.scrollTo()).perform(ViewActions.click());
             //The checks and insertions to the database take time. Because this is a web hosted database,
             //the time needed to check with it and respond may change depending on internet speeds.
-            //sleep 1000 was sufficient to consistently pass the test with my garbage internet, but
+            //sleep 500 was sufficient to consistently pass the test with my garbage internet, but
             //you may need more time depending on other factors as well. There's a cleaner way to do this
             // but I don't want to waste too much time doing all that stuff when this works for now.
-            Thread.sleep(1000);
+            Thread.sleep(500);
             //checks that we're back to main activity
             Intents.intended(IntentMatchers.hasComponent(MainActivity.class.getName()));
         }
