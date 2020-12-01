@@ -1,7 +1,6 @@
 package com.example.myapplication.activity;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -18,22 +17,23 @@ import com.example.myapplication.element.Session;
 import com.example.myapplication.engine.ManageDeveloper;
 import com.example.myapplication.engine.Validation;
 
-public class DeveloperActivity extends AppCompatActivity {
+public class DeveloperActivity extends ProgramActivity {
 
     boolean isConfirm;
     boolean isManager;
-    boolean isExist;
     Validation validation;
     String username, projectId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
         
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_developer_main);
+
+        setupUI(findViewById(R.id.developerMainActivity));
 
         Intent intent = getIntent();
         isManager = intent.getExtras().getBoolean("isManager");
@@ -120,7 +120,7 @@ public class DeveloperActivity extends AppCompatActivity {
         String message = null;
         if(validation.isExist()){
             String roles = validation.getRoles();
-            if(roles.equals("client")){
+            if(roles.equalsIgnoreCase("client")){
                 System.out.println("Not developer");
                 message = "Your role has been altered";
                 isValid = false;
@@ -200,18 +200,8 @@ public class DeveloperActivity extends AppCompatActivity {
         System.out.println("Build alert dialog");
         builder.setMessage(message)
                 .setTitle(title);
-        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                isConfirm = true;
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                isConfirm = false;
-            }
-        });
+        builder.setPositiveButton("Confirm", (dialog, which) -> isConfirm = true);
+        builder.setNegativeButton("Cancel", (dialog, which) -> isConfirm = false);
 
         builder.show();
         return isConfirm;

@@ -16,9 +16,9 @@ public class Application {
         this.roles = roles;
     }
 
+    @Override
     public String toString(){
-        String output = String.format("Username: %s\nRole: %s", username, roles);
-        return output;
+        return String.format("Username: %s\nRole: %s", username, roles);
     }
 
 }

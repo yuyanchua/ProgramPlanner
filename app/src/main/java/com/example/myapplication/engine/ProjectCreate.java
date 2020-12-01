@@ -44,9 +44,7 @@ public class ProjectCreate {
         String inviteCode;
         do{
             inviteCode = Project.generateCode(isClient);
-            if(inviteCodeSet.contains(inviteCode)){
-                continue;
-            }else{
+            if(!inviteCodeSet.contains(inviteCode)){
                 inviteCodeSet.add(inviteCode);
                 isValid = true;
             }

@@ -1,5 +1,7 @@
 package com.example.myapplication.activity;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -8,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
@@ -18,7 +21,7 @@ import com.example.myapplication.engine.ManageRoles;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RoleViewActivity extends AppCompatActivity {
+public class RoleViewActivity extends ProgramActivity {
     LinearLayout roleLayout;
     ManageRoles manageRoles;
     Session session;
@@ -26,17 +29,18 @@ public class RoleViewActivity extends AppCompatActivity {
     List<Roles> rolesList;
     List<String> kickList;
 
-    Button btKick, btConfirm, btChangeRole, btBack;
+    Button btKick, btCancel, btChangeRole, btBack;
     boolean isKick = false, isChange = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_role);
+        setupUI(findViewById(R.id.roleManageActivity));
 
         roleLayout = findViewById(R.id.roleLayout);
         session = Session.getInstance();
@@ -49,10 +53,24 @@ public class RoleViewActivity extends AppCompatActivity {
         setupButton();
     }
 
+    private void hideButton(boolean isHide){
+        if(isHide){
+            btKick.setVisibility(View.INVISIBLE);
+            btChangeRole.setVisibility(View.INVISIBLE);
+        }else{
+            btKick.setVisibility(View.VISIBLE);
+            btChangeRole.setVisibility(View.VISIBLE);
+        }
+    }
+
     public void setupLayout(final List<Roles> rolesList){
         this.rolesList = rolesList;
         roleLayout = findViewById(R.id.roleLayout);
         roleLayout.removeAllViews();
+
+        if(!isKick)
+            hideButton(rolesList.size() == 1);
+
         for(int i = 0; i < rolesList.size(); i ++){
             final TextView roleView = new TextView(this);
             Roles temp = rolesList.get(i);
@@ -67,24 +85,21 @@ public class RoleViewActivity extends AppCompatActivity {
             roleView.setPadding(5, 5, 5, 5);
             if(!temp.roles.equalsIgnoreCase("manager")) {
                 roleView.setClickable(true);
-                roleView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int index = roleLayout.indexOfChild(roleView);
-                        if(isKick){
-                            kickList.add(rolesList.get(index).username);
-                            roleView.setVisibility(View.GONE);
+                roleView.setOnClickListener(v -> {
+                    int index = roleLayout.indexOfChild(roleView);
+                    if(isKick){
+                        kickList.add(rolesList.get(index).username);
+                        roleView.setVisibility(View.GONE);
 
-                        }else if (isChange){
-                            Roles currRoles = rolesList.get(index);
-                            if(currRoles.roles.equalsIgnoreCase("developer")){
-                                currRoles.roles = "client";
-                            }else{
-                                currRoles.roles = "developer";
-                            }
-                            roleView.setText(currRoles.toString());
-                            rolesList.set(index, currRoles);
+                    }else if (isChange){
+                        Roles currRoles = rolesList.get(index);
+                        if(currRoles.roles.equalsIgnoreCase("developer")){
+                            currRoles.roles = "client";
+                        }else{
+                            currRoles.roles = "developer";
                         }
+                        roleView.setText(currRoles.toString());
+                        rolesList.set(index, currRoles);
                     }
                 });
             }
@@ -95,81 +110,76 @@ public class RoleViewActivity extends AppCompatActivity {
 
 
     private void setupButton(){
-        btConfirm = findViewById(R.id.buttonConfirm);
-        btConfirm.setVisibility(View.INVISIBLE);
-        btConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(isKick)
-                    manageRoles.kickMember(kickList);
-                else if(isChange)
-                    manageRoles.changeRole(rolesList);
-            }
+        btCancel = findViewById(R.id.buttonCancel);
+        btCancel.setVisibility(View.INVISIBLE);
+        btCancel.setOnClickListener(v -> {
+            if(isKick) {
+//                confirmKickDialog(RoleViewActivity.this, kickList);
+                toKick();
+            }else if(isChange)
+                toChange();
+//                manageRoles.changeRole(rolesList);
         });
 
         btKick = findViewById(R.id.buttonKick);
-        btKick.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                    toKick();
-            }
+//        btKick.setOnClickListener(v -> toKick());
+        btKick.setOnClickListener(v ->{
+            if(!isKick)
+                toKick();
+            else
+                confirmKickDialog(RoleViewActivity.this, kickList);
         });
 
         btChangeRole = findViewById(R.id.buttonChangeRole);
-        btChangeRole.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+//        btChangeRole.setOnClickListener(v -> toChange());
+        btChangeRole.setOnClickListener(v ->{
+            if(!isChange)
                 toChange();
-            }
+            else
+                manageRoles.changeRole(rolesList);
         });
-
         btBack = findViewById(R.id.buttonBack);
-        btBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        btBack.setOnClickListener(v -> finish());
     }
 
     private void toChange(){
         String change = "Change Role";
-        String confirm = "Cancel";
+        String confirm = "Confirm";
         if(!isChange){
             isChange = true;
             btChangeRole.setText(confirm);
             btKick.setVisibility(View.INVISIBLE);
             btBack.setVisibility(View.INVISIBLE);
-            btConfirm.setVisibility(View.VISIBLE);
+            btCancel.setVisibility(View.VISIBLE);
 
         }else{
             isChange = false;
-//            resetRoleLayout();
             btChangeRole.setText(change);
             btKick.setVisibility(View.VISIBLE);
             btBack.setVisibility(View.VISIBLE);
-            btConfirm.setVisibility(View.INVISIBLE);
+            btCancel.setVisibility(View.INVISIBLE);
 
         }
     }
 
     private void toKick(){
         String kick = "Kick Member";
-        String confirm = "Cancel";
+        String confirm = "Confirm";
         if(!isKick){
             isKick = true;
             btChangeRole.setVisibility(View.INVISIBLE);
             btBack.setVisibility(View.INVISIBLE);
-            btConfirm.setVisibility(View.VISIBLE);
+            btCancel.setVisibility(View.VISIBLE);
             btKick.setText(confirm);
 
         }else{
+            cancelKick();
             isKick = false;
             //reset layout
-            resetRoleLayout();
+//            resetRoleLayout();
             btChangeRole.setVisibility(View.VISIBLE);
             btBack.setVisibility(View.VISIBLE);
-            btConfirm.setVisibility(View.INVISIBLE);
+            btCancel.setVisibility(View.INVISIBLE);
             btKick.setText(kick);
         }
     }
@@ -202,6 +212,40 @@ public class RoleViewActivity extends AppCompatActivity {
 //        recreate();
     }
 
+    private void confirmKickDialog(Context context, List<String> kickMemberList){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Kick Confirmation");
+        String kickInfo;
+        if(!kickMemberList.isEmpty()) {
+
+            StringBuilder temp = new StringBuilder("Are you sure you want to kick the following members? \n");
+
+            for (String member : kickMemberList)
+                temp.append(String.format("\t%s\n", member));
+
+            kickInfo = temp.toString();
+
+            builder.setPositiveButton("Confirm", (dialog, which) -> manageRoles.kickMember(kickMemberList));
+            builder.setNegativeButton("Cancel", (dialog, which) -> cancelKick());
+
+        }else{
+            kickInfo = "There is no member chosen to delete";
+            builder.setNeutralButton("Cancel", (dialog, which) -> {
+
+            });
+        }
+
+        builder.setMessage(kickInfo);
+        builder.show();
+    }
+
+    private void cancelKick(){
+        if(!kickList.isEmpty())
+            Toast.makeText(getApplicationContext(), "Cancel Kick Member", Toast.LENGTH_SHORT).show();
+        kickList.clear();
+        setupLayout(rolesList);
+    }
 
 
 

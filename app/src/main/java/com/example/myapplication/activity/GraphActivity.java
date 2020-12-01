@@ -43,7 +43,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GraphActivity extends AppCompatActivity implements ImageAdapter.OnItemClickListen {
+public class GraphActivity extends ProgramActivity implements ImageAdapter.OnItemClickListen {
     private RecyclerView RecView;
     private ImageAdapter IAdapter;
     private DatabaseReference DB_Ref;
@@ -51,16 +51,15 @@ public class GraphActivity extends AppCompatActivity implements ImageAdapter.OnI
     private List<Image> Limages;
     private ProgressBar pro_Cir;
     private List<String> Del_list;
-    private ManageGraph manage;
     private Validation validation;
 
     private final static int  REQUEST_CODE = 11;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph_view);
@@ -143,21 +142,15 @@ public class GraphActivity extends AppCompatActivity implements ImageAdapter.OnI
 
     private void setupButton(){
         Button btUpload = findViewById(R.id.buttonUpload);
-        btUpload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(validate())
-                    startActivity(new Intent(GraphActivity.this, ImageChooser.class));
-            }
+        btUpload.setOnClickListener(v -> {
+            if(validate())
+                startActivity(new Intent(GraphActivity.this, ImageChooser.class));
         });
 
         Button btBack = findViewById(R.id.buttonBack);
-        btBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                validate();
-                finish();
-            }
+        btBack.setOnClickListener(v -> {
+            validate();
+            finish();
         });
 
     }
@@ -196,7 +189,6 @@ public class GraphActivity extends AppCompatActivity implements ImageAdapter.OnI
     @Override
     public void onItemClick(int position) {
         Image Item = Limages.get(position);
-        StorageReference S_Ref = Storage.getReferenceFromUrl(Item.ImageUrl);
         Intent intent = new Intent(this, FullScreenImageActivity.class);
         intent.setData(Uri.parse(Item.ImageUrl));
         startActivity(intent);
@@ -216,13 +208,10 @@ public class GraphActivity extends AppCompatActivity implements ImageAdapter.OnI
         final int pot = position;
 //        manage.deleteImage(Key, Item.ImageUrl, position);
         StorageReference S_Ref = Storage.getReferenceFromUrl(Item.ImageUrl);
-        S_Ref.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                DB_Ref.child(Key).removeValue();
-                Del_list.remove(pot);
-                Toast.makeText(getApplicationContext(), "Item Deleted", Toast.LENGTH_SHORT).show();
-            }
+        S_Ref.delete().addOnSuccessListener(aVoid -> {
+            DB_Ref.child(Key).removeValue();
+            Del_list.remove(pot);
+            Toast.makeText(getApplicationContext(), "Item Deleted", Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -234,7 +223,7 @@ public class GraphActivity extends AppCompatActivity implements ImageAdapter.OnI
             Picasso.with(getApplicationContext()).load(Item.ImageUrl).into(new Target() {
                 @Override
                 public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                    FileOutputStream outputStream = null;
+                    FileOutputStream outputStream;
                     try {
                         File path = getFilesDir();
                         String fileUri = path.getAbsoluteFile() + File.separator + System.currentTimeMillis() + ".jpg";
@@ -272,11 +261,11 @@ public class GraphActivity extends AppCompatActivity implements ImageAdapter.OnI
         return true;
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-            if(requestCode==REQUEST_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-
-            }
-    }
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//            if(requestCode==REQUEST_CODE && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+//
+//            }
+//    }
 }

@@ -13,47 +13,37 @@ import com.example.myapplication.element.Session;
 import com.example.myapplication.engine.ForgetPass;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class ForgetQuesActivity extends AppCompatActivity {
+public class ForgetQuesActivity extends ProgramActivity {
 
     private TextView errView;
     private TextView quesView;
     private ForgetPass forget;
-//    private FirebaseDatabase firebase;
-//    private DatabaseReference db_ref;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_pass_ques);
+        setupUI(findViewById(R.id.forgetPassQuestionActivity));
 
         errView = findViewById(R.id.errorMessage);
         errView.setVisibility(View.INVISIBLE);
         quesView = findViewById(R.id.securityQuestionTip);
 
-//        firebase = FirebaseDatabase.getInstance();
-//        db_ref = firebase.getReference("Users");
-
-//        TextView ques_view = findViewById(R.id.securityQuestionTip);
-//        Intent intent = getIntent();
         String username = Session.getInstance().getUserName();
 
-        forget = new ForgetPass(this, username);
+        forget = new ForgetPass(ForgetQuesActivity.this, username);
         forget.getQuestion();
-//        setSecurityQuestion();
 
         FloatingActionButton btConfirm = findViewById(R.id.buttonNextStep);
-        btConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditText ansEdit = findViewById(R.id.questionAnswer);
-                String quesAns = ansEdit.getText().toString();
-//                verifyQuestion(ques_ans);
-                forget.verifyQuestion(quesAns);
-            }
+        btConfirm.setOnClickListener(v -> {
+            EditText ansEdit = findViewById(R.id.questionAnswer);
+            String quesAns = ansEdit.getText().toString();
+            forget.verifyQuestion(quesAns);
         });
     }
 
@@ -69,53 +59,6 @@ public class ForgetQuesActivity extends AppCompatActivity {
     public void finishVerify(){
         startActivity(new Intent(ForgetQuesActivity.this, ResetPassActivity.class));
     }
-
-//    private void setSecurityQuestion(){
-//        db_ref.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                try {
-//                    String ques_index = dataSnapshot.child(username).child("questionIndex").getValue().toString();
-//                    String question = getQuestion(Integer.parseInt(ques_index));
-//                    quesView.setText(question);
-//                }catch(NullPointerException ex){
-//                    errView.setText("Please enter a username");
-//                    errView.setVisibility(View.VISIBLE);
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
-
-//    private void verifyQuestion(final String ques_ans){
-//        db_ref.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                String db_ans = dataSnapshot.child(username).child("answer").getValue().toString();
-//                if(ques_ans.equals(db_ans)){
-//                    startActivity(new Intent(ForgetQuesActivity.this, ResetPassActivity.class));
-//                }else{
-//                    errView.setText("Incorrect Security Answer");
-//                    errView.setVisibility(View.VISIBLE);
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
-//    private String getQuestion(int ques_index){
-//        String question = Question.QUESTION[ques_index];
-//        return question;
-//    }
-
-
 
 
 }

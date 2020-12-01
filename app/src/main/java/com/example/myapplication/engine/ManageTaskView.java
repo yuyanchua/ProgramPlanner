@@ -20,8 +20,6 @@ public class ManageTaskView {
     DatabaseReference db_ref;
 
     TaskAssignActivity activity;
-    Task task;
-    int taskId;
 
     public ManageTaskView(TaskAssignActivity activity, String projectId){
         firebase = FirebaseDatabase.getInstance();

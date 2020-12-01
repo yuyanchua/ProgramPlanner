@@ -1,6 +1,7 @@
 
 package com.example.myapplication.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
@@ -22,30 +24,26 @@ import com.example.myapplication.engine.Validation;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TaskAssignActivity extends AppCompatActivity {
+public class TaskAssignActivity extends ProgramActivity {
 
-//    FirebaseDatabase firebase;
-//    DatabaseReference db_ref;
     List<Task> taskList;
     List<String> deleteList;
     ManageTaskView manageTaskView;
     Validation validation;
 
     LinearLayout taskLayout;
-    boolean canDelete = false, isEdit = false;
-    Button btAdd, btEdit, btDelete, btConfirm, btBack;
+    boolean isDelete = false, isEdit = false;
+    Button btAdd, btEdit, btDelete, btCancel, btBack;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_assignment_view);
-
-//        firebase = FirebaseDatabase.getInstance();
-//        db_ref = firebase.getReference("Project").child(Session.getInstance().getProjectId()).child("Task");
+        setupUI(findViewById(R.id.taskViewActivity));
 
         String projectId = Session.getInstance().getProjectId();
         String username = Session.getInstance().getUserName();
@@ -58,59 +56,56 @@ public class TaskAssignActivity extends AppCompatActivity {
 
         manageTaskView.getTaskList();
 
-//        getTaskList();
-//        setupTaskView();
         setupButton();
 
     }
 
     private void setupButton(){
-//        Button btEdit = findViewById(R.id.buttonEdit);
         btEdit = findViewById(R.id.buttonEdit);
-        btEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(validate())
-                    toEdit();
-            }
+        btEdit.setOnClickListener(v -> {
+            if(validate())
+                toEdit();
         });
 
         btAdd = findViewById(R.id.buttonAdd);
-        btAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(validate())
-                    toAdd();
-            }
+        btAdd.setOnClickListener(v -> {
+            if(validate())
+                toAdd();
         });
 
         btDelete = findViewById(R.id.buttonDelete);
-        btDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(validate())
-                toDelete();
-            }
+        btDelete.setOnClickListener(v -> {
+            if(validate())
+                if(!isDelete)
+                    toDelete();
+                else
+//                    manageTaskView.confirmRemove(deleteList);
+                    confirmDeleteTask(TaskAssignActivity.this, deleteList);
         });
 
-        btConfirm = findViewById(R.id.buttonConfirm);
-        btConfirm.setVisibility(View.INVISIBLE);
-        btConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(validate())
-                   manageTaskView.confirmRemove(deleteList);
-            }
+        btCancel = findViewById(R.id.buttonCancel);
+        btCancel.setVisibility(View.INVISIBLE);
+        btCancel.setOnClickListener(v -> {
+            if(validate())
+                toDelete();
+//               manageTaskView.confirmRemove(deleteList);
         });
 
         btBack = findViewById(R.id.buttonBack);
-        btBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                validate();
-                finish();
-            }
+        btBack.setOnClickListener(v -> {
+            validate();
+            finish();
         });
+    }
+
+    private void hideButton(boolean isHide){
+        if(isHide){
+            btEdit.setVisibility(View.INVISIBLE);
+            btDelete.setVisibility(View.INVISIBLE);
+        }else{
+            btEdit.setVisibility(View.VISIBLE);
+            btDelete.setVisibility(View.VISIBLE);
+        }
     }
 
     private boolean validate(){
@@ -144,30 +139,6 @@ public class TaskAssignActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-//    private void getTaskList(){
-//        db_ref.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                for(DataSnapshot snap : dataSnapshot.getChildren()){
-//                    String taskId = snap.getKey();
-//                    String taskName = snap.child("task").getValue().toString();
-////                    String
-//                    Task tempTask = new Task(taskName);
-//                    tempTask.taskId = taskId;
-//
-//                    taskList.add(tempTask);
-//                }
-//                setupTaskView();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//
-//    }
-
     public void setupTaskView(List<Task> list){
         this.taskList = list;
         setupTaskView();
@@ -178,14 +149,19 @@ public class TaskAssignActivity extends AppCompatActivity {
         taskLayout = findViewById(R.id.TaskList);
         taskLayout.removeAllViews();
 
-        if(taskList.isEmpty()){
-            String info = "There is no task for the project";
-            TextView infoView = new TextView(this);
-            infoView.setText(info);
-            infoView.setTextSize(20);
-            infoView.setPadding(5, 5, 5, 5);
-            infoView.setClickable(false);
-            taskLayout.addView(infoView);
+        if(!isDelete) {
+            if (taskList.isEmpty()) {
+                String info = "There is no task for the project";
+                TextView infoView = new TextView(this);
+                infoView.setText(info);
+                infoView.setTextSize(20);
+                infoView.setPadding(5, 5, 5, 5);
+                infoView.setClickable(false);
+                taskLayout.addView(infoView);
+                hideButton(true);
+            } else {
+                hideButton(false);
+            }
         }
 
         for(int i = 0; i < taskList.size(); i ++){
@@ -198,21 +174,14 @@ public class TaskAssignActivity extends AppCompatActivity {
             taskView.setTextSize(25);
             taskView.setPadding(5, 5, 5, 5);
             taskView.setClickable(true);
-            taskView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int index = ((ViewGroup) taskView.getParent()).indexOfChild(taskView);
+            taskView.setOnClickListener(v -> {
+                int index = ((ViewGroup) taskView.getParent()).indexOfChild(taskView);
 
-                    if(canDelete){
-                        deleteList.add(taskList.get(index).taskId);
-                        taskView.setVisibility(View.GONE);
-//                        deleteTask(index);
-//                        taskLayout.getChildAt(index).setVisibility(View.GONE);
-                    }else if(isEdit){
-//                        toManage(false);
-//                        System.out.println("TaskId: " + taskList.get(index).toString());
-                        editTask(taskList.get(index).taskId);
-                    }
+                if(isDelete){
+                    deleteList.add(taskList.get(index).taskId);
+                    taskView.setVisibility(View.GONE);
+                }else if(isEdit){
+                    editTask(taskList.get(index).taskId);
                 }
             });
             taskLayout.addView(taskView);
@@ -220,24 +189,27 @@ public class TaskAssignActivity extends AppCompatActivity {
     }
 
     private void toEdit(){
+        String editMsg;
         if(!isEdit){
             isEdit = true;
             btAdd.setVisibility(View.INVISIBLE);
 //            btEdit.setVisibility(View.INVISIBLE);
-            btConfirm.setVisibility(View.INVISIBLE);
+            btCancel.setVisibility(View.INVISIBLE);
             btDelete.setVisibility(View.INVISIBLE);
             btBack.setVisibility(View.INVISIBLE);
-            btEdit.setText("Cancel Edit");
+            editMsg = "Cancel Edit";
         }else{
             isEdit = false;
-//            resetTaskLayout();
+//            cancelDelete();
+            resetTaskLayout();
             btAdd.setVisibility(View.VISIBLE);
             btEdit.setVisibility(View.VISIBLE);
             btBack.setVisibility(View.VISIBLE);
             btDelete.setVisibility(View.VISIBLE);
-            btEdit.setText("Edit");
-//            recreate();
+            editMsg = "Edit";
         }
+
+        btEdit.setText(editMsg);
     }
 
     private void editTask(String taskId){
@@ -250,34 +222,33 @@ public class TaskAssignActivity extends AppCompatActivity {
         Intent intent = new Intent(TaskAssignActivity.this, AddTaskActivity.class);
         startActivity(intent);
     }
-
-//    private void toManage(boolean isAdd){
-//        Intent intent = new Intent(TaskAssignActivity.this, AddTaskActivity.class);
-//        if(isAdd){
-//            intent.putExtra("mode", "add");
-//        }else{
-//            intent.putExtra("mode", "edit");
-//        }
-//        startActivity(new Intent(TaskAssignActivity.this, AddTaskActivity.class));
-//    }
+    
 
     private void toDelete(){
-        if(!canDelete){
-            canDelete = true;
+        String label;
+        if(!isDelete){
+            isDelete = true;
             btAdd.setVisibility(View.INVISIBLE);
             btEdit.setVisibility(View.INVISIBLE);
-            btConfirm.setVisibility(View.VISIBLE);
-            btDelete.setVisibility(View.INVISIBLE);
+            btCancel.setVisibility(View.VISIBLE);
+//            btDelete.setVisibility(View.INVISIBLE);
             btBack.setVisibility(View.INVISIBLE);
+
+            label = "Confirm";
         }else{
-            canDelete = false;
-            resetTaskLayout();
+            isDelete = false;
+            cancelDelete();
+//            resetTaskLayout();
             btAdd.setVisibility(View.VISIBLE);
             btEdit.setVisibility(View.VISIBLE);
             btBack.setVisibility(View.VISIBLE);
-            btDelete.setVisibility(View.VISIBLE);
+            btCancel.setVisibility(View.INVISIBLE);
+//            btDelete.setVisibility(View.VISIBLE);
 //            recreate();
+            label = "Delete";
         }
+
+        btDelete.setText(label);
     }
 
 
@@ -299,6 +270,36 @@ public class TaskAssignActivity extends AppCompatActivity {
                 taskList.add(tempTaskList.get(i));
             }
         }
-//        recreate();
+    }
+
+    private void cancelDelete(){
+        if(!deleteList.isEmpty())
+            Toast.makeText(getApplicationContext(), "Cancel Task Delete", Toast.LENGTH_SHORT).show();
+        deleteList.clear();
+        setupTaskView(taskList);
+    }
+
+    private void confirmDeleteTask(Context context, List<String> deleteList){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Delete Task Confirmation");
+        String deleteInfo;
+        if(!deleteList.isEmpty()){
+            StringBuilder temp = new StringBuilder("Are you sure you want to delete the task with the following Task ID?\n");
+
+            for(String task: deleteList)
+                temp.append(String.format("%s, ", task));
+
+            deleteInfo = temp.toString();
+            builder.setPositiveButton("Confirm", (dialog, which) -> manageTaskView.confirmRemove(deleteList));
+            builder.setNegativeButton("Cancel", (dialog, which) -> cancelDelete());
+        }else{
+            deleteInfo = "There is no task chosen to delete";
+            builder.setNeutralButton("Cancel", (dialog, which) ->{
+
+            });
+        }
+
+        builder.setMessage(deleteInfo);
+        builder.show();
     }
 }

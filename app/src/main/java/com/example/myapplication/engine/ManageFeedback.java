@@ -58,7 +58,7 @@ public class ManageFeedback {
         });
     }
 
-    public int generateFeedbackId(){
+    public void generateFeedbackId(){
 
         db_ref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -67,7 +67,6 @@ public class ManageFeedback {
                     feedbackId = Integer.parseInt(snap.getKey()) + 1;
                 }
 
-//                addFeedbackToDatabase(feedbackId);
             }
 
             @Override
@@ -76,7 +75,6 @@ public class ManageFeedback {
             }
         });
 
-        return feedbackId;
     }
 
     public void getFeedbackList(){

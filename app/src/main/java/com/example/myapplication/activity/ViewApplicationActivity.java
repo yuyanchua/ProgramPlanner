@@ -1,7 +1,6 @@
 package com.example.myapplication.activity;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -20,7 +19,7 @@ import com.example.myapplication.engine.ManageApplication;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewApplicationActivity extends AppCompatActivity {
+public class ViewApplicationActivity extends ProgramActivity {
     LinearLayout applicationLayout;
     List<Application> applicationList;
     List<Integer> appViewIdList;
@@ -29,11 +28,12 @@ public class ViewApplicationActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_application);
+        setupUI(findViewById(R.id.applicationViewActivity));
 
         applicationLayout = findViewById(R.id.applicationLayout);
         appViewIdList = new ArrayList<>();
@@ -72,12 +72,9 @@ public class ViewApplicationActivity extends AppCompatActivity {
             appView.setTextSize(20);
             appView.setPadding(5, 5, 5, 5);
             appView.setClickable(true);
-            appView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int index = applicationLayout.indexOfChild(appView);
-                    viewApplication(index);
-                }
+            appView.setOnClickListener(v -> {
+                int index = applicationLayout.indexOfChild(appView);
+                viewApplication(index);
             });
 
             applicationLayout.addView(appView);
@@ -104,24 +101,11 @@ public class ViewApplicationActivity extends AppCompatActivity {
         builder.setMessage(appDetails)
                 .setTitle(title);
 
-        builder.setPositiveButton("Accept", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                manageApp.acceptApplication(application);
-            }
-        });
+        builder.setPositiveButton("Accept", (dialog, which) -> manageApp.acceptApplication(application));
 
-        builder.setNegativeButton("Reject", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                manageApp.rejectApplication(application);
-            }
-        });
+        builder.setNegativeButton("Reject", (dialog, which) -> manageApp.rejectApplication(application));
 
-        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
+        builder.setNeutralButton("Cancel", (dialog, which) -> {
         });
 
         builder.show();

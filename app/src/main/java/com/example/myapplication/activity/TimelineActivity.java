@@ -1,5 +1,6 @@
 package com.example.myapplication.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
@@ -19,12 +21,11 @@ import com.example.myapplication.engine.ManageTimeline;
 import com.example.myapplication.engine.Validation;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 
-public class TimelineActivity extends AppCompatActivity {
+public class TimelineActivity extends ProgramActivity {
 
-//    FirebaseDatabase firebase;
-//    DatabaseReference db_ref;
     Session session;
     List<Event> eventList;
     List<String> deleteList;
@@ -32,17 +33,18 @@ public class TimelineActivity extends AppCompatActivity {
     Validation validation;
 
     LinearLayout  eventLayout;
-    Button btAdd, btDelete, btConfirm, btEdit, btBack;
+    Button btAdd, btDelete, btCancel, btEdit, btBack;
     boolean isDelete = false, isEdit = false, isDeveloper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline_view);
+        setupUI(findViewById(R.id.timelineActivity));
 
         session = Session.getInstance();
         String projectId = session.getProjectId();
@@ -51,13 +53,10 @@ public class TimelineActivity extends AppCompatActivity {
         validation = new Validation(username, projectId);
 
         manage = new ManageTimeline(this, projectId);
-//        firebase = FirebaseDatabase.getInstance();
-//        db_ref = firebase.getReference("Project").child(session.getProjectId()).child("Event");
 
         eventList = new ArrayList<>();
         deleteList = new ArrayList<>();
 
-//        getEventList();
         manage.getEventList();
 
         Intent intent = getIntent();
@@ -99,101 +98,66 @@ public class TimelineActivity extends AppCompatActivity {
     private void setup(boolean isDeveloper){
         btEdit = findViewById(R.id.buttonEdit);
 
-        btEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(validate())
-                    toEdit();
-            }
+        btEdit.setOnClickListener(v -> {
+            if(validate())
+                toEdit();
         });
 
         btAdd = findViewById(R.id.buttonAdd);
-        btAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(validate())
-                    toAdd();
-//                System.out.println("Select add");
-//                startActivity(new Intent(TimelineActivity.this, EventActivity.class));
-            }
+        btAdd.setOnClickListener(v -> {
+            if(validate())
+                toAdd();
         });
 
         btDelete = findViewById(R.id.buttonDelete);
-        btDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(validate())
+        btDelete.setOnClickListener(v -> {
+            if(validate())
+                if(!isDelete)
                     toDelete();
-            }
+                else
+                    confirmDeleteEvent(TimelineActivity.this, deleteList);
         });
 
-        btConfirm = findViewById(R.id.buttonConfirm);
-        btConfirm.setVisibility(View.INVISIBLE);
-        btConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                confirm();
-                if(validate())
-                    manage.confirmRemove(deleteList);
-            }
+        btCancel = findViewById(R.id.buttonCancel);
+        btCancel.setVisibility(View.INVISIBLE);
+        btCancel.setOnClickListener(v -> {
+            if(validate())
+//                manage.confirmRemove(deleteList);
+                toDelete();
         });
 
         btBack = findViewById(R.id.buttonBack);
-        btBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                validate();
-                finish();
-            }
+        btBack.setOnClickListener(v -> {
+            validate();
+            finish();
         });
 
         if(!isDeveloper){
             btEdit.setVisibility(View.GONE);
             btAdd.setVisibility(View.GONE);
             btDelete.setVisibility(View.GONE);
-            btConfirm.setVisibility(View.GONE);
+            btCancel.setVisibility(View.GONE);
         }
     }
 
-//    private void getEventList(){
-//        db_ref.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                for(DataSnapshot snap : dataSnapshot.getChildren()){
-//
-//                    String eventId = snap.getKey();
-//                    String date = snap.child("eventDate").getValue().toString();
-//                    String eventTitle = snap.child("eventTitle").getValue().toString();
-//                    boolean isNotify = Boolean.getBoolean(snap.child("isNotify").getValue().toString());
-//
-//                    Event tempEvent = new Event(eventTitle, date, isNotify);
-//                    System.out.println(tempEvent.toString());
-//                    tempEvent.eventId = eventId;
-//                    eventList.add(tempEvent);
-//                }
-//                setupEventList();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
 
     public void setupEventList(List<Event> list){
         this.eventList = list;
         eventLayout = findViewById(R.id.EventLayout);
         eventLayout.removeAllViews();
-
-        if(list.isEmpty()){
-            String info = "There is no event for the project";
-            TextView infoView = new TextView(this);
-            infoView.setText(info);
-            infoView.setTextSize(20);
-            infoView.setPadding(5, 5, 5, 5);
-            infoView.setClickable(false);
-            eventLayout.addView(infoView);
+        if(!isDelete) {
+            if (list.isEmpty()) {
+                String info = "There is no event for the project";
+                TextView infoView = new TextView(this);
+                infoView.setText(info);
+                infoView.setTextSize(20);
+                infoView.setPadding(5, 5, 5, 5);
+                infoView.setClickable(false);
+                eventLayout.addView(infoView);
+                hideButton(true);
+            } else {
+                hideButton(false);
+            }
         }
 
         for(int i = 0; i < eventList.size(); i ++){
@@ -204,16 +168,13 @@ public class TimelineActivity extends AppCompatActivity {
             eventView.setText(event);
             eventView.setTextSize(25);
             eventView.setPadding(5, 5, 5, 5);
-            eventView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int index =((ViewGroup) eventView.getParent()).indexOfChild(eventView);
-                    if(isDelete){
-                        deleteList.add(eventList.get(index).eventId);
-                        eventView.setVisibility(View.GONE);
-                    }else if (isEdit){
-                        editEvent(eventList.get(index).eventId);
-                    }
+            eventView.setOnClickListener(v -> {
+                int index =((ViewGroup) eventView.getParent()).indexOfChild(eventView);
+                if(isDelete){
+                    deleteList.add(eventList.get(index).eventId);
+                    eventView.setVisibility(View.GONE);
+                }else if (isEdit){
+                    editEvent(eventList.get(index).eventId);
                 }
             });
             eventLayout.addView(eventView);
@@ -221,23 +182,32 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     private void toEdit(){
+        String editMsg;
         if(!isEdit){
             isEdit = true;
             btAdd.setVisibility(View.INVISIBLE);
-//            btEdit.setVisibility(View.INVISIBLE);
-            btConfirm.setVisibility(View.INVISIBLE);
+            btCancel.setVisibility(View.INVISIBLE);
             btBack.setVisibility(View.INVISIBLE);
             btDelete.setVisibility(View.INVISIBLE);
-            btEdit.setText("Cancel Edit");
-//            btDelete.setText("Cancel delete");
+            editMsg = "Cancel Edit";
         }else{
             isEdit = false;
-//            resetEventLayout();
             btAdd.setVisibility(View.VISIBLE);
             btBack.setVisibility(View.VISIBLE);
             btDelete.setVisibility(View.VISIBLE);
-//            btDelete.setText("Delete");
-            btEdit.setText("Edit");
+            editMsg = "Edit";
+        }
+
+        btEdit.setText(editMsg);
+    }
+
+    private void hideButton(boolean isHide){
+        if(isHide){
+            btEdit.setVisibility(View.INVISIBLE);
+            btDelete.setVisibility(View.INVISIBLE);
+        }else{
+            btEdit.setVisibility(View.VISIBLE);
+            btDelete.setVisibility(View.VISIBLE);
         }
     }
 
@@ -256,54 +226,33 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     private void toDelete(){
+        String label;
         if(!isDelete){
             isDelete = true;
             btAdd.setVisibility(View.INVISIBLE);
             btEdit.setVisibility(View.INVISIBLE);
-            btConfirm.setVisibility(View.VISIBLE);
+            btCancel.setVisibility(View.VISIBLE);
             btBack.setVisibility(View.INVISIBLE);
-            btDelete.setVisibility(View.INVISIBLE);
-//            btDelete.setText("Cancel delete");
+            label = "Confirm Delete";
+
+//            btDelete.setVisibility(View.INVISIBLE);
         }else{
             isDelete = false;
-            resetEventLayout();
+            cancelDelete();
+//            resetEventLayout();
             btAdd.setVisibility(View.VISIBLE);
             btEdit.setVisibility(View.VISIBLE);
-//            btConfirm.setVisibility(View.VISIBLE);
             btBack.setVisibility(View.VISIBLE);
-            btDelete.setText("Delete");
+            btCancel.setVisibility(View.INVISIBLE);
+            label = "Delete";
         }
+        btDelete.setText(label);
     }
-
-//    public void confirm(){
-//        manage.confirmRemove(deleteList);
-//        deleteList.clear();
-//        toDelete();
-//    }
 
     public void reset(){
         deleteList.clear();
         toDelete();
     }
-
-//    private void toConfirm(){
-//        db_ref.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                for(String eventId : deleteList){
-//                    db_ref.child(eventId).removeValue();
-//                }
-//
-//                deleteList.clear();
-//                toDelete();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
 
     private void resetEventLayout(){
         int count = eventLayout.getChildCount();
@@ -317,10 +266,39 @@ public class TimelineActivity extends AppCompatActivity {
             if(visible != View.GONE){
                 eventList.add(tempEventList.get(i));
             }
-//            recreate();
-//            eventLayout.removeAllViews();
         }
-//        recreate();
+    }
+
+    private void cancelDelete(){
+        if(!deleteList.isEmpty())
+            Toast.makeText(getApplicationContext(), "Cancel Event Delete", Toast.LENGTH_SHORT).show();
+        deleteList.clear();
+        setupEventList(eventList);
+    }
+
+    private void confirmDeleteEvent(Context context, List<String> deleteList){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Delete Event Confirmation");
+        String deleteInfo;
+        if(!deleteList.isEmpty()){
+            StringBuilder temp = new StringBuilder("Are you sure you want to delete the event with the following event Id?\n");
+
+            for(String event: deleteList)
+                temp.append(String.format("%s, ", event));
+
+            deleteInfo = temp.toString();
+            builder.setPositiveButton("Confirm", (dialog, which) -> manage.confirmRemove(deleteList));
+            builder.setNegativeButton("Cancel", (dialog, which) -> cancelDelete());
+
+        }else{
+            deleteInfo = "There is no event chosen to delete" ;
+            builder.setNeutralButton("Cancel", (dialog, which) -> {
+
+            });
+        }
+
+        builder.setMessage(deleteInfo);
+        builder.show();
     }
 
 

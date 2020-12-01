@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,7 +21,7 @@ import com.example.myapplication.engine.Validation;
 
 import java.util.Calendar;
 
-public class EventActivity extends AppCompatActivity {
+public class EventActivity extends ProgramActivity {
 
     TextView errView, dateView;
     EditText titleEdit;
@@ -41,12 +40,13 @@ public class EventActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
         
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_view);
+        setupUI(findViewById(R.id.eventViewActivity));
 
         String projectIdStr = Session.getInstance().getProjectId();
         String username = Session.getInstance().getUserName();
@@ -74,21 +74,18 @@ public class EventActivity extends AppCompatActivity {
         }
 
         dateView = findViewById(R.id.textViewDate);
-        dateView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                calendar = Calendar.getInstance();
-                day = calendar.get(Calendar.DAY_OF_MONTH);
-                month = calendar.get(Calendar.MONTH);
-                year = calendar.get(Calendar.YEAR);
+        dateView.setOnClickListener(v -> {
+            calendar = Calendar.getInstance();
+            day = calendar.get(Calendar.DAY_OF_MONTH);
+            month = calendar.get(Calendar.MONTH);
+            year = calendar.get(Calendar.YEAR);
 
-                datePicker = new DatePickerDialog(EventActivity.this,
-                        (view, year, month, dayOfMonth) -> {
-                            String date = (month+ 1) + "-" + dayOfMonth + "-" + year;
-                            dateView.setText(date);
-                        }, year, month, day);
-                datePicker.show();
-            }
+            datePicker = new DatePickerDialog(EventActivity.this,
+                    (view, year, month, dayOfMonth) -> {
+                        String date = (month+ 1) + "-" + dayOfMonth + "-" + year;
+                        dateView.setText(date);
+                    }, year, month, day);
+            datePicker.show();
         });
 
         Button btAdd = findViewById(R.id.buttonAddEvent);
@@ -141,16 +138,15 @@ public class EventActivity extends AppCompatActivity {
 
         if(isValid) {
             newEvent = new Event(title, date, isNotify);
-//            if(!isEdit)
-//                getEventId();
-//            addEventToDatabase();
+
             if(!isEdit){
                 manage.addNewEvent(newEvent);
             }else{
                 manage.editEvent(eventId, newEvent);
             }
         }else{
-            errView.setText("Either title or date is invalid");
+            String errMsg = "Either title or date is invalid";
+            errView.setText(errMsg);
             errView.setVisibility(View.VISIBLE);
         }
     }
@@ -186,46 +182,12 @@ public class EventActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-//    private void addEventToDatabase(){
-//        db_ref.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//
-////                System.out.println(eventId);
-//
-//                db_ref.child(Integer.toString(eventId)).setValue(newEvent);
-//                Toast.makeText(getApplicationContext(), "New Event is Created", Toast.LENGTH_SHORT).show();
-//                returnPage();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
 
     public void finishAdd(){
         Toast.makeText(getApplicationContext(), "New Event is Created", Toast.LENGTH_SHORT).show();
         returnPage();
     }
 
-//    private void getEventId(){
-//        db_ref.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//
-//                for(DataSnapshot snap : dataSnapshot.getChildren()){
-//                    eventId = Integer.parseInt(snap.getKey()) + 1;
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
 
     private void returnPage(){
         boolean isTimeline = lastIntent.getExtras().getBoolean("isTimeline");

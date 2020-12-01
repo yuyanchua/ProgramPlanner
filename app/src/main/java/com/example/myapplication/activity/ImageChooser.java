@@ -31,7 +31,7 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 
-public class ImageChooser extends AppCompatActivity {
+public class ImageChooser extends ProgramActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
     private ProgressBar ProBar;
     private Uri ImageUri;
@@ -41,9 +41,9 @@ public class ImageChooser extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_chooser);
@@ -59,26 +59,11 @@ public class ImageChooser extends AppCompatActivity {
 
     private void setupButton(){
         Button bt_image = findViewById(R.id.bt_choose_image);
-            bt_image.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    FileChooser();
-                }
-            });
+            bt_image.setOnClickListener(v -> FileChooser());
         Button bt_upload = findViewById(R.id.bt_upload_image);
-        bt_upload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Upload();
-            }
-        });
+        bt_upload.setOnClickListener(v -> Upload());
         Button bt_back = findViewById(R.id.bt_back);
-        bt_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        bt_back.setOnClickListener(v -> finish());
 
     }
     private void FileChooser(){
@@ -102,35 +87,22 @@ public class ImageChooser extends AppCompatActivity {
         if(ImageUri != null){
             StorageReference Ref = StorageRef.child(System.currentTimeMillis()
                     + "." + FileExt(ImageUri));
-            Ref.putFile(ImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            ProBar.setProgress(0);
-                        }
-                    }, 500);
+            Ref.putFile(ImageUri).addOnSuccessListener(taskSnapshot -> {
+                Handler handler = new Handler();
+                handler.postDelayed(() -> ProBar.setProgress(0), 500);
 
-                    Toast.makeText(getApplicationContext(), "Upload Successfully!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Upload Successfully!", Toast.LENGTH_SHORT).show();
 
-                    com.google.android.gms.tasks.Task<Uri> downloadUri = taskSnapshot.getStorage().getDownloadUrl();
-                    downloadUri.addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            String uploadId = DB_Ref.push().getKey();
-                            String imageUri = uri.toString();
-                            Image image = new Image(imageUri);
-                            System.out.println("ImageUri = " + imageUri);
-                            DB_Ref.child(uploadId).setValue(image);
-                        }
-                    });
-                    finish();
+                com.google.android.gms.tasks.Task<Uri> downloadUri = taskSnapshot.getStorage().getDownloadUrl();
+                downloadUri.addOnSuccessListener(uri -> {
+                    String uploadId = DB_Ref.push().getKey();
+                    String imageUri = uri.toString();
+                    Image image = new Image(imageUri);
+                    System.out.println("ImageUri = " + imageUri);
+                    DB_Ref.child(uploadId).setValue(image);
+                });
+                finish();
 
-
-
-                }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {

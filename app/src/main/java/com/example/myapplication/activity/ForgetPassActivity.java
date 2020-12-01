@@ -13,38 +13,26 @@ import com.example.myapplication.element.Session;
 import com.example.myapplication.engine.ForgetPass;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class ForgetPassActivity extends AppCompatActivity {
+public class ForgetPassActivity extends ProgramActivity {
 
     private TextView errView;
-//    private FirebaseDatabase firebase;
-//    private DatabaseReference db_ref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_password);
 
+        setupUI(findViewById(R.id.forgetPassActivity));
         errView = findViewById(R.id.errorMessage);
         errView.setVisibility(View.INVISIBLE);
 
-//        firebase = FirebaseDatabase.getInstance();
-//        db_ref = firebase.getReference("Users");
 
         FloatingActionButton btNext = findViewById(R.id.buttonNextStep);
-        btNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                verifyUsername();
-//                EditText userEdit = findViewById(R.id.accountName);
-//                String username = userEdit.getText().toString();
-//                new ForgetPass(ForgetPassActivity.this, username);
-//                checkDb(username);
-            }
-        });
+        btNext.setOnClickListener(v -> verifyUsername());
     }
 
     private void verifyUsername(){

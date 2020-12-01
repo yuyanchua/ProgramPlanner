@@ -20,10 +20,9 @@ import com.example.myapplication.engine.ProjectMain;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProjectMainActivity extends AppCompatActivity {
+public class ProjectMainActivity extends ProgramActivity {
 
-//    FirebaseDatabase firebase;
-//    DatabaseReference db_ref;
+
     List<Roles> projectList;
     List<Integer> projectIdList;
     LinearLayout projectLayout;
@@ -31,16 +30,14 @@ public class ProjectMainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
 
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_project_view);
 
-//        firebase = FirebaseDatabase.getInstance();
-//        db_ref = firebase.getReference("Roles");
         session = Session.getInstance();
 
         TextView welcomeView = findViewById(R.id.WelcomeMessage);
@@ -49,44 +46,21 @@ public class ProjectMainActivity extends AppCompatActivity {
         checkCrash();
         welcomeView.setText(welcome);
 
-//        projectList = new ArrayList<>();
         projectIdList = new ArrayList<>();
-//        getProjectList();
         ProjectMain main = new ProjectMain(this, session.getUserName());
         main.getProjectList();
-//        setupProjectList();
 
         Button btCreate = findViewById(R.id.buttonCreate);
-        btCreate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createProject();
-            }
-        });
+        btCreate.setOnClickListener(v -> createProject());
 
         Button btJoin = findViewById(R.id.buttonJoin);
-        btJoin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                joinProject();
-            }
-        });
+        btJoin.setOnClickListener(v -> joinProject());
 
         Button btLogout = findViewById(R.id.buttonLogOut);
-        btLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                logout();
-            }
-        });
+        btLogout.setOnClickListener(v -> logout());
 
         TextView NotAccount = findViewById(R.id.notYourAccountTip);
-        NotAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                OpenDia();
-            }
-        });
+        NotAccount.setOnClickListener(v -> OpenDia());
 
     }
 
@@ -123,12 +97,9 @@ public class ProjectMainActivity extends AppCompatActivity {
             projectView.setTextSize(20);
             projectView.setPadding(5, 5,5, 5);
             projectView.setClickable(true);
-            projectView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int index = projectLayout.indexOfChild(projectView);
-                    toProjectActivity(index);
-                }
+            projectView.setOnClickListener(v -> {
+                int index = projectLayout.indexOfChild(projectView);
+                toProjectActivity(index);
             });
 
             projectLayout.addView(projectView);

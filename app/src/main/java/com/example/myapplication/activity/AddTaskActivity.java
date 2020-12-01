@@ -23,7 +23,7 @@ import com.example.myapplication.engine.Validation;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddTaskActivity extends AppCompatActivity {
+public class AddTaskActivity extends ProgramActivity {
 
     TextView errView;
     Spinner spinMember;
@@ -41,12 +41,13 @@ public class AddTaskActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_task_assignment);
+        setupUI(findViewById(R.id.taskAssignManageActivity));
 
         errView = findViewById(R.id.errorMessageTip);
         errView.setVisibility(View.INVISIBLE);
@@ -98,7 +99,7 @@ public class AddTaskActivity extends AppCompatActivity {
         this.memberList = list;
         spinMember = findViewById(R.id.spinnerTeamMember);
 //        System.out.println(memberList.toString());
-        ArrayAdapter memberAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, memberList);
+        ArrayAdapter<String> memberAdapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, memberList);
         memberAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         spinMember.setAdapter(memberAdapter);
     }
@@ -136,41 +137,31 @@ public class AddTaskActivity extends AppCompatActivity {
 
     private void setupButton(){
         btAddPart = findViewById(R.id.buttonAddParticipants);
-        btAddPart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(validate())
-                    toAddParticipants();
-            }
+        btAddPart.setOnClickListener(v -> {
+            if(validate())
+                toAddParticipants();
         });
 
         btAddTask = findViewById(R.id.buttonAddTask);
+        String editMsg = "Edit Task";
         if(isEdit)
-            btAddTask.setText("Edit Task");
-        btAddTask.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(validate())
-                    toAddTask();
-            }
+            btAddTask.setText(editMsg);
+
+        btAddTask.setOnClickListener(v -> {
+            if(validate())
+                toAddTask();
         });
 
         btRemove = findViewById(R.id.buttonRemove);
-        btRemove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(validate())
-                    toRemoveParticipants();
-            }
+        btRemove.setOnClickListener(v -> {
+            if(validate())
+                toRemoveParticipants();
         });
 
         btBack = findViewById(R.id.buttonBack);
-        btBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                validate();
-                backToLastPage();
-            }
+        btBack.setOnClickListener(v -> {
+            validate();
+            backToLastPage();
         });
     }
 
@@ -183,8 +174,7 @@ public class AddTaskActivity extends AppCompatActivity {
     private void toAddParticipants(String memberName){
         if(addMemberList.contains(memberName)){
             if(!isEdit) {
-                errView.setText("Already added the member");
-                errView.setVisibility(View.VISIBLE);
+                setErrView("Already added the member");
             }
         }else {
             addMemberList.add(memberName);
@@ -193,13 +183,9 @@ public class AddTaskActivity extends AppCompatActivity {
             tempView.setText(memberName);
             tempView.setPadding(5, 5, 5, 5);
             tempView.setClickable(true);
-            tempView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (isRemove) {
-//                    memberLayout.indexOfChild(tempView);
-                        memberLayout.removeView(tempView);
-                    }
+            tempView.setOnClickListener(v -> {
+                if (isRemove) {
+                    memberLayout.removeView(tempView);
                 }
             });
             memberLayout.addView(tempView);
@@ -211,11 +197,9 @@ public class AddTaskActivity extends AppCompatActivity {
         EditText taskEdit = findViewById(R.id.textBoxTaskName);
         String taskName = taskEdit.getText().toString();
         if(taskName.isEmpty()){
-            errView.setText("Please enter a value for task name");
-            errView.setVisibility(View.VISIBLE);
+            setErrView("Please enter a value for task name");
         }else if (addMemberList.size() == 0){
-            errView.setText("Please add at least one member");
-            errView.setVisibility(View.VISIBLE);
+            setErrView("Please add at least one member");
         }else {
             newTask = new Task(taskName, addMemberList);
             if(!isEdit){
@@ -228,42 +212,11 @@ public class AddTaskActivity extends AppCompatActivity {
         }
     }
 
-//    private void getTaskIdFromDatabase(){
-//        db_ref.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                for(DataSnapshot snap: dataSnapshot.getChildren()){
-//                    taskId = Integer.parseInt(snap.getKey()) + 1;
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
 
     public void finishAddTask(){
         Toast.makeText(getApplicationContext(), "New Task is Added", Toast.LENGTH_SHORT).show();
         backToLastPage();
     }
-
-//    private void addTaskToDatabase(){
-//        db_ref.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                db_ref.child(Integer.toString(taskId)).setValue(newTask);
-//                Toast.makeText(getApplicationContext(), "New Task is Added", Toast.LENGTH_SHORT).show();
-//                backToLastPage();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
 
     private void backToLastPage(){
         Intent intent = new Intent(AddTaskActivity.this, TaskAssignActivity.class);
@@ -273,21 +226,23 @@ public class AddTaskActivity extends AppCompatActivity {
 
     private void toRemoveParticipants(){
         //set remove
-
+        String errMsg;
         if(!isRemove) {
             isRemove = true;
             btAddPart.setVisibility(View.INVISIBLE);
             btAddTask.setVisibility(View.INVISIBLE);
             btBack.setVisibility(View.INVISIBLE);
-            btRemove.setText("Finish Remove");
+            errMsg = "Finish Remove";
         }else {
             resetAddMemberList();
             isRemove = false;
             btAddPart.setVisibility(View.VISIBLE);
             btAddTask.setVisibility(View.VISIBLE);
             btBack.setVisibility(View.VISIBLE);
-            btRemove.setText("Remove Members");
+            errMsg = "Remove Members";
         }
+
+        btRemove.setText(errMsg);
     }
 
     private void resetAddMemberList(){
@@ -299,6 +254,11 @@ public class AddTaskActivity extends AppCompatActivity {
             String tempMemberName = memberView.getText().toString();
             addMemberList.add(tempMemberName);
         }
+    }
+
+    private void setErrView(String errMsg){
+        errView.setText(errMsg);
+        errView.setVisibility(View.VISIBLE);
     }
 
 }

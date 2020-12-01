@@ -19,6 +19,7 @@ public class Event{
         this.isNotify = isNotify;
     }
 
+    @Override
     public String toString() {
         return String.format("Event Title: %s, Event Date: %s\n", eventTitle, eventDate);
     }

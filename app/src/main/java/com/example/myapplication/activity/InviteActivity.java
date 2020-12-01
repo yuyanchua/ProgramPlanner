@@ -19,7 +19,7 @@ import com.example.myapplication.element.Session;
 import com.example.myapplication.engine.ManageProjectInvite;
 import com.example.myapplication.engine.Validation;
 
-public class InviteActivity extends AppCompatActivity {
+public class InviteActivity extends ProgramActivity{
     TextView customerView, developerView, errView;
     CardView notification;
 
@@ -29,17 +29,16 @@ public class InviteActivity extends AppCompatActivity {
 
     Spinner roleSpin;
     boolean isManager;
-//    FirebaseDatabase firebase;
-//    DatabaseReference db_ref;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invite_code_page);
+        setupUI(findViewById(R.id.inviteViewActivity));
 
         errView = findViewById(R.id.errorMessageTip);
         errView.setVisibility(View.INVISIBLE);
@@ -51,10 +50,7 @@ public class InviteActivity extends AppCompatActivity {
 
 
         notification = findViewById(R.id.notification);
-//        firebase = FirebaseDatabase.getInstance();
-//        db_ref = firebase.getReference("Project").child(Session.getInstance().getProjectId());
 
-//        setupCode();
         manage = new ManageProjectInvite(this, Session.getInstance().getProjectId());
         manage.getInviteCode();
 
@@ -132,30 +128,21 @@ public class InviteActivity extends AppCompatActivity {
 
     private void setupButton(){
         Button btInvite = findViewById(R.id.buttonInvite);
-        btInvite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(validate())
-                    inviteUser();
-            }
+        btInvite.setOnClickListener(v -> {
+            if(validate())
+                inviteUser();
         });
 
         Button btView = findViewById(R.id.buttonApplication);
-        btView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(validate())
-                    viewApplication();
-            }
+        btView.setOnClickListener(v -> {
+            if(validate())
+                viewApplication();
         });
 
         Button btDone = findViewById(R.id.buttonDone);
-        btDone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                validate();
-                finish();
-            }
+        btDone.setOnClickListener(v -> {
+            validate();
+            finish();
         });
 
 
@@ -168,11 +155,14 @@ public class InviteActivity extends AppCompatActivity {
     private void inviteUser(){
         userEdit = findViewById(R.id.textUsername);
         String username = userEdit.getText().toString();
-
-        String projectName = Session.getInstance().getProjectName();
-        String projectRole = roleSpin.getSelectedItem().toString();
-        manage.inviteUser(username, projectName, projectRole);
-
+        System.out.println("Invite Username: " + username);
+        if(!username.isEmpty()) {
+            String projectName = Session.getInstance().getProjectName();
+            String projectRole = roleSpin.getSelectedItem().toString();
+            manage.inviteUser(username, projectName, projectRole);
+        }else{
+            setErrText("Please enter a username!");
+        }
     }
 
 

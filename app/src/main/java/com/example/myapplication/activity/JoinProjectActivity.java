@@ -19,7 +19,7 @@ import com.example.myapplication.element.Project;
 import com.example.myapplication.element.Session;
 import com.example.myapplication.engine.JoinProject;
 
-public class JoinProjectActivity extends AppCompatActivity {
+public class JoinProjectActivity extends ProgramActivity {
 
     TextView errView;
     CardView notification;
@@ -27,28 +27,26 @@ public class JoinProjectActivity extends AppCompatActivity {
 //    DatabaseReference db_ref, db_ref_roles;
     Session session;
     JoinProject joinProject;
-    Button btJoin, btApply, btView, btCancel;
+    Button btJoin, btApply, btView;
     Spinner roleSpin;
 
 //    boolean isExist, isValid, isDeveloper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_project);
+        setupUI(findViewById(R.id.projectJoinPage));
 
         errView = findViewById(R.id.errorMessageTip);
         errView.setVisibility(View.INVISIBLE);
 
         notification = findViewById(R.id.notification);
 
-//        firebase = FirebaseDatabase.getInstance();
-//        db_ref = firebase.getReference("Project");
-//        db_ref_roles = firebase.getReference("Roles");
         session = Session.getInstance();
         joinProject = new JoinProject(this, session.getUserName());
 
@@ -58,8 +56,8 @@ public class JoinProjectActivity extends AppCompatActivity {
 
     private void setupSpinner(){
         roleSpin = findViewById(R.id.spinnerRole);
-        String [] roles = {"client", "Developer"};
-        ArrayAdapter roleAdapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, roles);
+        String [] roles = {"client", "developer"};
+        ArrayAdapter<String> roleAdapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, roles);
 
         roleAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         roleSpin.setAdapter(roleAdapter);
@@ -76,38 +74,20 @@ public class JoinProjectActivity extends AppCompatActivity {
 
     private void setupButton(){
         btJoin = findViewById(R.id.buttonJoin);
-        btJoin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                joinProject();
-            }
-        });
+        btJoin.setOnClickListener(v -> joinProject());
 
         btApply = findViewById(R.id.buttonApply);
-        btApply.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                applyProject();
-            }
-        });
+        btApply.setOnClickListener(v -> applyProject());
 
         btView = findViewById(R.id.buttonInvite);
-        btView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toViewInvite();
-            }
-        });
+        btView.setOnClickListener(v -> toViewInvite());
 
         Button btCancel = findViewById(R.id.buttonCancel);
-        btCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btCancel.setOnClickListener(v -> {
 //                finish();
-                Intent intent = new Intent(JoinProjectActivity.this, ProjectMainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
+            Intent intent = new Intent(JoinProjectActivity.this, ProjectMainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         });
     }
 

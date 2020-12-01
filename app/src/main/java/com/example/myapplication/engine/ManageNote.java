@@ -17,7 +17,6 @@ public class ManageNote {
     FirebaseDatabase firebase;
     DatabaseReference db_ref;
     NotebookActivity activity;
-//    String projectId;
     Notebook notebook;
     int noteId;
 
@@ -26,7 +25,6 @@ public class ManageNote {
         db_ref = firebase.getReference("Project").child(projectId).child("Notebook");
 
         this.activity = activity;
-//        this.projectId = projectId;
     }
 
     public void getNoteList(){

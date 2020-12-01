@@ -2,36 +2,28 @@ package com.example.myapplication.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
 import com.example.myapplication.element.Log;
-import com.example.myapplication.element.Project;
 import com.example.myapplication.element.Session;
-import com.example.myapplication.element.User;
 import com.example.myapplication.engine.ManageLog;
 import com.example.myapplication.engine.Validation;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
-public class LogViewActivity extends AppCompatActivity {
+public class LogViewActivity extends ProgramActivity {
 
 //    FirebaseDatabase firebase;
 //    DatabaseReference db_ref;
@@ -43,31 +35,26 @@ public class LogViewActivity extends AppCompatActivity {
     SimpleDateFormat fmtDate;
     LinearLayout logLayout;
     Log newLog;
-
-    int logId;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_view);
+        setupUI(findViewById(R.id.logActivity));
 
         session = Session.getInstance();
         String username = session.getUserName();
         String projectId = session.getProjectId();
 
         validation = new Validation(username, projectId);
-//        firebase = FirebaseDatabase.getInstance();
-//        db_ref = firebase.getReference("Project").child(session.getProjectId()).child("Log");
         manageLog = new ManageLog(this, projectId);
         calendar = Calendar.getInstance();
-        fmtDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        fmtDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 
         logList = new ArrayList<>();
-//        getLogList();
         manageLog.getLogList();
 
         setupButton();
@@ -133,24 +120,18 @@ public class LogViewActivity extends AppCompatActivity {
 
     private void setupButton(){
         Button btSubmit = findViewById(R.id.buttonSubmit);
-        btSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(validate()) {
-                    logList.clear();
-                    logLayout.removeAllViews();
-                    submit();
-                }
+        btSubmit.setOnClickListener(v -> {
+            if(validate()) {
+                logList.clear();
+                logLayout.removeAllViews();
+                submit();
             }
         });
 
         Button btBack = findViewById(R.id.buttonBack);
-        btBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                validate();
-                finish();
-            }
+        btBack.setOnClickListener(v -> {
+            validate();
+            finish();
         });
     }
 
@@ -158,11 +139,13 @@ public class LogViewActivity extends AppCompatActivity {
         EditText logEdit = findViewById(R.id.editTextTextMultiLine3);
         String logContent = logEdit.getText().toString();
 
-        String currDate = fmtDate.format(calendar.getTime());
-        String username = session.getUserName();
+        if(!logContent.isEmpty()) {
+            String currDate = fmtDate.format(calendar.getTime());
+            String username = session.getUserName();
 
-        newLog = new Log(currDate, logContent, username);
-        manageLog.addLog(newLog);
+            newLog = new Log(currDate, logContent, username);
+            manageLog.addLog(newLog);
+        }
 //        getLogId();
 //
 //        addLogToDatabase();
@@ -191,22 +174,6 @@ public class LogViewActivity extends AppCompatActivity {
 //                recreate();
     }
 
-//    private void addLogToDatabase(){
-//
-//        db_ref.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                db_ref.child(Integer.toString(logId)).setValue(newLog);
-//                Toast.makeText(getApplicationContext(), "New Log is Added", Toast.LENGTH_SHORT).show();
-////                recreate();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
 
 
 }
