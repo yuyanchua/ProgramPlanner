@@ -30,6 +30,7 @@ import com.example.myapplication.activity.LoginActivity;
 import com.example.myapplication.activity.MainActivity;
 import com.example.myapplication.activity.NotebookActivity;
 import com.example.myapplication.activity.ProjectMainActivity;
+import com.example.myapplication.activity.RoleViewActivity;
 import com.example.myapplication.activity.TaskAssignActivity;
 import com.example.myapplication.activity.TimelineActivity;
 import com.example.myapplication.activity.ViewFeedbackActivity;
@@ -368,6 +369,22 @@ public class ProjectMainActivityTest {
             System.err.println("Error occurred while waiting for photo upload. Test failed.");
         }
         Espresso.onView(ViewMatchers.withId(R.id.bt_back)).perform(ViewActions.click());
+    }
+
+    /**
+     * Test roles.
+     * Unfortunately, since the inviting doesn't work for me for
+     * whatever reason, I can't ui test most of the role functionality.
+     * The result of this is that I'll check the intent of accessing the screen
+     * and see where that goes.
+     */
+    @Test
+    public void testRoleIntent() {
+        Espresso.onView(ViewMatchers.withText("54:UITest Project 1  (manager)")).perform(ViewActions.click());
+        Espresso.onView(ViewMatchers.withId(R.id.buttonManageRole)).perform(ViewActions.click());
+        Intents.intended(IntentMatchers.hasComponent(RoleViewActivity.class.getName()));
+
+        Espresso.onView(ViewMatchers.withId(R.id.buttonBack)).perform(ViewActions.click());
     }
 
     /**
