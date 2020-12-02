@@ -1,5 +1,12 @@
 package com.example.myapplication;
 
+import android.app.Activity;
+import android.app.Instrumentation;
+import android.content.ContentResolver;
+import android.content.Intent;
+import android.content.res.Resources;
+import android.net.Uri;
+
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.action.ViewActions;
@@ -10,10 +17,13 @@ import androidx.test.espresso.intent.matcher.IntentMatchers;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.example.myapplication.activity.AddTaskActivity;
 import com.example.myapplication.activity.CreateProjectActivity;
 import com.example.myapplication.activity.EventActivity;
+import com.example.myapplication.activity.GraphActivity;
+import com.example.myapplication.activity.ImageChooser;
 import com.example.myapplication.activity.JoinProjectActivity;
 import com.example.myapplication.activity.LogViewActivity;
 import com.example.myapplication.activity.LoginActivity;
@@ -27,6 +37,7 @@ import com.example.myapplication.activity.ViewInvitationActivity;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -130,7 +141,7 @@ public class ProjectMainActivityTest {
         //After this test, you must manually remove the created project by logging in
         //with username: UITester password:password to delete the second project on their list.
         //This will allow the test to be run again
-        //You may also delete the project directly from firebase, but that takes a bit of searching
+        //You may also delete the project directly from firebase, but that takes a bit of searchingU
         Espresso.onView(ViewMatchers.withId(R.id.buttonCreate)).perform(ViewActions.click());
         Espresso.onView(ViewMatchers.withId(R.id.textBoxProjectName)).perform(ViewActions.typeText("UITest Project 2"));
         Espresso.onView(ViewMatchers.withId(R.id.textBoxProjectName)).perform(ViewActions.closeSoftKeyboard());
@@ -327,6 +338,39 @@ public class ProjectMainActivityTest {
     }
 
     /**
+     * Test adding graphics. Will need at least 1 downloaded image
+     * on virtual device for test to work.
+     */
+    @Test
+    public void testGraphAdd() {
+        Espresso.onView(ViewMatchers.withText("54:UITest Project 1  (manager)")).perform(ViewActions.click());
+        Espresso.onView(ViewMatchers.withId(R.id.buttonGraph)).perform(ViewActions.click());
+        Intents.intended(IntentMatchers.hasComponent(GraphActivity.class.getName()));
+
+        Espresso.onView(ViewMatchers.withId(R.id.buttonBack)).perform(ViewActions.click());
+        Espresso.onView(ViewMatchers.withId(R.id.buttonGraph)).perform(ViewActions.click());
+        Espresso.onView(ViewMatchers.withId(R.id.buttonUpload)).perform(ViewActions.click());
+        Intents.intended(IntentMatchers.hasComponent(ImageChooser.class.getName()));
+
+        Espresso.onView(ViewMatchers.withId(R.id.bt_upload_image)).perform(ViewActions.click());
+        //Stub for image chooser.
+        Matcher<Intent> expected = IntentMatchers.hasType("image/*");
+        Instrumentation.ActivityResult result = imageChoiceStub();
+        Intents.intending(expected).respondWith(result);
+        Espresso.onView(ViewMatchers.withId(R.id.bt_choose_image)).perform(ViewActions.click());
+        //Now in image chooser . This may cause issues.
+        Intents.intended(expected);
+        Espresso.onView(ViewMatchers.withId(R.id.bt_upload_image)).perform(ViewActions.click());
+        try {
+            Thread.sleep(1000);
+        }
+        catch (Exception e){
+            System.err.println("Error occurred while waiting for photo upload. Test failed.");
+        }
+        Espresso.onView(ViewMatchers.withId(R.id.bt_back)).perform(ViewActions.click());
+    }
+
+    /**
      * Remove the second project.
      * Due to exceedingly long delete times, will manually remove the object to prevent later conflict
      * and that the activity reverts to the main scree.
@@ -359,4 +403,16 @@ public class ProjectMainActivityTest {
 
     }
 
+    /*
+     * Stub the image choosing behavior
+     * Found from https://www.youtube.com/watch?v=CpQQ6-vo5bw
+     * with some bug fixes from https://stackoverflow.com/questions/4896223/how-to-get-an-uri-of-an-image-resource-in-android
+     */
+    private Instrumentation.ActivityResult imageChoiceStub() {
+        Resources testRes = InstrumentationRegistry.getInstrumentation().getContext().getResources();
+        Uri imageURI = Uri.parse("android.resource://src/main/res/drawable/" + R.drawable.arrowicon);
+        Intent resultIntent = new Intent();
+        resultIntent.setData(imageURI);
+        return new Instrumentation.ActivityResult(Activity.RESULT_OK, resultIntent);
+    }
 }
