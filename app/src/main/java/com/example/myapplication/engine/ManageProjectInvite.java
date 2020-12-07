@@ -52,7 +52,7 @@ public class ManageProjectInvite {
                 return true;
             }
         }
-        activity.setErrText("The user entered does not exists");
+        activity.setErrText("The user entered does not exist");
         return false;
     }
 

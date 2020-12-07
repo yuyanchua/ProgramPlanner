@@ -56,7 +56,7 @@ public class SignUp {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.child(user.username).exists()){
-                    activity.setErrView("Username is already exist in database");
+                    activity.setErrView("Username already exists");
                 }else{
                     db_ref.child(user.username).setValue(user);
                     activity.finishSignUp();

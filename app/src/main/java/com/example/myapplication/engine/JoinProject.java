@@ -140,7 +140,7 @@ public class JoinProject {
             }
         }
 
-        activity.setErrText("The project does not exists");
+        activity.setErrText("The project does not exist");
 
         return false;
     }
