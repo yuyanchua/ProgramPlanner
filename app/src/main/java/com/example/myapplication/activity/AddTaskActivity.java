@@ -98,7 +98,7 @@ public class AddTaskActivity extends ProgramActivity {
     public void setupSpinner(List<String> list){
         this.memberList = list;
         spinMember = findViewById(R.id.spinnerTeamMember);
-//        System.out.println(memberList.toString());
+        System.out.println(memberList.toString());
         ArrayAdapter<String> memberAdapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, memberList);
         memberAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         spinMember.setAdapter(memberAdapter);
@@ -177,7 +177,8 @@ public class AddTaskActivity extends ProgramActivity {
             if(!isEdit) {
                 setErrView("Already added the member");
             }
-        }else {
+        }
+        else {
             addMemberList.add(memberName);
             final TextView tempView = new TextView(this);
             tempView.setTextSize(30);

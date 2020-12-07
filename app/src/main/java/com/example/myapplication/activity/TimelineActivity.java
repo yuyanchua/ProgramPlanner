@@ -159,7 +159,7 @@ public class TimelineActivity extends ProgramActivity {
                 hideButton(false);
             }
         }
-
+        System.out.println("EventList: " + eventList);
         for(int i = 0; i < eventList.size(); i ++){
             final TextView eventView = new TextView(this);
             Event temp = eventList.get(i);
