@@ -38,7 +38,7 @@ public class InviteActivity extends ProgramActivity{
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invite_code_page);
-        setupUI(findViewById(R.id.inviteViewActivity));
+        setupUI(findViewById(R.id.projectInvitePage));
 
         errView = findViewById(R.id.errorMessageTip);
         errView.setVisibility(View.INVISIBLE);

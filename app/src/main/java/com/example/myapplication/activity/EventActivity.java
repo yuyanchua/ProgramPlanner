@@ -85,7 +85,8 @@ public class EventActivity extends ProgramActivity {
                         String date = (month+ 1) + "-" + dayOfMonth + "-" + year;
                         dateView.setText(date);
                     }, year, month, day);
-            datePicker.getDatePicker().setMinDate(System.currentTimeMillis());
+
+            datePicker.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
             datePicker.show();
         });
 
