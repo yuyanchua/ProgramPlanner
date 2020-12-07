@@ -141,18 +141,19 @@ public class AddTaskActivity extends ProgramActivity {
             if(validate())
                 toAddParticipants();
         });
-
+        btRemove = findViewById(R.id.buttonRemove);
         btAddTask = findViewById(R.id.buttonAddTask);
         String editMsg = "Edit Task";
         if(isEdit)
             btAddTask.setText(editMsg);
 
         btAddTask.setOnClickListener(v -> {
-            if(validate())
+            if(validate()) {
                 toAddTask();
+            }
         });
 
-        btRemove = findViewById(R.id.buttonRemove);
+
         btRemove.setOnClickListener(v -> {
             if(validate())
                 toRemoveParticipants();
@@ -227,7 +228,10 @@ public class AddTaskActivity extends ProgramActivity {
     private void toRemoveParticipants(){
         //set remove
         String errMsg;
-        if(!isRemove) {
+        if(!isRemove && addMemberList.size() != 0) {
+            if(addMemberList.size() == 0){
+                Toast.makeText(getApplicationContext(), "Empty Member list! Cannot be removed!", Toast.LENGTH_SHORT).show();
+            }
             isRemove = true;
             btAddPart.setVisibility(View.INVISIBLE);
             btAddTask.setVisibility(View.INVISIBLE);
@@ -241,7 +245,6 @@ public class AddTaskActivity extends ProgramActivity {
             btBack.setVisibility(View.VISIBLE);
             errMsg = "Remove Members";
         }
-
         btRemove.setText(errMsg);
     }
 
