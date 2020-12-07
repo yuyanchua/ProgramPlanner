@@ -228,10 +228,10 @@ public class AddTaskActivity extends ProgramActivity {
     private void toRemoveParticipants(){
         //set remove
         String errMsg;
+        if(addMemberList.size() == 0){
+            Toast.makeText(getApplicationContext(), "Empty Member list!", Toast.LENGTH_SHORT).show();
+        }
         if(!isRemove && addMemberList.size() != 0) {
-            if(addMemberList.size() == 0){
-                Toast.makeText(getApplicationContext(), "Empty Member list! Cannot be removed!", Toast.LENGTH_SHORT).show();
-            }
             isRemove = true;
             btAddPart.setVisibility(View.INVISIBLE);
             btAddTask.setVisibility(View.INVISIBLE);
