@@ -60,36 +60,6 @@ public class LogViewActivity extends ProgramActivity {
         setupButton();
     }
 
-//    private boolean validate(){
-//        boolean isValid = true;
-//        String message = null;
-//        if(validation.isExist()){
-//            String roles = validation.getRoles();
-//            if(roles.equals("client")){
-//                message = "Your role has been altered";
-//                isValid = false;
-//            }
-//        }else{
-//            message = "You have been kicked out of the project!";
-//            isValid = false;
-//        }
-//
-//        if(!isValid){
-//            backToProjectPage(message);
-//        }
-//
-//        return isValid;
-//    }
-//
-//    private void backToProjectPage(String message){
-//        if(message == null){
-//            message = "Encountered unexpected error";
-//        }
-//        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-//        Intent intent = new Intent(LogViewActivity.this, ProjectMainActivity.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        startActivity(intent);
-//    }
 
     public void setupLogList(List<Log> logList){
         this.logList = logList;
@@ -108,7 +78,7 @@ public class LogViewActivity extends ProgramActivity {
         for(int i = 0; i < logList.size(); i ++){
             TextView logView = new TextView(this);
             Log temp = logList.get(i);
-            String content = temp.date + ": " + temp.content + ", " + temp.username;
+            String content = temp.date + ": \n" + temp.content + " \n" + temp.username;
 
             logView.setText(content);
             logView.setTextSize(20);
@@ -145,6 +115,8 @@ public class LogViewActivity extends ProgramActivity {
 
             newLog = new Log(currDate, logContent, username);
             manageLog.addLog(newLog);
+        }else{
+            Toast.makeText(getApplicationContext(), "Nothing to add. Please enter a log", Toast.LENGTH_SHORT).show();
         }
 //        getLogId();
 //
@@ -153,21 +125,6 @@ public class LogViewActivity extends ProgramActivity {
 
     }
 
-//    private void getLogId(){
-//        db_ref.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                for(DataSnapshot snap: dataSnapshot.getChildren()){
-//                    logId = Integer.parseInt(snap.getKey()) + 1 ;
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
 
     public void finishAddLog(){
         Toast.makeText(getApplicationContext(), "New Log is Added", Toast.LENGTH_SHORT).show();
