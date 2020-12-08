@@ -31,7 +31,7 @@ public class LogViewActivity extends ProgramActivity {
     List<Log> logList;
     Calendar calendar;
     ManageLog manageLog;
-    Validation validation;
+//    Validation validation;
     SimpleDateFormat fmtDate;
     LinearLayout logLayout;
     Log newLog;
@@ -60,36 +60,36 @@ public class LogViewActivity extends ProgramActivity {
         setupButton();
     }
 
-    private boolean validate(){
-        boolean isValid = true;
-        String message = null;
-        if(validation.isExist()){
-            String roles = validation.getRoles();
-            if(roles.equals("client")){
-                message = "Your role has been altered";
-                isValid = false;
-            }
-        }else{
-            message = "You have been kicked out of the project!";
-            isValid = false;
-        }
-
-        if(!isValid){
-            backToProjectPage(message);
-        }
-
-        return isValid;
-    }
-
-    private void backToProjectPage(String message){
-        if(message == null){
-            message = "Encountered unexpected error";
-        }
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(LogViewActivity.this, ProjectMainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-    }
+//    private boolean validate(){
+//        boolean isValid = true;
+//        String message = null;
+//        if(validation.isExist()){
+//            String roles = validation.getRoles();
+//            if(roles.equals("client")){
+//                message = "Your role has been altered";
+//                isValid = false;
+//            }
+//        }else{
+//            message = "You have been kicked out of the project!";
+//            isValid = false;
+//        }
+//
+//        if(!isValid){
+//            backToProjectPage(message);
+//        }
+//
+//        return isValid;
+//    }
+//
+//    private void backToProjectPage(String message){
+//        if(message == null){
+//            message = "Encountered unexpected error";
+//        }
+//        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+//        Intent intent = new Intent(LogViewActivity.this, ProjectMainActivity.class);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        startActivity(intent);
+//    }
 
     public void setupLogList(List<Log> logList){
         this.logList = logList;
@@ -121,7 +121,7 @@ public class LogViewActivity extends ProgramActivity {
     private void setupButton(){
         Button btSubmit = findViewById(R.id.buttonSubmit);
         btSubmit.setOnClickListener(v -> {
-            if(validate()) {
+            if(validateRole()) {
                 logList.clear();
                 logLayout.removeAllViews();
                 submit();
@@ -130,7 +130,7 @@ public class LogViewActivity extends ProgramActivity {
 
         Button btBack = findViewById(R.id.buttonBack);
         btBack.setOnClickListener(v -> {
-            validate();
+            validateRole();
             finish();
         });
     }

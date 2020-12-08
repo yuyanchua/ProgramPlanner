@@ -51,7 +51,7 @@ public class GraphActivity extends ProgramActivity implements ImageAdapter.OnIte
     private List<Image> Limages;
     private ProgressBar pro_Cir;
     private List<String> Del_list;
-    private Validation validation;
+//    private Validation validation;
 
     private final static int  REQUEST_CODE = 11;
 
@@ -143,48 +143,48 @@ public class GraphActivity extends ProgramActivity implements ImageAdapter.OnIte
     private void setupButton(){
         Button btUpload = findViewById(R.id.buttonUpload);
         btUpload.setOnClickListener(v -> {
-            if(validate())
+            if(validateRole())
                 startActivity(new Intent(GraphActivity.this, ImageChooser.class));
         });
 
         Button btBack = findViewById(R.id.buttonBack);
         btBack.setOnClickListener(v -> {
-            validate();
+            validateRole();
             finish();
         });
 
     }
 
-    private boolean validate(){
-        boolean isValid = true;
-        String message = null;
-        if(validation.isExist()){
-            String roles = validation.getRoles();
-            if(roles.equals("client")){
-                message = "Your role has been altered";
-                isValid = false;
-            }
-        }else{
-            message = "You have been kicked out of the project!";
-            isValid = false;
-        }
-
-        if(!isValid){
-            backToProjectPage(message);
-        }
-
-        return isValid;
-    }
-
-    private void backToProjectPage(String message){
-        if(message == null){
-            message = "Encountered unexpected error";
-        }
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(GraphActivity.this, ProjectMainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-    }
+//    private boolean validate(){
+//        boolean isValid = true;
+//        String message = null;
+//        if(validation.isExist()){
+//            String roles = validation.getRoles();
+//            if(roles.equals("client")){
+//                message = "Your role has been altered";
+//                isValid = false;
+//            }
+//        }else{
+//            message = "You have been kicked out of the project!";
+//            isValid = false;
+//        }
+//
+//        if(!isValid){
+//            backToProjectPage(message);
+//        }
+//
+//        return isValid;
+//    }
+//
+//    private void backToProjectPage(String message){
+//        if(message == null){
+//            message = "Encountered unexpected error";
+//        }
+//        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+//        Intent intent = new Intent(GraphActivity.this, ProjectMainActivity.class);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        startActivity(intent);
+//    }
 
     @Override
     public void onItemClick(int position) {

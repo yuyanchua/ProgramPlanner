@@ -25,7 +25,7 @@ public class InviteActivity extends ProgramActivity{
 
     EditText userEdit;
     ManageProjectInvite manage;
-    Validation validation;
+//    Validation validation;
 
     Spinner roleSpin;
     boolean isManager;
@@ -63,36 +63,36 @@ public class InviteActivity extends ProgramActivity{
 
     }
 
-    private boolean validate(){
-        boolean isValid = true;
-        String message = null;
-        if(validation.isExist()){
-            String roles = validation.getRoles();
-            if(roles.equals("client")){
-                message = "Your role has been altered";
-                isValid = false;
-            }
-        }else{
-            message = "You have been kicked out of the project!";
-            isValid = false;
-        }
-
-        if(!isValid){
-            backToProjectPage(message);
-        }
-
-        return isValid;
-    }
-
-    private void backToProjectPage(String message){
-        if(message == null){
-            message = "Encountered unexpected error";
-        }
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(InviteActivity.this, ProjectMainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-    }
+//    private boolean validate(){
+//        boolean isValid = true;
+//        String message = null;
+//        if(validation.isExist()){
+//            String roles = validation.getRoles();
+//            if(roles.equals("client")){
+//                message = "Your role has been altered";
+//                isValid = false;
+//            }
+//        }else{
+//            message = "You have been kicked out of the project!";
+//            isValid = false;
+//        }
+//
+//        if(!isValid){
+//            backToProjectPage(message);
+//        }
+//
+//        return isValid;
+//    }
+//
+//    private void backToProjectPage(String message){
+//        if(message == null){
+//            message = "Encountered unexpected error";
+//        }
+//        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+//        Intent intent = new Intent(InviteActivity.this, ProjectMainActivity.class);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        startActivity(intent);
+//    }
 
     private void setupSpinner(){
         roleSpin = findViewById(R.id.spinnerRole);
@@ -129,19 +129,19 @@ public class InviteActivity extends ProgramActivity{
     private void setupButton(){
         Button btInvite = findViewById(R.id.buttonInvite);
         btInvite.setOnClickListener(v -> {
-            if(validate())
+            if(validateRole())
                 inviteUser();
         });
 
         Button btView = findViewById(R.id.buttonApplication);
         btView.setOnClickListener(v -> {
-            if(validate())
+            if(validateRole())
                 viewApplication();
         });
 
         Button btDone = findViewById(R.id.buttonDone);
         btDone.setOnClickListener(v -> {
-            validate();
+            validateRole();
             finish();
         });
 

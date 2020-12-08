@@ -57,14 +57,13 @@ public class LoginActivity extends ProgramActivity {
 
     }
 
-//    private void hideKeyboard(View view){
-//        InputMethodManager inputMethodManager = (InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
-//        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
-//    }
 
     private void setup(){
         FloatingActionButton btLogin = findViewById(R.id.buttonLogIn);
-        btLogin.setOnClickListener(v -> login());
+        btLogin.setOnClickListener(v -> {
+            if(validateWifi(false))
+                login();
+        });
 
         TextView forgotText = findViewById(R.id.forgotPassword);
         forgotText.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, ForgetPassActivity.class)));

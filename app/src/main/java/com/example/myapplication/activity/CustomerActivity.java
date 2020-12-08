@@ -16,7 +16,7 @@ import com.example.myapplication.engine.Validation;
 public class CustomerActivity extends ProgramActivity {
 
     Session session = Session.getInstance();
-    Validation validation;
+//    Validation validation;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,52 +35,24 @@ public class CustomerActivity extends ProgramActivity {
 
         String username = session.getUserName();
 
-        validation = new Validation(username, session.getProjectId());
+//        validation = new Validation(username, session.getProjectId());
+        setValidation(username, session.getProjectId());
 
         Button btFeedback = findViewById(R.id.buttonLeaveFeedBack);
         btFeedback.setOnClickListener(v -> {
-            if(validate())
+            if(validateRole())
                 toFeedback();
         });
 
         Button btTimeline = findViewById(R.id.buttonTimeline);
         btTimeline.setOnClickListener(v -> {
-            if(validate())
+            if(validateRole())
                   toTimeline();
         });
 
         Button btBack = findViewById(R.id.buttonBack);
         btBack.setOnClickListener(v -> onBackPressed());
 
-    }
-    private boolean validate(){
-        boolean isValid = true;
-        String message = null;
-
-        if(validation.isExist()){
-            String roles = validation.getRoles();
-            if(!roles.equalsIgnoreCase("client")){
-                message = "Your role has been altered";
-                isValid = false;
-            }
-        }else{
-            message = "You have been kicked out from the project!";
-            isValid = false;
-        }
-
-        if(!isValid){
-            backToProjectPage(message);
-        }
-
-        return isValid;
-    }
-
-    private void backToProjectPage(String message){
-        if(message == null){
-            message = "Encountered unexpected error";
-        }
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-        onBackPressed();
     }
 
 

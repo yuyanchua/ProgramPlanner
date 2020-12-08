@@ -103,17 +103,9 @@ public class ImageChooser extends ProgramActivity {
                 });
                 finish();
 
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getApplicationContext(), "Upload failed!", Toast.LENGTH_SHORT).show();
-                }
-            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
-                    double progress = (100.0 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
-                    ProBar.setProgress((int) progress);
-                }
+            }).addOnFailureListener(e -> Toast.makeText(getApplicationContext(), "Upload failed!", Toast.LENGTH_SHORT).show()).addOnProgressListener(snapshot -> {
+                double progress = (100.0 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                ProBar.setProgress((int) progress);
             });
         }
         else{
