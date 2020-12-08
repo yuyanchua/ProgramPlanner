@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -61,12 +62,15 @@ public class ProgramActivity extends AppCompatActivity {
 
     public boolean checkWifi(){
         WifiManager wifiManager = (WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         if(wifiManager.isWifiEnabled()){
             WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-            return true;
-            //return wifiInfo.getNetworkId() != -1;
+            return wifiInfo.getLinkSpeed() != WifiInfo.LINK_SPEED_UNKNOWN && wifiInfo.getLinkSpeed() != 0;
         }else{
-            return false;
+            if(cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected())
+                return true;
+            else
+                return false;
         }
     }
 
