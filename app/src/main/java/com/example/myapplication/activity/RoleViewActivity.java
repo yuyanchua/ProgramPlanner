@@ -116,8 +116,10 @@ public class RoleViewActivity extends ProgramActivity {
             if(isKick) {
 //                confirmKickDialog(RoleViewActivity.this, kickList);
                 toKick();
-            }else if(isChange)
+            }else if(isChange) {
                 toChange();
+                recreate();
+            }
 //                manageRoles.changeRole(rolesList);
         });
 
@@ -136,14 +138,7 @@ public class RoleViewActivity extends ProgramActivity {
             if(!isChange)
                 toChange();
             else {
-                final boolean[] Is_cancel = {false};
-                btCancel.setOnClickListener(v2 ->{
-                    Is_cancel[0] = true;
-                    finish();
-                });
-                if(!Is_cancel[0]) {
-                    manageRoles.changeRole(rolesList);
-                }
+                manageRoles.changeRole(rolesList);
             }
         });
         btBack = findViewById(R.id.buttonBack);
