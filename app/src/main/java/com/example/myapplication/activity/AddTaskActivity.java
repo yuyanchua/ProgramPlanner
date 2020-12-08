@@ -167,8 +167,12 @@ public class AddTaskActivity extends ProgramActivity {
 
 
     private void toAddParticipants(){
-        String memberName = spinMember.getSelectedItem().toString();
-        toAddParticipants(memberName);
+        try {
+            String memberName = spinMember.getSelectedItem().toString();
+            toAddParticipants(memberName);
+        }catch (NullPointerException exception){
+            Toast.makeText(getApplicationContext(), "There is no participant to add", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void toAddParticipants(String memberName){
