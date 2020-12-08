@@ -46,6 +46,7 @@ public class ViewApplicationActivity extends ProgramActivity {
 
     public void setupLayout(List<Application> applicationList){
         this.applicationList = applicationList;
+        //applicationList.clear();
         applicationLayout = findViewById(R.id.applicationLayout);
         applicationLayout.removeAllViews();
 

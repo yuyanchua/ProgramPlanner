@@ -52,6 +52,7 @@ public class JoinProject {
 
         if(checkProjectName(projectName)){
             appList.add(new Application(username, roles));
+            //System.out.println("appList!!! " + appList);
             submitApplication();
         }
     }
@@ -183,7 +184,6 @@ public class JoinProject {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 //                Application app = new Application(username, roles);
                 db_ref_project.child(projectId).child("Application").setValue(appList);
-                System.out.println(projectName);
                 activity.finishApply();
             }
 

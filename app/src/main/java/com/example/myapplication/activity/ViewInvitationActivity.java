@@ -47,7 +47,6 @@ public class ViewInvitationActivity extends ProgramActivity {
     }
 
     public void setupLayout(List<Invitation> inviteList){
-        System.out.println(inviteList.toString());
         this.inviteList = inviteList;
         inviteLayout = findViewById(R.id.inviteLayout);
 

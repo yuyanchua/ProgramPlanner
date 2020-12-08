@@ -135,8 +135,16 @@ public class RoleViewActivity extends ProgramActivity {
         btChangeRole.setOnClickListener(v ->{
             if(!isChange)
                 toChange();
-            else
-                manageRoles.changeRole(rolesList);
+            else {
+                final boolean[] Is_cancel = {false};
+                btCancel.setOnClickListener(v2 ->{
+                    Is_cancel[0] = true;
+                    finish();
+                });
+                if(!Is_cancel[0]) {
+                    manageRoles.changeRole(rolesList);
+                }
+            }
         });
         btBack = findViewById(R.id.buttonBack);
         btBack.setOnClickListener(v -> finish());
