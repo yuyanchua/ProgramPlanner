@@ -19,10 +19,6 @@ public class ViewFeedbackActivity extends ProgramActivity{
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        
-//        if (getSupportActionBar() != null) {
-//            getSupportActionBar().hide();
-//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_developer_feedback_view);
@@ -33,7 +29,10 @@ public class ViewFeedbackActivity extends ProgramActivity{
         manage.getFeedbackList();
 
         Button btBack = findViewById(R.id.buttonBack);
-        btBack.setOnClickListener(v -> finish());
+        btBack.setOnClickListener(v -> {
+            validateRole();
+            finish();
+        });
 
     }
 

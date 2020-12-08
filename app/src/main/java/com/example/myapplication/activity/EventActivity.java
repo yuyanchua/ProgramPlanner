@@ -31,7 +31,7 @@ public class EventActivity extends ProgramActivity {
 
     ManageEvent manage;
     Event newEvent;
-    Validation validation;
+//    Validation validation;
     boolean isEdit = false;
     int eventId;
     Intent lastIntent;
@@ -51,7 +51,8 @@ public class EventActivity extends ProgramActivity {
         String projectIdStr = Session.getInstance().getProjectId();
         String username = Session.getInstance().getUserName();
 
-        validation = new Validation(username, projectIdStr);
+//        validation = new Validation(username, projectIdStr);
+        setValidation(username, projectIdStr);
 
         errView = findViewById(R.id.errorMessageTip);
         errView.setVisibility(View.INVISIBLE);
@@ -92,13 +93,13 @@ public class EventActivity extends ProgramActivity {
 
         Button btAdd = findViewById(R.id.buttonAddEvent);
         btAdd.setOnClickListener(v -> {
-            if(validate())
+            if(validateRole())
                 addEvent();
         });
 
         Button btBack = findViewById(R.id.buttonBack);
         btBack.setOnClickListener(v -> {
-            validate();
+            validateRole();
             finish();
         });
     }
@@ -153,36 +154,36 @@ public class EventActivity extends ProgramActivity {
         }
     }
 
-    private boolean validate(){
-        boolean isValid = true;
-        String message = null;
-        if(validation.isExist()){
-            String roles = validation.getRoles();
-            if(roles.equals("client")){
-                message = "Your role has been altered";
-                isValid = false;
-            }
-        }else{
-            message = "You have been kicked out of the project!";
-            isValid = false;
-        }
-
-        if(!isValid){
-            backToProjectPage(message);
-        }
-
-        return isValid;
-    }
-
-    private void backToProjectPage(String message){
-        if(message == null){
-            message = "Encountered unexpected error";
-        }
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(EventActivity.this, ProjectMainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-    }
+//    private boolean validate(){
+//        boolean isValid = true;
+//        String message = null;
+//        if(validation.isExist()){
+//            String roles = validation.getRoles();
+//            if(roles.equals("client")){
+//                message = "Your role has been altered";
+//                isValid = false;
+//            }
+//        }else{
+//            message = "You have been kicked out of the project!";
+//            isValid = false;
+//        }
+//
+//        if(!isValid){
+//            backToProjectPage(message);
+//        }
+//
+//        return isValid;
+//    }
+//
+//    private void backToProjectPage(String message){
+//        if(message == null){
+//            message = "Encountered unexpected error";
+//        }
+//        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+//        Intent intent = new Intent(EventActivity.this, ProjectMainActivity.class);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        startActivity(intent);
+//    }
 
 
     public void finishAdd(){

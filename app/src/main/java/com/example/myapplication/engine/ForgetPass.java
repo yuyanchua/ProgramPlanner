@@ -47,13 +47,17 @@ public class ForgetPass {
         db_ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                boolean isExist = snapshot.child(username).exists();
+                try {
+                    boolean isExist = snapshot.child(username).exists();
 //                System.out.println(username);
 //                System.out.println(isExist);
-                if(isExist){
-                    passActivity.toForgetQuestion(username);
-                }else{
-                    passActivity.setErrText("The username does not exist");
+                    if (isExist) {
+                        passActivity.toForgetQuestion(username);
+                    } else {
+                        passActivity.setErrText("The username does not exist");
+                    }
+                }catch (NullPointerException exception){
+                    passActivity.setErrText("Unexpected error encountered. Please try again");
                 }
             }
 

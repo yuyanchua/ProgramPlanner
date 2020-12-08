@@ -24,7 +24,7 @@ public class NotebookActivity extends ProgramActivity {
     Session session = Session.getInstance();
     List<Notebook> bookList;
     Notebook newNotebook;
-    Validation validation;
+//    Validation validation;
     ManageNote manage;
 
 
@@ -54,37 +54,37 @@ public class NotebookActivity extends ProgramActivity {
 
     }
 
-    private boolean validate(){
-        boolean isValid = true;
-        String message = null;
-        if(validation.isExist()){
-            String roles = validation.getRoles();
-            if(roles.equals("client")){
-                message = "Your role has been altered";
-                System.out.println(message);
-                isValid = false;
-            }
-        }else{
-            message = "You have been kicked out of the project!";
-            isValid = false;
-        }
-
-        if(!isValid){
-            backToProjectPage(message);
-        }
-
-        return isValid;
-    }
-
-    private void backToProjectPage(String message){
-        if(message == null){
-            message = "Encountered unexpected error";
-        }
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(NotebookActivity.this, ProjectMainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-    }
+//    private boolean validate(){
+//        boolean isValid = true;
+//        String message = null;
+//        if(validation.isExist()){
+//            String roles = validation.getRoles();
+//            if(roles.equals("client")){
+//                message = "Your role has been altered";
+//                System.out.println(message);
+//                isValid = false;
+//            }
+//        }else{
+//            message = "You have been kicked out of the project!";
+//            isValid = false;
+//        }
+//
+//        if(!isValid){
+//            backToProjectPage(message);
+//        }
+//
+//        return isValid;
+//    }
+//
+//    private void backToProjectPage(String message){
+//        if(message == null){
+//            message = "Encountered unexpected error";
+//        }
+//        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+//        Intent intent = new Intent(NotebookActivity.this, ProjectMainActivity.class);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        startActivity(intent);
+//    }
 
     public void setupNoteList(List<Notebook> notebookList){
         this.bookList = notebookList;
@@ -118,13 +118,13 @@ public class NotebookActivity extends ProgramActivity {
     private void setupButton(){
         Button btSubmit = findViewById(R.id.buttonSubmit);
         btSubmit.setOnClickListener(v -> {
-            if(validate())
+            if(validateRole())
                 toSubmit();
         });
 
         Button btBack = findViewById(R.id.buttonBack);
         btBack.setOnClickListener(v -> {
-            validate();
+            validateRole();
             finish();
         });
     }

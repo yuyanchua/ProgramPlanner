@@ -62,20 +62,24 @@ public class ManageTask {
         db_ref_roles.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<String> memberList = new ArrayList<>();
-                for(DataSnapshot snap : snapshot.getChildren()){
-                    String member = snap.getKey();
-                    boolean isMember = snap.child("Roles").exists();
+                try {
+                    List<String> memberList = new ArrayList<>();
+                    for (DataSnapshot snap : snapshot.getChildren()) {
+                        String member = snap.getKey();
+                        boolean isMember = snap.child("Roles").exists();
 
-                    if(isMember){
-                        String role = snap.child("Roles").getValue().toString();
-                        if(role.equals("developer")){
-                            memberList.add(member);
+                        if (isMember) {
+                            String role = snap.child("Roles").getValue().toString();
+                            if (role.equals("developer")) {
+                                memberList.add(member);
+                            }
                         }
                     }
-                }
 
-                activity.setupSpinner(memberList);
+                    activity.setupSpinner(memberList);
+                }catch (NullPointerException ex){
+                    ex.printStackTrace();
+                }
             }
 
             @Override
@@ -102,8 +106,12 @@ public class ManageTask {
         db_ref_project.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot snap : snapshot.getChildren()){
-                    taskId = Integer.parseInt(snap.getKey()) + 1;
+                try {
+                    for (DataSnapshot snap : snapshot.getChildren()) {
+                        taskId = Integer.parseInt(snap.getKey()) + 1;
+                    }
+                }catch (NullPointerException ex){
+                    ex.printStackTrace();
                 }
             }
 
@@ -118,8 +126,12 @@ public class ManageTask {
         db_ref_project.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                db_ref_project.child(Integer.toString(taskId)).setValue(task);
-                activity.finishAddTask();
+                try {
+                    db_ref_project.child(Integer.toString(taskId)).setValue(task);
+                    activity.finishAddTask();
+                }catch (Exception exception){
+                    exception.printStackTrace();
+                }
             }
 
             @Override

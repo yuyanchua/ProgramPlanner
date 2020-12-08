@@ -30,7 +30,7 @@ public class TimelineActivity extends ProgramActivity {
     List<Event> eventList;
     List<String> deleteList;
     ManageTimeline manage;
-    Validation validation;
+//    Validation validation;
 
     LinearLayout  eventLayout;
     Button btAdd, btDelete, btCancel, btEdit, btBack;
@@ -64,54 +64,54 @@ public class TimelineActivity extends ProgramActivity {
         setup(isDeveloper);
     }
 
-    private boolean validate(){
-        boolean isValid = true;
-        String message = null;
-        if(validation.isExist()){
-            String roles = validation.getRoles();
-            if((roles.equals("client") && isDeveloper) || !roles.equals("client") && !isDeveloper){
-                message = "Your role has been altered";
-                isValid = false;
-            }
-        }else{
-            message = "You have been kicked out of the project!";
-            isValid = false;
-        }
-
-        if(!isValid){
-            backToProjectPage(message);
-        }
-
-        return isValid;
-    }
-
-    private void backToProjectPage(String message){
-        if(message == null){
-            message = "Encountered unexpected error";
-        }
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(TimelineActivity.this, ProjectMainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-    }
+//    private boolean validate(){
+//        boolean isValid = true;
+//        String message = null;
+//        if(validation.isExist()){
+//            String roles = validation.getRoles();
+//            if((roles.equals("client") && isDeveloper) || !roles.equals("client") && !isDeveloper){
+//                message = "Your role has been altered";
+//                isValid = false;
+//            }
+//        }else{
+//            message = "You have been kicked out of the project!";
+//            isValid = false;
+//        }
+//
+//        if(!isValid){
+//            backToProjectPage(message);
+//        }
+//
+//        return isValid;
+//    }
+//
+//    private void backToProjectPage(String message){
+//        if(message == null){
+//            message = "Encountered unexpected error";
+//        }
+//        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+//        Intent intent = new Intent(TimelineActivity.this, ProjectMainActivity.class);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        startActivity(intent);
+//    }
 
     private void setup(boolean isDeveloper){
         btEdit = findViewById(R.id.buttonEdit);
 
         btEdit.setOnClickListener(v -> {
-            if(validate())
+            if(validateRole())
                 toEdit();
         });
 
         btAdd = findViewById(R.id.buttonAdd);
         btAdd.setOnClickListener(v -> {
-            if(validate())
+            if(validateRole())
                 toAdd();
         });
 
         btDelete = findViewById(R.id.buttonDelete);
         btDelete.setOnClickListener(v -> {
-            if(validate())
+            if(validateRole())
                 if(!isDelete)
                     toDelete();
                 else
@@ -121,14 +121,14 @@ public class TimelineActivity extends ProgramActivity {
         btCancel = findViewById(R.id.buttonCancel);
         btCancel.setVisibility(View.INVISIBLE);
         btCancel.setOnClickListener(v -> {
-            if(validate())
+            if(validateRole())
 //                manage.confirmRemove(deleteList);
                 toDelete();
         });
 
         btBack = findViewById(R.id.buttonBack);
         btBack.setOnClickListener(v -> {
-            validate();
+            validateRole();
             finish();
         });
 

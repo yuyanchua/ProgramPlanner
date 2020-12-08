@@ -21,7 +21,7 @@ public class DeveloperActivity extends ProgramActivity {
 
     boolean isConfirm;
     boolean isManager;
-    Validation validation;
+//    Validation validation;
     String username, projectId;
 
     @Override
@@ -50,51 +50,51 @@ public class DeveloperActivity extends ProgramActivity {
 
         username = Session.getInstance().getUserName();
         projectId = Session.getInstance().getProjectId();
-        validation = new Validation(username, projectId);
-
+//        validation = new Validation(username, projectId);
+        setValidation(username, projectId);
     }
 
     private void setup(boolean isManager){
         Button btTask = findViewById(R.id.buttonTaskAssignment);
         btTask.setOnClickListener(v -> {
-            if(validate())
+            if(validateRole())
                 toTaskAssignment();
         });
 
 
         Button btInvite = findViewById(R.id.buttonInvite);
         btInvite.setOnClickListener(v -> {
-            if(validate())
+            if(validateRole())
                 toInvite();
         });
 
         Button btNote = findViewById(R.id.buttonNoteBook);
         btNote.setOnClickListener(v -> {
-            if(validate())
+            if(validateRole())
                 toNotebook();
         });
 
         Button btGraph = findViewById(R.id.buttonGraph);
         btGraph.setOnClickListener(v -> {
-            if(validate())
+            if(validateRole())
                 toGraph();
         });
 
         Button btLog = findViewById(R.id.buttonLog);
         btLog.setOnClickListener(v -> {
-            if(validate())
+            if(validateRole())
                 toLog();
         });
 
         Button btTimeline = findViewById(R.id.buttonTimeLine);
         btTimeline.setOnClickListener(v -> {
-            if(validate())
+            if(validateRole())
                 toTimeline();
         });
 
         Button btViewFeedback = findViewById(R.id.buttonViewFeedBack);
         btViewFeedback.setOnClickListener(v -> {
-            if(validate())
+            if(validateRole())
                 toViewFeedback();
         });
 
@@ -115,36 +115,36 @@ public class DeveloperActivity extends ProgramActivity {
 
     }
 
-    private boolean validate(){
-        boolean isValid = true;
-        String message = null;
-        if(validation.isExist()){
-            String roles = validation.getRoles();
-            if(roles.equalsIgnoreCase("client")){
-                System.out.println("Not developer");
-                message = "Your role has been altered";
-                isValid = false;
-            }
-        }else{
-            message = "You have been kicked out from the project!";
-            isValid = false;
-        }
-
-        if(!isValid){
-            System.out.println("Return false");
-            backToProjectPage(message);
-        }
-
-        return isValid;
-    }
-
-    private void backToProjectPage(String message){
-        if(message == null){
-            message = "Encountered unexpected error";
-        }
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-        onBackPressed();
-    }
+//    private boolean validate(){
+//        boolean isValid = true;
+//        String message = null;
+//        if(validation.isExist()){
+//            String roles = validation.getRoles();
+//            if(roles.equalsIgnoreCase("client")){
+//                System.out.println("Not developer");
+//                message = "Your role has been altered";
+//                isValid = false;
+//            }
+//        }else{
+//            message = "You have been kicked out from the project!";
+//            isValid = false;
+//        }
+//
+//        if(!isValid){
+//            System.out.println("Return false");
+//            backToProjectPage(message);
+//        }
+//
+//        return isValid;
+//    }
+//
+//    private void backToProjectPage(String message){
+//        if(message == null){
+//            message = "Encountered unexpected error";
+//        }
+//        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+//        onBackPressed();
+//    }
 
     private void toTaskAssignment(){
         startActivity(new Intent(DeveloperActivity.this, TaskAssignActivity.class));

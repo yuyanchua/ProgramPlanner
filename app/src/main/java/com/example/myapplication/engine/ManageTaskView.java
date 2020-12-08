@@ -35,25 +35,29 @@ public class ManageTaskView {
                 db_ref.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        List<Task> taskList = new ArrayList<>();
+                        try {
+                            List<Task> taskList = new ArrayList<>();
 
-                        for(DataSnapshot snap : snapshot.getChildren()){
-                            String taskId = snap.getKey();
-                            String taskName = snap.child("task").getValue().toString();
+                            for (DataSnapshot snap : snapshot.getChildren()) {
+                                String taskId = snap.getKey();
+                                String taskName = snap.child("task").getValue().toString();
 
-                            DataSnapshot memberSnap = snap.child("memberList");
-                            List<String> memberList = new ArrayList<>();
-                            for(DataSnapshot tempSnap : memberSnap.getChildren()){
-                                String member = tempSnap.getValue().toString();
-                                memberList.add(member);
+                                DataSnapshot memberSnap = snap.child("memberList");
+                                List<String> memberList = new ArrayList<>();
+                                for (DataSnapshot tempSnap : memberSnap.getChildren()) {
+                                    String member = tempSnap.getValue().toString();
+                                    memberList.add(member);
+                                }
+
+                                Task tempTask = new Task(taskId, taskName, memberList);
+
+                                taskList.add(tempTask);
+
                             }
-
-                            Task tempTask = new Task(taskId, taskName, memberList);
-
-                            taskList.add(tempTask);
-
+                            activity.setupTaskView(taskList);
+                        }catch (NullPointerException ex){
+                            ex.printStackTrace();
                         }
-                        activity.setupTaskView(taskList);
                     }
 
                     @Override

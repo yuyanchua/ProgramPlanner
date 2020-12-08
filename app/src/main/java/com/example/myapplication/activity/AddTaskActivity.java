@@ -35,15 +35,12 @@ public class AddTaskActivity extends ProgramActivity {
     String taskIdStr;
     Task newTask;
     Intent lastIntent;
-    Validation validation;
+//    Validation validation;
 
     Button btAddPart, btAddTask, btRemove, btBack;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-//        if (getSupportActionBar() != null) {
-//            getSupportActionBar().hide();
-//        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_task_assignment);
@@ -55,7 +52,8 @@ public class AddTaskActivity extends ProgramActivity {
         String projectIdStr = Session.getInstance().getProjectId();
         String username = Session.getInstance().getUserName();
 
-        validation = new Validation(username, projectIdStr);
+//        validation = new Validation(username, projectIdStr);
+        setValidation(username, projectIdStr);
 
         manageTask = new ManageTask(this, projectIdStr);
         lastIntent = getIntent();
@@ -104,41 +102,42 @@ public class AddTaskActivity extends ProgramActivity {
         spinMember.setAdapter(memberAdapter);
     }
 
-    private boolean validate(){
-        boolean isValid = true;
-        String message = null;
-        if(validation.isExist()){
-            String roles = validation.getRoles();
-            if(roles.equals("client")){
-                message = "Your role has been altered";
-                isValid = false;
-            }
-        }else{
-            message = "You have been kicked out of the project!";
-            isValid = false;
-        }
-
-        if(!isValid){
-            backToProjectPage(message);
-        }
-
-        return isValid;
-    }
-
-    private void backToProjectPage(String message){
-        if(message == null){
-            message = "Encountered unexpected error";
-        }
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(AddTaskActivity.this, ProjectMainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-    }
+//    private boolean validate(){
+//        boolean isValid = true;
+//        String message = null;
+//
+//        if(validation.isExist()){
+//            String roles = validation.getRoles();
+//            if(roles.equals("client")){
+//                message = "Your role has been altered";
+//                isValid = false;
+//            }
+//        }else{
+//            message = "You have been kicked out of the project!";
+//            isValid = false;
+//        }
+//
+//        if(!isValid){
+//            backToProjectPage(message);
+//        }
+//
+//        return isValid;
+//    }
+//
+//    private void backToProjectPage(String message){
+//        if(message == null){
+//            message = "Encountered unexpected error";
+//        }
+//        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+//        Intent intent = new Intent(AddTaskActivity.this, ProjectMainActivity.class);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        startActivity(intent);
+//    }
 
     private void setupButton(){
         btAddPart = findViewById(R.id.buttonAddParticipants);
         btAddPart.setOnClickListener(v -> {
-            if(validate())
+            if(validateRole())
                 toAddParticipants();
         });
         btRemove = findViewById(R.id.buttonRemove);
@@ -148,20 +147,20 @@ public class AddTaskActivity extends ProgramActivity {
             btAddTask.setText(editMsg);
 
         btAddTask.setOnClickListener(v -> {
-            if(validate()) {
+            if(validateRole()) {
                 toAddTask();
             }
         });
 
 
         btRemove.setOnClickListener(v -> {
-            if(validate())
+            if(validateRole())
                 toRemoveParticipants();
         });
 
         btBack = findViewById(R.id.buttonBack);
         btBack.setOnClickListener(v -> {
-            validate();
+            validateRole();
             backToLastPage();
         });
     }
