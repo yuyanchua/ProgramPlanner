@@ -63,7 +63,8 @@ public class ProgramActivity extends AppCompatActivity {
         WifiManager wifiManager = (WifiManager)getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         if(wifiManager.isWifiEnabled()){
             WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-            return wifiInfo.getNetworkId() != -1;
+            return true;
+            //return wifiInfo.getNetworkId() != -1;
         }else{
             return false;
         }
