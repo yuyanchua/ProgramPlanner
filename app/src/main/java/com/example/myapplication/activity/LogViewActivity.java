@@ -78,7 +78,7 @@ public class LogViewActivity extends ProgramActivity {
         for(int i = 0; i < logList.size(); i ++){
             TextView logView = new TextView(this);
             Log temp = logList.get(i);
-            String content = temp.date + ": \n" + temp.content + " \n" + temp.username;
+            String content = temp.date + ": \n" + temp.content + " \n";
 
             logView.setText(content);
             logView.setTextSize(20);
