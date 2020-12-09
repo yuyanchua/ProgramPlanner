@@ -10,8 +10,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class ManageLog {
     FirebaseDatabase firebase;
@@ -21,10 +24,16 @@ public class ManageLog {
     int logId;
 
     public ManageLog(LogViewActivity activity, String projectId){
+//        firebase = FirebaseDatabase.getInstance();
+//        db_ref = firebase.getReference("Project").child(projectId).child("Log");
+        this(projectId);
+        this.activity = activity;
+    }
+
+    public ManageLog(String projectId){
         firebase = FirebaseDatabase.getInstance();
         db_ref = firebase.getReference("Project").child(projectId).child("Log");
 
-        this.activity = activity;
     }
 
     public void getLogList(){

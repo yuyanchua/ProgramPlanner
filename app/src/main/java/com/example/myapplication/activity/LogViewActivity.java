@@ -29,10 +29,10 @@ public class LogViewActivity extends ProgramActivity {
 //    DatabaseReference db_ref;
     Session session;
     List<Log> logList;
-    Calendar calendar;
+//    Calendar calendar;
     ManageLog manageLog;
 //    Validation validation;
-    SimpleDateFormat fmtDate;
+//    SimpleDateFormat fmtDate;
     LinearLayout logLayout;
     Log newLog;
     @Override
@@ -51,8 +51,8 @@ public class LogViewActivity extends ProgramActivity {
 
         validation = new Validation(username, projectId);
         manageLog = new ManageLog(this, projectId);
-        calendar = Calendar.getInstance();
-        fmtDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+//        calendar = Calendar.getInstance();
+//        fmtDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 
         logList = new ArrayList<>();
         manageLog.getLogList();
@@ -78,7 +78,7 @@ public class LogViewActivity extends ProgramActivity {
         for(int i = 0; i < logList.size(); i ++){
             TextView logView = new TextView(this);
             Log temp = logList.get(i);
-            String content = temp.date + ": \n" + temp.content + " \n";
+            String content = temp.date + " : \n" + temp.content + " \nBy: " + temp.username + "\n";
 
             logView.setText(content);
             logView.setTextSize(20);
@@ -110,10 +110,11 @@ public class LogViewActivity extends ProgramActivity {
         String logContent = logEdit.getText().toString();
 
         if(!logContent.isEmpty()) {
-            String currDate = fmtDate.format(calendar.getTime());
+//            String currDate = fmtDate.format(calendar.getTime());
             String username = session.getUserName();
 
-            newLog = new Log(currDate, logContent, username);
+//            newLog = new Log(currDate, logContent, username);
+            newLog = new Log(logContent, username);
             manageLog.addLog(newLog);
         }else{
             Toast.makeText(getApplicationContext(), "Nothing to add. Please enter a log", Toast.LENGTH_SHORT).show();
