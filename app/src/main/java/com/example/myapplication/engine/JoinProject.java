@@ -51,15 +51,28 @@ public class JoinProject {
         this.username = username;
 
         if(checkProjectName(projectName)){
-            appList.add(new Application(username, roles));
-            //System.out.println("appList!!! " + appList);
-            submitApplication();
+            if(!isApplicationExist(username)) {
+                appList.add(new Application(username, roles));
+                //System.out.println("appList!!! " + appList);
+                submitApplication();
+            }else{
+                activity.setErrText("Application already sent!");
+            }
         }
+    }
+
+    private boolean isApplicationExist(String username){
+        for(Application app : appList){
+            if(app.username.equalsIgnoreCase(username))
+                return true;
+        }
+        return false;
     }
 
     public void setProjectValue(Project project){
         this.projectName = project.projectName;
         this.projectId = Long.toString(project.projectId);
+        this.appList = project.applicationList;
     }
 
     private void retrieveDatabase(){
@@ -68,19 +81,20 @@ public class JoinProject {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 projectList = new ArrayList<>();
                 appList = new ArrayList<>();
+                System.out.println("RETRIEVE DATABASE USING THIS METHOD");
                 for(DataSnapshot snap : snapshot.getChildren()){
                         String name = snap.child("projectName").getValue().toString();
                         long projectId = Long.parseLong(snap.getKey());
                         String clientCode = snap.child("clientCode").getValue().toString();
                         String devCode = snap.child("devCode").getValue().toString();
-
+                        appList = new ArrayList<>();
                         for(DataSnapshot appSnap : snap.child("Application").getChildren()){
                             String username = appSnap.child("username").getValue().toString();
                             String roles = appSnap.child("roles").getValue().toString();
                             appList.add(new Application(username, roles));
                         }
 
-                        Project project = new Project(projectId, name, clientCode, devCode);
+                        Project project = new Project(projectId, name, clientCode, devCode, appList);
                         projectList.add(project);
                 }
             }
@@ -134,6 +148,7 @@ public class JoinProject {
     }
 
     private boolean checkProjectName(String projectName){
+        System.out.println(projectList.toString());
         for(Project project : projectList){
             if(project.projectName.equals(projectName)){
                 setProjectValue(project);
@@ -149,7 +164,7 @@ public class JoinProject {
 
     public void joinProjectInDatabase(){
 
-        db_ref_roles.addValueEventListener(new ValueEventListener() {
+        db_ref_roles.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 boolean isExist;
@@ -183,6 +198,7 @@ public class JoinProject {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 //                Application app = new Application(username, roles);
+                db_ref_project.child(projectId).child("Application").removeValue();
                 db_ref_project.child(projectId).child("Application").setValue(appList);
                 activity.finishApply();
             }

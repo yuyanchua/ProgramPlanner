@@ -1,5 +1,7 @@
 package com.example.myapplication.engine;
 
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 
 import com.example.myapplication.activity.ProjectMainActivity;
@@ -34,10 +36,10 @@ public class ProjectMain {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 projectList = new ArrayList<>();
 
-                for(DataSnapshot snap: snapshot.getChildren()){
+                for (DataSnapshot snap : snapshot.getChildren()) {
                     boolean isExist = snap.child(username).exists();
 
-                    if(isExist){
+                    if (isExist) {
                         String projectName = snap.child("ProjectName").getValue().toString();
                         String projectId = snap.getKey();
                         String role = snap.child(username).child("Roles").getValue().toString();

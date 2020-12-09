@@ -1,5 +1,6 @@
 package com.example.myapplication.element;
 
+import java.util.List;
 import java.util.Random;
 
 public class Project {
@@ -7,6 +8,7 @@ public class Project {
     public String projectName;
     public String clientCode;
     public String devCode;
+    public List<Application> applicationList;
     //Non static versions added by Henry.
     //Accessed by get function
     //prefixed with i to indicate instance variables.
@@ -15,15 +17,16 @@ public class Project {
 //    private String i_clientCode;
 //    private String i_devCode;
 
+    public Project(long projectId, String projectName, String clientCode, String devCode, List<Application> applicationList){
+        this(projectId, projectName, clientCode, devCode);
+        this.applicationList = applicationList;
+    }
+
     public Project(long projectId, String projectName, String clientCode, String devCode){
         this.projectId = projectId;
         this.projectName = projectName;
         this.clientCode = clientCode;
         this.devCode = devCode;
-//        i_projectId = projectId;
-//        i_projectName = projectName;
-//        i_clientCode = clientCode;
-//        i_devCode = devCode;
     }
 
     public Project(long projectId, String projectName){
