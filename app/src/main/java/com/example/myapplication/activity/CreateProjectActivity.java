@@ -50,7 +50,15 @@ public class CreateProjectActivity extends ProgramActivity{
     private void createProject(){
         EditText nameEdit = findViewById(R.id.textBoxProjectName);
         projectName = nameEdit.getText().toString();
-        System.out.println(projectName);
+//        System.out.println(projectName);
+
+        if(projectName.equalsIgnoreCase("system") ||
+                projectName.equalsIgnoreCase("systems") ||
+                projectName.equalsIgnoreCase("admin")){
+            setErrView("This project name cannot be used");
+            return;
+        }
+
         projectCreate.createProject(projectName, session.getUserName());
     }
 

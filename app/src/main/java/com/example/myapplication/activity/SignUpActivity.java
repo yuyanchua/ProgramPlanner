@@ -81,7 +81,12 @@ public class SignUpActivity extends ProgramActivity{
             return;
         }
 
-
+        if(name.equalsIgnoreCase("system") ||
+                name.equalsIgnoreCase("systems") ||
+                name.equalsIgnoreCase("admin")){
+            setErrView("This username cannot be used");
+            return;
+        }
 
         //TODO: Password policy Verification?
 
