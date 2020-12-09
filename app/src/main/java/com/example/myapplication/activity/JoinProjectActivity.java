@@ -74,13 +74,22 @@ public class JoinProjectActivity extends ProgramActivity {
 
     private void setupButton(){
         btJoin = findViewById(R.id.buttonJoin);
-        btJoin.setOnClickListener(v -> joinProject());
+        btJoin.setOnClickListener(v -> {
+            if(validateWifi(false))
+                joinProject();
+        });
 
         btApply = findViewById(R.id.buttonApply);
-        btApply.setOnClickListener(v -> applyProject());
+        btApply.setOnClickListener(v -> {
+            if(validateWifi(false))
+                applyProject();
+        });
 
         btView = findViewById(R.id.buttonInvite);
-        btView.setOnClickListener(v -> toViewInvite());
+        btView.setOnClickListener(v -> {
+            if(validateWifi(false))
+                toViewInvite();
+        });
 
         Button btCancel = findViewById(R.id.buttonCancel);
         btCancel.setOnClickListener(v -> {

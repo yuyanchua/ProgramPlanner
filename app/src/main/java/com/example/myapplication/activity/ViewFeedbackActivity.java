@@ -28,6 +28,8 @@ public class ViewFeedbackActivity extends ProgramActivity{
         ManageFeedback manage = new ManageFeedback(this, projectIdStr);
         manage.getFeedbackList();
 
+        setValidation(Session.getInstance().getUserName(), Session.getInstance().getProjectId());
+
         Button btBack = findViewById(R.id.buttonBack);
         btBack.setOnClickListener(v -> {
             validateRole();

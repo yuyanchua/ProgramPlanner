@@ -46,7 +46,10 @@ public class SignUpActivity extends ProgramActivity{
 
 
         FloatingActionButton btSignUp = findViewById(R.id.buttonNextStep);
-        btSignUp.setOnClickListener(v -> signup());
+        btSignUp.setOnClickListener(v -> {
+            if(validateWifi(false))
+                signup();
+        });
     }
 
     private String getEditValue(int id){

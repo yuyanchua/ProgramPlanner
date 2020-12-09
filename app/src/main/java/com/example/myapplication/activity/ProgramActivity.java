@@ -65,6 +65,7 @@ public class ProgramActivity extends AppCompatActivity {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         if(wifiManager.isWifiEnabled()){
             WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+            System.out.println(wifiInfo.toString());
             return wifiInfo.getLinkSpeed() != WifiInfo.LINK_SPEED_UNKNOWN && wifiInfo.getLinkSpeed() != 0;
         }else{
             if(cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected())

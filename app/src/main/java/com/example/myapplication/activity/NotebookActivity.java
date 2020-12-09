@@ -138,6 +138,8 @@ public class NotebookActivity extends ProgramActivity {
 
             manage.addNote(newNotebook);
 
+        }else{
+            Toast.makeText(getApplicationContext(), "Nothing to add. Please enter a note!", Toast.LENGTH_SHORT).show();
         }
 
         noteEdit.getText().clear();

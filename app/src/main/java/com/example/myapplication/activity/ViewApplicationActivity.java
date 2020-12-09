@@ -74,6 +74,7 @@ public class ViewApplicationActivity extends ProgramActivity {
             appView.setPadding(5, 5, 5, 5);
             appView.setClickable(true);
             appView.setOnClickListener(v -> {
+
                 int index = applicationLayout.indexOfChild(appView);
                 viewApplication(index);
             });

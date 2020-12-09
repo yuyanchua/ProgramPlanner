@@ -41,7 +41,10 @@ public class CreateProjectActivity extends ProgramActivity{
 
 
         Button btConfirm = findViewById(R.id.buttonConfirm);
-        btConfirm.setOnClickListener(v -> createProject());
+        btConfirm.setOnClickListener(v -> {
+            if(validateWifi(false))
+                createProject();
+        });
 
         Button btCancel = findViewById(R.id.buttonCancel);
         btCancel.setOnClickListener(v -> backToMain());

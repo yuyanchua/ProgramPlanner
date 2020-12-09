@@ -68,4 +68,9 @@ public class ManageTimeline {
             }
         });
     }
+
+    private void sortEvent(List<Event> eventList){
+
+
+    }
 }

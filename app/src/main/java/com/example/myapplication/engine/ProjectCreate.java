@@ -34,6 +34,8 @@ public class ProjectCreate {
 
         this.activity = activity;
         inviteCodeSet = new HashSet<>();
+        projectList = new ArrayList<>();
+        
         getAllCodes();
         retrieveProjectData();
         generateProjectId();
