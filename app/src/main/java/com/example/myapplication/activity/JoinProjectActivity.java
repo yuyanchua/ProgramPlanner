@@ -158,7 +158,9 @@ public class JoinProjectActivity extends ProgramActivity {
     }
 
     private void toDeveloper(){
-        startActivity(new Intent(JoinProjectActivity.this, DeveloperActivity.class));
+        Intent intent = new Intent(JoinProjectActivity.this, DeveloperActivity.class);
+        intent.putExtra("isManager", false);
+        startActivity(intent);
     }
 
     private void toClient(){

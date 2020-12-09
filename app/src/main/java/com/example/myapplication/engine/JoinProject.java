@@ -133,12 +133,14 @@ public class JoinProject {
                 setProjectValue(project);
                 isValid = true;
                 isDeveloper = false;
+                isExist = true;
                 break;
             }else if(project.devCode.equals(inviteCode)){
                 activity.setProjectValue(project);
                 setProjectValue(project);
                 isValid = true;
                 isDeveloper = true;
+                isExist = true;
                 break;
             }
         }
