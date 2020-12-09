@@ -11,6 +11,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ManageTimeline {
@@ -41,6 +42,8 @@ public class ManageTimeline {
                     eventList.add(temp);
 
                 }
+
+                Collections.sort(eventList, new Event());
                 activity.setupEventList(eventList);
 
             }
@@ -69,8 +72,4 @@ public class ManageTimeline {
         });
     }
 
-    private void sortEvent(List<Event> eventList){
-
-
-    }
 }
