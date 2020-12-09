@@ -4,6 +4,7 @@ package com.example.myapplication.engine;
 import androidx.annotation.NonNull;
 
 import com.example.myapplication.activity.JoinProjectActivity;
+import com.example.myapplication.element.Log;
 import com.example.myapplication.element.Project;
 import com.example.myapplication.element.Application;
 import com.google.firebase.database.DataSnapshot;
@@ -41,8 +42,10 @@ public class JoinProject {
         this.inviteCode = inviteCode;
         this.username = username;
 
-        if(checkInviteCode(inviteCode))
+        if(checkInviteCode(inviteCode)) {
             joinProjectInDatabase();
+
+        }
     }
 
     public void applyProject(String projectName, String roles, String username){
@@ -178,6 +181,10 @@ public class JoinProject {
 
                         db_ref_roles.child(projectId).child("ProjectName").setValue(projectName);
                         db_ref_roles.child(projectId).child(username).child("Roles").setValue(userRole);
+
+                        String logMessage = String.format("%s entered the invite code and joined the project team.", username);
+                        Log log = new Log(logMessage, "SYSTEM");
+                        new ManageLog(projectId, log);
 
                         activity.finishJoin(isDeveloper);
                     }else{

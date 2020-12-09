@@ -81,6 +81,8 @@ public class SignUpActivity extends ProgramActivity{
             return;
         }
 
+
+
         //TODO: Password policy Verification?
 
         User user  = new User(name, pass, quesIndex, answer);

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.example.myapplication.activity.ViewApplicationActivity;
 import com.example.myapplication.element.Application;
+import com.example.myapplication.element.Log;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,6 +37,11 @@ public class ManageApplication {
 
         updateRoles(username, roles);
         deleteApplication(appId);
+
+        String logMessage = String.format("%s's application is accepted and join the team.", username);
+        Log log = new Log(logMessage, "SYSTEM");
+        new ManageLog(projectId, log);
+
         activity.finishViewApplication("Application Accepted");
     }
 

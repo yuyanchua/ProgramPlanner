@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 
 import com.example.myapplication.activity.ViewInvitationActivity;
 import com.example.myapplication.element.Invitation;
+import com.example.myapplication.element.Log;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,6 +40,12 @@ public class ManageInvitation {
 
         updateRole(projectId, projectRole);
         deleteInvite(inviteId);
+
+        String logMessage = String.format("%s's accepted the invitation and " +
+                "joined the project team.", username);
+        Log log = new Log(logMessage, "SYSTEM");
+        new ManageLog(projectId, log);
+
         activity.finishViewInvite("Accepted Invitation");
 
     }

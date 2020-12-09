@@ -3,6 +3,7 @@ package com.example.myapplication.engine;
 import androidx.annotation.NonNull;
 
 import com.example.myapplication.activity.CreateProjectActivity;
+import com.example.myapplication.element.Log;
 import com.example.myapplication.element.Project;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -100,6 +101,10 @@ public class ProjectCreate {
             String devCode = generateInviteCode(false);
             project = new Project(projectId, projectName, clientCode, devCode);
             addProjectToDatabase();
+
+            String logMessage = String.format("%s created the project.", username);
+            Log log = new Log(logMessage, "SYSTEM");
+            new ManageLog(Long.toString(projectId), log);
         }
     }
 

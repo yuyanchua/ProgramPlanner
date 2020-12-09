@@ -30,6 +30,11 @@ public class ManageLog {
         this.activity = activity;
     }
 
+    public ManageLog(String projectId, Log log){
+        this(projectId);
+        addLog(log);
+    }
+
     public ManageLog(String projectId){
         firebase = FirebaseDatabase.getInstance();
         db_ref = firebase.getReference("Project").child(projectId).child("Log");
@@ -86,7 +91,9 @@ public class ManageLog {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 db_ref.child(Integer.toString(logId)).setValue(log);
-                activity.finishAddLog();
+                if(activity != null)
+                    activity.finishAddLog();
+
             }
 
             @Override
